@@ -10,7 +10,7 @@ import (
 )
 
 var GT *template.Template
-var UserDB = dbase.NewDB("data/users")
+var UserDB = dbase.DBase{"data/users"}
 
 func Handle(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Host, "--", r.URL.Path)
