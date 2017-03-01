@@ -1,20 +1,32 @@
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <title>Hello</title>
-        <meta charset="utf-8">
-    </head>
-    <body>
+{{template "head"}}
         <h1>Pocket Money</h1>
-        <form action="NewUser">
-            <h2>New user</h2>
-            UserName : <input type="text" name="Username"><br>
-            Full Name : <input type="text" name="Full Name"><br>
+
+        {{if .}}
+        <b>Error:{{printf "%s" .}}</b>
+        {{end}}
+
+
+
+        <form action="loginfamily">
+            <h2>Family Login</h2>
+            Email : <input type="text" name="Email"><br>
+            Password : <input type="password" name="PWD1"><br>
+            <input type="submit">
+        </form>
+
+        <form action="loginuser">
+            <h2>User Login</h2>
+            Username : <input type="text" name="Username"><br>
+            Password : <input type="password" name="PWD1"><br>
+            <input type="submit">
+        </form>
+
+        <form action="newfamily">
+            <h2>New Family</h2>
+            Email : <input type="text" name="Email"><br>
+            Family Name : <input type="text" name="Family Name"><br>
             Password : <input type="password" name="PWD1"><br>
             Confirm Password : <input type="password" name="PWD2"><br>
             <input type="submit">
         </form>
-    </body>
-</html>
-
+{{template "base"}}        

@@ -1,0 +1,15 @@
+{{template "head"}}
+        <h1>Family Page: {{.FamilyName}}</h1>
+        <ul>
+        {{range .Members}}
+            <li>
+                {{.UserName}} -- {{bSelect .Parent "Parent" "Child"}}<br>
+            </li>
+        {{end}}
+        </ul>
+        <form action="AddMember"> 
+            Name : <input type="text" name="Username">
+            Is Parent: <input type="checkbox" name="Parent"><br>
+            <input type="submit">
+        </form>
+{{template "base"}}
