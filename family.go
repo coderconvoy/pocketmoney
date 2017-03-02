@@ -135,7 +135,7 @@ func HandleAddMember(w http.ResponseWriter, r *http.Request) {
 	}
 	f.Members = append(f.Members, User{
 		Username: uname,
-		Parent:   parent == "true",
+		Parent:   parent == "on",
 		Password: pw,
 	})
 
@@ -149,7 +149,5 @@ func HandleAddMember(w http.ResponseWriter, r *http.Request) {
 		ExTemplate(GT, w, "index.html", "Could not write new member to db")
 		return
 	}
-
 	ExTemplate(GT, w, "familypage.html", f)
-
 }
