@@ -9,3 +9,8 @@ body{
 form {
     border:5px solid black;
 }
+
+input , button {
+    margin:5px;
+
+}

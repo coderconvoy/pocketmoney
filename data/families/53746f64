@@ -45,22 +45,83 @@
     "Salt": "ncvEkTtrwE15fg=="
    },
    "Parent": true
+  },
+  {
+   "Username": "River",
+   "Email": "",
+   "Password": {
+    "Hash": "27d4OcHgOxn39pjsCSZfOzJJYOOJZiDro5Bxk3BUhbU=",
+    "Salt": "k2m8btAc2V9xwg=="
+   },
+   "Parent": false
   }
  ],
  "Accounts": [
   {
    "Username": "Matt",
-   "ID": 0,
    "Name": "checking",
    "StartDate": "2017-03-03T13:06:09.870173744Z",
-   "Current": 0
+   "Current": -1700
   },
   {
    "Username": "Matt",
-   "ID": 0,
    "Name": "Poop",
    "StartDate": "2017-03-03T13:10:51.455749761Z",
-   "Current": 0
+   "Current": 950
+  },
+  {
+   "Username": "Matt",
+   "Name": "Plooop",
+   "StartDate": "2017-03-03T15:56:59.829469209Z",
+   "Current": 700
+  },
+  {
+   "Username": "River",
+   "Name": "Checking",
+   "StartDate": "2017-03-03T16:33:34.528187798Z",
+   "Current": 50
+  }
+ ],
+ "Transactions": [
+  {
+   "FromUser": "Matt",
+   "DestUser": "Matt",
+   "FromAC": "checking",
+   "DestAC": "Poop",
+   "Amount": 500,
+   "Authorised": false,
+   "Purpose": "t3",
+   "Date": "0001-01-01T00:00:00Z"
+  },
+  {
+   "FromUser": "Matt",
+   "DestUser": "Matt",
+   "FromAC": "checking",
+   "DestAC": "Poop",
+   "Amount": 500,
+   "Authorised": true,
+   "Purpose": "no reason",
+   "Date": "2017-03-03T15:57:17.625839721Z"
+  },
+  {
+   "FromUser": "Matt",
+   "DestUser": "Matt",
+   "FromAC": "checking",
+   "DestAC": "Plooop",
+   "Amount": 700,
+   "Authorised": true,
+   "Purpose": "test",
+   "Date": "2017-03-03T16:24:41.333599494Z"
+  },
+  {
+   "FromUser": "Matt",
+   "DestUser": "River",
+   "FromAC": "Poop",
+   "DestAC": "Checking",
+   "Amount": 50,
+   "Authorised": true,
+   "Purpose": "For Roo",
+   "Date": "2017-03-03T16:34:01.738298033Z"
   }
  ]
 }

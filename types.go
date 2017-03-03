@@ -13,9 +13,10 @@ type PageData struct {
 }
 
 type Family struct {
-	FamilyName string
-	Members    []User
-	Accounts   []Account
+	FamilyName   string
+	Members      []User
+	Accounts     []*Account
+	Transactions []Transaction
 }
 
 type User struct {
@@ -27,15 +28,15 @@ type User struct {
 
 type Transaction struct {
 	FromUser, DestUser string
-	FromID, DestID     string
+	FromAC, DestAC     string
 	Amount             int
-	Authorized         bool
+	Authorised         bool
 	Purpose            string
+	Date               time.Time
 }
 
 type Account struct {
 	Username  string
-	ID        uint64
 	Name      string
 	StartDate time.Time
 	Current   int

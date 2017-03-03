@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/coderconvoy/dbase2"
 	"github.com/pkg/errors"
@@ -157,6 +158,12 @@ func HandleAddMember(w http.ResponseWriter, r *http.Request) {
 		Username: uname,
 		Parent:   parent == "on",
 		Password: pw,
+	})
+	fam.Accounts = append(fam.Accounts, &Account{
+		Username:  uname,
+		Name:      "Checking",
+		Current:   0,
+		StartDate: time.Now(),
 	})
 
 	err = SaveFamily(fam)
