@@ -31,26 +31,7 @@ func HandleLogout(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func HandleNewUser(w http.ResponseWriter, r *http.Request) {
-}
-
-func HandleNewAccount(w http.ResponseWriter, r *http.Request) {
-	/*c, err := r.Cookie("Username")
-	if err != nil {
-		ExTemplate(GT,w, "index.html", nil)
-	}
-	b, err := UserDB.ReadMap(c.Value)
-	if err != nil {
-		fmt.Fprintf(w, "No thing stored for user %s", c.Value)
-	}
-
-	ExTemplate(GT,w, "newaccount.html", b)
-	*/
-
-}
-
 func HandleStatic(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Handling Static")
 	p := r.URL.Path
 	ass, err := Asset(path.Join("assets", p))
 	if err != nil {
@@ -59,13 +40,11 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 	}
 	switch path.Ext(p) {
 	case ".css":
-		fmt.Println("CSS")
 		w.Header().Set("Content-Type", "text/css")
 	case ".js":
 
 	}
 	w.Write(ass)
-
 }
 
 func main() {
@@ -77,6 +56,9 @@ func main() {
 	GT = template.New("index").Funcs(tempower.FMap())
 	ad, err := AssetDir("assets/templates")
 	for _, n := range ad {
+		if path.Ext(n) == ".swp" {
+			continue
+		}
 		t, err := Asset("assets/templates/" + n)
 		fmt.Println("Parsing :" + n)
 		GT = GT.New(n)
@@ -92,6 +74,8 @@ func main() {
 	http.HandleFunc("/login", HandleLogin)
 	http.HandleFunc("/addmember", HandleAddMember)
 	http.HandleFunc("/logout", HandleLogout)
+	http.HandleFunc("/personal", HandlePersonal)
+	http.HandleFunc("/addaccount", HandleAddAccount)
 	http.HandleFunc("/", Handle)
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {

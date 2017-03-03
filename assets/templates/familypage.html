@@ -1,7 +1,7 @@
 {{template "head"}}
     <h1>Family Page: {{.FamilyName}}</h1>
     <ul>
-    {{range .Members}}
+    {{range .Fam.Members}}
         <li>
             {{.Username}} -- {{bSelect .Parent "Parent" "Child"}}<br>
         </li>
@@ -9,10 +9,13 @@
     </ul>
     <br><br>
     <form action="addmember"> 
+        {{if .Mes}}
+        <h3 class="message">{{.Mes }}</h3>
+        {{end}}
         <h2>Add Family Member</h2>
         Name : <input type="text" name="username">
         Is Parent: <input type="checkbox" name="parent"><br>
-        Password : <input type="password" pattern=".{5,20}" required title="5-20 characters" name="pwd1"><br>
+        Password : <input type="password" pattern=".{5,20}" required name="pwd1"><br>
         (Minimum 5 letters)<br>
         Confirm Password : <input type="password" name="pwd2"><br>
         <input type="submit">

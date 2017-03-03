@@ -1,0 +1,31 @@
+{{template "head"}}
+<h2>User Page : {{.Fmem}}</h2>
+<h3>Accounts</h3>
+{{/*Show Accounts*/}}
+
+<ul>
+{{range $k, $v := .Fam.Accounts}}
+    {{if eq $v.Username .Fmem}}
+    <li>{{$v.ID}} - {{$v.Name}} - {{$v.Current}}</li>
+    {{end}}
+{{end}}
+</li>
+
+{{/*Add Account*/}}
+<form action="addaccount">
+<h3>Add Account</h3>
+<input type="text" name="username" readonly value="{{.Fmem}}">  
+<input type="text" name="accountname" pattern=".{4,20}" required>
+<input type="submit" text="Add">
+</form>
+
+
+
+
+{{/*Pay Money*/}}
+
+
+
+
+
+{{template "base"}}

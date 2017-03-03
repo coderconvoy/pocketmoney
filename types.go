@@ -1,6 +1,16 @@
 package main
 
-import "github.com/coderconvoy/dbase2"
+import (
+	"time"
+
+	"github.com/coderconvoy/dbase2"
+)
+
+type PageData struct {
+	Mes  string
+	Fmem string
+	Fam  *Family
+}
 
 type Family struct {
 	FamilyName string
@@ -25,8 +35,9 @@ type Transaction struct {
 }
 
 type Account struct {
-	Username string
-	ID       uint64
-	Name     string
-	Monthly  []int
+	Username  string
+	ID        uint64
+	Name      string
+	StartDate time.Time
+	Current   int
 }
