@@ -26,9 +26,8 @@ type User struct {
 }
 
 type Transaction struct {
-	ID                 uint64
 	FromUser, DestUser string
-	FromID, DestID     int
+	FromID, DestID     string
 	Amount             int
 	Authorized         bool
 	Purpose            string

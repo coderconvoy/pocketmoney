@@ -80,7 +80,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	loginControl.Login(w, fam.FamilyName, uname)
-	ExTemplate(GT, w, "familypage.html", fam)
+	ExTemplate(GT, w, "familypage.html", PageData{"", uname, fam})
 
 }
 func HandleNewFamily(w http.ResponseWriter, r *http.Request) {

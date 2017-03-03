@@ -4,8 +4,9 @@
 {{/*Show Accounts*/}}
 
 <ul>
+{{$Fmem := .Fmem}}
 {{range $k, $v := .Fam.Accounts}}
-    {{if eq $v.Username .Fmem}}
+    {{if eq $v.Username $Fmem}}
     <li>{{$v.ID}} - {{$v.Name}} - {{$v.Current}}</li>
     {{end}}
 {{end}}

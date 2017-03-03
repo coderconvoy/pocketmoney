@@ -1,1 +1,66 @@
-{"FamilyName":"Stod","Members":[{"Username":"Matt","Email":"m@m.com","Password":{"Hash":"VcdT/st19u0vs32SPJp3fW1Zm/kLyrgAKzjauxvnlwk=","Salt":"vE8eYgJfSaUhmA=="},"Parent":true},{"Username":"Toby","Email":"","Password":{"Hash":"pkmfphqf+/KbNjevFsgfHBoRUA4c5qvEGo/JKXMRhBw=","Salt":"1Ojt/Fz+Xr0zVA=="},"Parent":false},{"Username":"Tasha","Email":"","Password":{"Hash":"eu+B5/SyhOC8uKsXHrY//qlmIah3b013RruA535KU9Y=","Salt":"1iGy3l3TFy43UA=="},"Parent":false},{"Username":"Steve","Email":"","Password":{"Hash":"0v/rSCilvHdiiwrwnVbJVMw1G/9AyMvnv7jhr3t0DkQ=","Salt":"KbReWR6zbmtRKg=="},"Parent":false},{"Username":"poo","Email":"","Password":{"Hash":"w5BWdK8zzQW73JMK/b0NtVxLr0iMDfEGBooXoNp1Sb8=","Salt":"ncvEkTtrwE15fg=="},"Parent":true}],"Accounts":null}
+{
+ "FamilyName": "Stod",
+ "Members": [
+  {
+   "Username": "Matt",
+   "Email": "m@m.com",
+   "Password": {
+    "Hash": "VcdT/st19u0vs32SPJp3fW1Zm/kLyrgAKzjauxvnlwk=",
+    "Salt": "vE8eYgJfSaUhmA=="
+   },
+   "Parent": true
+  },
+  {
+   "Username": "Toby",
+   "Email": "",
+   "Password": {
+    "Hash": "pkmfphqf+/KbNjevFsgfHBoRUA4c5qvEGo/JKXMRhBw=",
+    "Salt": "1Ojt/Fz+Xr0zVA=="
+   },
+   "Parent": false
+  },
+  {
+   "Username": "Tasha",
+   "Email": "",
+   "Password": {
+    "Hash": "eu+B5/SyhOC8uKsXHrY//qlmIah3b013RruA535KU9Y=",
+    "Salt": "1iGy3l3TFy43UA=="
+   },
+   "Parent": false
+  },
+  {
+   "Username": "Steve",
+   "Email": "",
+   "Password": {
+    "Hash": "0v/rSCilvHdiiwrwnVbJVMw1G/9AyMvnv7jhr3t0DkQ=",
+    "Salt": "KbReWR6zbmtRKg=="
+   },
+   "Parent": false
+  },
+  {
+   "Username": "poo",
+   "Email": "",
+   "Password": {
+    "Hash": "w5BWdK8zzQW73JMK/b0NtVxLr0iMDfEGBooXoNp1Sb8=",
+    "Salt": "ncvEkTtrwE15fg=="
+   },
+   "Parent": true
+  }
+ ],
+ "Accounts": [
+  {
+   "Username": "Matt",
+   "ID": 0,
+   "Name": "checking",
+   "StartDate": "2017-03-03T13:06:09.870173744Z",
+   "Current": 0
+  },
+  {
+   "Username": "Matt",
+   "ID": 0,
+   "Name": "Poop",
+   "StartDate": "2017-03-03T13:10:51.455749761Z",
+   "Current": 0
+  }
+ ]
+}

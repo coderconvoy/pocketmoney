@@ -24,6 +24,10 @@ func HandlePersonal(w http.ResponseWriter, r *http.Request) {
 
 func HandleAddAccount(w http.ResponseWriter, r *http.Request) {
 	fam, fmem, err := LoggedInFamily(w, r)
+	if err != nil {
+		ExTemplate(GT, w, "index.html", err.Error())
+		return
+	}
 	//TODO, check permission to add account
 
 	uname := r.FormValue("username")
@@ -31,16 +35,17 @@ func HandleAddAccount(w http.ResponseWriter, r *http.Request) {
 
 	fam.Accounts = append(fam.Accounts, Account{
 		Username:  uname,
-		ID:        len(fam.Accounts), //TODo generate
 		Name:      aname,
 		StartDate: time.Now(),
 		Current:   0,
 	})
-	err := SaveFamily(fam)
+	err = SaveFamily(fam)
 
+	mes := ""
 	if err != nil {
-		fam.Accounts = fam.Accounts[:len(Fam.Accounts)-1]
-
+		fam.Accounts = fam.Accounts[:len(fam.Accounts)-1]
+		mes = "Could not Save Family: " + err.Error()
 	}
 
+	ExTemplate(GT, w, "userhome.html", PageData{mes, fmem, fam})
 }
