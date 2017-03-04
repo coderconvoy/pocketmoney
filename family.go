@@ -50,6 +50,14 @@ func SaveFamily(f *Family) error {
 	return nil
 }
 
+func HandleFamily(w http.ResponseWriter, r *http.Request) {
+	fam, fmem, err := LoggedInFamily(w, r)
+	if err != nil {
+		ExTemplate(GT, w, "index.html", err.Error())
+	}
+	ExTemplate(GT, w, "familypage.html", PageData{"", fmem, fam})
+}
+
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	//Load Family File
 	famname := r.FormValue("family")

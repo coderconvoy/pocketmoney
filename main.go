@@ -77,6 +77,7 @@ func main() {
 	http.HandleFunc("/personal", HandlePersonal)
 	http.HandleFunc("/addaccount", HandleAddAccount)
 	http.HandleFunc("/transactions", HandleTransactions)
+	http.HandleFunc("/family", HandleFamily)
 	http.HandleFunc("/pay", HandlePay)
 	http.HandleFunc("/", Handle)
 	err = http.ListenAndServe(":8080", nil)
