@@ -80,7 +80,7 @@ func main() {
 	http.HandleFunc("/family", HandleFamily)
 	http.HandleFunc("/pay", HandlePay)
 	http.HandleFunc("/", Handle)
-	err = http.ListenAndServe(":8080", nil)
+	err = http.ListenAndServeTLS(":8081", "data/server.pub", "data/server.key", nil)
 	if err != nil {
 		fmt.Println(err)
 	}
