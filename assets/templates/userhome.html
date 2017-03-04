@@ -16,7 +16,7 @@
 </li>
 
 {{/*Add Account*/}}
-<form action="addaccount">
+<form action="addaccount" method="post">
 <h3>Add Account</h3>
 <input type="text" name="username" readonly value="{{.Fmem}}" hidden>
 <input type="text" name="accountname" pattern=".{4,20}" required>
@@ -25,7 +25,7 @@
 
 
 {{/*Pay Money*/}}
-<form action="pay">
+<form action="pay" method="post">
     <h3>Make a Payment</h3>
 <input type="text" name="username" readonly value="{{.Fmem}}" hidden>  
 From:

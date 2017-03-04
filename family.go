@@ -118,12 +118,19 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 		Parent:   true,
 	})
 
+	f.Accounts = append(f.Accounts, &Account{
+		Username:  uname,
+		Name:      "checking",
+		StartDate: time.Now(),
+		Current:   0,
+	})
+
 	err = SaveFamily(&f)
 	if err != nil {
 		//TODO
 	}
 	loginControl.Login(w, f.FamilyName, uname)
-	ExTemplate(GT, w, "familypage.html", f)
+	ExTemplate(GT, w, "familypage.html", PageData{"", uname, &f})
 
 }
 
