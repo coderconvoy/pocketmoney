@@ -13,7 +13,7 @@
     <li>{{$v.Name}} £{{$v.Current}}</li>
     {{end}}
 {{end}}
-</li>
+</ul>
 
 {{/*Add Account*/}}
 <form action="addaccount" method="post">
@@ -45,6 +45,12 @@ To:
 Amount:  £<input type="number" step="0.01" name="amount">  Purpose:  <input type="text" name="purpose"><br>
     <input type="submit" text="Pay Now">
 </form>
-
+<form action="chpass" method="post">
+    <h2>Change Password</h2>
+    Old Password : <input type="password" name="oldpwd"><br>
+    New password : <input type="password" name="pwd1"><br>
+    Confirm : <input type="password" name="pwd2"><br>
+    <input type="submit" text="Change">
+</form>
 
 {{template "base"}}

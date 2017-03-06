@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 	"path"
@@ -48,11 +49,9 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	/*t, err := Asset("assets/index.html")
-	if err != nil {
-		fmt.Println("ERRor:", err)
-		return
-	}*/
+	insecure := flag.Bool("i", false, "Run without https")
+	flag.Parse()
+
 	GT = template.New("index").Funcs(tempower.FMap())
 	ad, err := AssetDir("assets/templates")
 	for _, n := range ad {
@@ -79,7 +78,14 @@ func main() {
 	http.HandleFunc("/transactions", HandleTransactions)
 	http.HandleFunc("/family", HandleFamily)
 	http.HandleFunc("/pay", HandlePay)
+	http.HandleFunc("/chpass", HandlePasswordChange)
 	http.HandleFunc("/", Handle)
+
+	if *insecure {
+		err = http.ListenAndServe(":8080", nil)
+		return
+
+	}
 	err = http.ListenAndServeTLS(":8081", "data/server.pub", "data/server.key", nil)
 	if err != nil {
 		fmt.Println(err)
