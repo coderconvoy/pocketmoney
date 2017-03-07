@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"time"
 )
 
 func (f *Family) Calculate() {
@@ -36,5 +37,38 @@ func (f *Family) calculateTransaction(t Transaction) error {
 	from.Current -= t.Amount
 	dest.Current += t.Amount
 	return nil
+}
 
+func (f *Family) calculateStanding() {
+	ntList := []Transaction{}
+	for _, s := range f.Standing {
+
+		//Some standing orders will be set in the future.
+		if s.Start.After(time.Now()) {
+			continue
+		}
+
+		var lastTrans Transaction
+
+		for i := len(f.Transactions) - 1; i >= 0; i-- {
+			if f.Transactions[i].Purpose == s.Purpose {
+				lastTrans = f.Transactions[i]
+				break
+			}
+			if s.Start.After(t.Transactions[i].Date) {
+				break
+			}
+		}
+		if lastTrans.Amount == 0 && lastTrans.Purpose == "" {
+			lastTrans.BasicTransaction = s.BasicTransaction
+			lastTrans.Date = s.Start
+			lastTrans.Status = T_PAID
+			ntList = append(ntList, lastTrans)
+		}
+		//Todo add dates between initial and today
+
+	}
+
+	fam.Transactions = append(fam.Transactions, ntList...)
+	//TODO sort
 }

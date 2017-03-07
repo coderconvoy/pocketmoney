@@ -6,6 +6,16 @@ import (
 	"github.com/coderconvoy/dbase2"
 )
 
+const (
+	T_PAID = iota
+	T_REQUESTED
+	T_REJECTED
+)
+const (
+	D_NDAYS = iota
+	D_OFMONTH
+)
+
 type PageData struct {
 	Mes  string
 	Fmem string
@@ -17,6 +27,9 @@ type Family struct {
 	Members      []User
 	Accounts     []*Account
 	Transactions []Transaction
+	Requests     []Transaction
+	Standing     []StandingOrder
+	LastStanding time.Time
 }
 
 type User struct {
@@ -26,13 +39,24 @@ type User struct {
 	Parent   bool
 }
 
-type Transaction struct {
+type BasicTransaction struct {
 	FromUser, DestUser string
 	FromAC, DestAC     string
 	Amount             int
-	Authorised         bool
 	Purpose            string
-	Date               time.Time
+}
+
+type Transaction struct {
+	BasicTransaction
+	Status int
+	Date   time.Time
+}
+
+type StandingOrder struct {
+	BasicTransaction
+	Start     time.Time
+	Delay     int
+	DelayType int
 }
 
 type Account struct {
@@ -40,4 +64,5 @@ type Account struct {
 	Name      string
 	StartDate time.Time
 	Current   int
+	Available int
 }
