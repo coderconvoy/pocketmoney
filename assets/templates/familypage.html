@@ -8,6 +8,7 @@
     {{end}}
     </ul>
     <br><br>
+    {{if (isparent .Fmem .Fam)}}
     <form action="addmember" method="post"> 
         {{if .Mes}}
         <h3 class="message">{{.Mes }}</h3>
@@ -20,4 +21,5 @@
         Confirm Password : <input type="password" name="pwd2"><br>
         <input type="submit">
     </form>
+    {{end}}
 {{template "base"}}

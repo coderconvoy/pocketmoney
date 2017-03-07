@@ -71,7 +71,7 @@ func main() {
 	insecure := flag.Bool("i", false, "Run without https")
 	flag.Parse()
 
-	GT = template.New("index").Funcs(tempower.FMap())
+	GT = template.New("index").Funcs(tempower.FMap()).Funcs(TemplateFuncs())
 	ad, err := AssetDir("assets/templates")
 	for _, n := range ad {
 		if path.Ext(n) == ".swp" {

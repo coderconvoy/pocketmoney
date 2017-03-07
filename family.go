@@ -159,6 +159,10 @@ func HandleAddMember(w http.ResponseWriter, r *http.Request) {
 		GoIndex(w, r, "Not Logged In")
 		return
 	}
+	if !IsParent(fmem, fam) {
+		ExTemplate(GT, w, "familypage.html", PageData{"Not a Parent", fmem, fam})
+		return
+	}
 
 	uname := r.FormValue("username")
 	parent := r.FormValue("parent")
