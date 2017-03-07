@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"path"
+	"strings"
 	"text/template"
 
 	"github.com/coderconvoy/dbase2"
@@ -13,6 +14,25 @@ import (
 
 var GT *template.Template
 var FamDB = dbase2.DBase{"data/families"}
+
+type IndexData struct {
+	Mes, Family, Username string
+}
+
+func GoIndex(w http.ResponseWriter, r *http.Request, m string) {
+	c, err := r.Cookie("LastLog")
+	if err != nil {
+		ExTemplate(GT, w, "index.html", IndexData{m, "", ""})
+		return
+	}
+	s := strings.Split(c.Value, ":")
+	if len(s) != 2 {
+		ExTemplate(GT, w, "index.html", IndexData{m, c.Value, ""})
+		return
+	}
+	ExTemplate(GT, w, "index.html", IndexData{m, s[0], s[1]})
+
+}
 
 func ExTemplate(t *template.Template, w http.ResponseWriter, name string, data interface{}) {
 	err := t.ExecuteTemplate(w, name, data)
@@ -23,13 +43,12 @@ func ExTemplate(t *template.Template, w http.ResponseWriter, name string, data i
 
 func Handle(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Host, "--", r.URL.Path)
-	ExTemplate(GT, w, "index.html", nil)
+	GoIndex(w, r, "")
 }
 
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	loginControl.Logout(w, r)
-	ExTemplate(GT, w, "index.html", "You are now Logged out")
-
+	GoIndex(w, r, "You are now Logged out")
 }
 
 func HandleStatic(w http.ResponseWriter, r *http.Request) {

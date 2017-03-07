@@ -2,15 +2,15 @@
         <h1>Pocket Money</h1>
 
         {{if .}}
-        <b>Error:{{printf "%s" .}}</b>
+        <b>{{.Mes}}</b>
         {{end}}
 
 
 
         <form action="login" method="post">
             <h2>Login</h2>
-            Family: <input type="text" name="family"><br>
-            Member Name : <input type="text" name="username"><br>
+            Family: <input type="text" name="family" value="{{.Family}}"><br>
+            Member Name : <input type="text" name="username" value="{{.Username}}"><br>
             Password : <input type="password" name="pwd"><br>
             <input type="submit">
         </form>

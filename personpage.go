@@ -11,7 +11,7 @@ func HandlePersonal(w http.ResponseWriter, r *http.Request) {
 	fam, uname, err := LoggedInFamily(w, r)
 
 	if err != nil {
-		ExTemplate(GT, w, "index.html", err.Error())
+		GoIndex(w, r, err.Error())
 		return
 	}
 
@@ -28,7 +28,7 @@ func HandlePersonal(w http.ResponseWriter, r *http.Request) {
 func HandleAddAccount(w http.ResponseWriter, r *http.Request) {
 	fam, fmem, err := LoggedInFamily(w, r)
 	if err != nil {
-		ExTemplate(GT, w, "index.html", err.Error())
+		GoIndex(w, r, err.Error())
 		return
 	}
 	//TODO, check permission to add account
@@ -58,7 +58,7 @@ func HandleAddAccount(w http.ResponseWriter, r *http.Request) {
 func HandlePay(w http.ResponseWriter, r *http.Request) {
 	fam, fmem, err := LoggedInFamily(w, r)
 	if err != nil {
-		ExTemplate(GT, w, "index.html", err.Error())
+		GoIndex(w, r, err.Error())
 		return
 	}
 	fUser := r.FormValue("username")
@@ -102,7 +102,7 @@ func HandlePay(w http.ResponseWriter, r *http.Request) {
 func HandleTransactions(w http.ResponseWriter, r *http.Request) {
 	fam, fmem, err := LoggedInFamily(w, r)
 	if err != nil {
-		ExTemplate(GT, w, "index.html", err.Error())
+		GoIndex(w, r, err.Error())
 		return
 	}
 	ExTemplate(GT, w, "transactions.html", PageData{"", fmem, fam})

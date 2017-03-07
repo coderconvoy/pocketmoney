@@ -53,7 +53,8 @@ func SaveFamily(f *Family) error {
 func HandleFamily(w http.ResponseWriter, r *http.Request) {
 	fam, fmem, err := LoggedInFamily(w, r)
 	if err != nil {
-		ExTemplate(GT, w, "index.html", err.Error())
+		GoIndex(w, r, err.Error())
+		return
 	}
 	ExTemplate(GT, w, "familypage.html", PageData{"", fmem, fam})
 }
@@ -63,16 +64,20 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	famname := r.FormValue("family")
 	fam, err := LoadFamily(famname)
 	if err != nil {
-		ExTemplate(GT, w, "index.html", err.Error())
+		GoIndex(w, r, err.Error())
 		return
 	}
 
-	//Check Password
 	uname := r.FormValue("username")
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "LastLog",
+		Value:   famname + ":" + uname,
+		Expires: time.Now().Add(time.Hour * 24 * 30),
+	})
+
+	//Check Password
 	pw := r.FormValue("pwd")
-	if uname == "" {
-		ExTemplate(GT, w, "index.html", "Username Blank")
-	}
 
 	sel := -1
 	for i, v := range fam.Members {
@@ -84,7 +89,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if sel == -1 {
-		ExTemplate(GT, w, "index.html", "No Username-Password match")
+		ExTemplate(GT, w, "index.html", IndexData{"No Username-Password match", famname, uname})
 		return
 	}
 
@@ -95,11 +100,18 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 	var f Family
 	f.FamilyName = r.FormValue("familyname")
+	uname := r.FormValue("username")
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "LastLog",
+		Value:   f.FamilyName + ":" + uname,
+		Expires: time.Now().Add(time.Hour * 24 * 30),
+	})
 
 	//Check if family already exists
 	_, err := FamDB.ReadMap(f.FamilyName)
 	if err == nil {
-		ExTemplate(GT, w, "index.html", "Family Name Already Exists")
+		GoIndex(w, r, "Family Name Already Exists")
 		return
 	}
 
@@ -107,17 +119,16 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 	p2 := r.FormValue("pwd2")
 
 	if p1 != p2 {
-		ExTemplate(GT, w, "index.html", "Passwords don't match")
+		GoIndex(w, r, "Passwords don't match")
 		return
 	}
 
 	pw, err := dbase2.NewPassword(p1)
 	if err != nil {
-		ExTemplate(GT, w, "index.html", "Passwords error: "+err.Error())
+		GoIndex(w, r, "Passwords error: "+err.Error())
 		return
 	}
 
-	uname := r.FormValue("username")
 	email := r.FormValue("email")
 	f.Members = append(f.Members, User{
 		Username: uname,
@@ -145,7 +156,7 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 func HandleAddMember(w http.ResponseWriter, r *http.Request) {
 	fam, fmem, err := LoggedInFamily(w, r)
 	if err != nil {
-		ExTemplate(GT, w, "index.html", "Not Logged In")
+		GoIndex(w, r, "Not Logged In")
 		return
 	}
 
@@ -167,7 +178,8 @@ func HandleAddMember(w http.ResponseWriter, r *http.Request) {
 	pw, err := dbase2.NewPassword(pwd1)
 	if err != nil {
 		fmt.Println("Could not Password: ", err)
-		ExTemplate(GT, w, "index.html", PageData{"Password Failed", fmem, fam})
+		GoIndex(w, r, "Password Failed")
+		return
 	}
 	fam.Members = append(fam.Members, User{
 		Username: uname,

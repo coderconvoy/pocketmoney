@@ -9,7 +9,7 @@ import (
 func HandlePasswordChange(w http.ResponseWriter, r *http.Request) {
 	fam, fmem, err := LoggedInFamily(w, r)
 	if err != nil {
-		ExTemplate(GT, w, "index.html", "Not Logged In"+err.Error())
+		GoIndex(w, r, "Not Logged In"+err.Error())
 		return
 	}
 
