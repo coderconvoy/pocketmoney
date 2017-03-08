@@ -52,6 +52,12 @@ type Transaction struct {
 	Date   time.Time
 }
 
+type Transortable []Transaction
+
+func (t Transortable) Len() int           { return len(t) }
+func (t Transortable) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
+func (t Transortable) Less(i, j int) bool { return t[j].After(t[i]) }
+
 type StandingOrder struct {
 	BasicTransaction
 	Start     time.Time

@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"sort"
 	"time"
 )
 
@@ -39,7 +40,11 @@ func (f *Family) calculateTransaction(t Transaction) error {
 	return nil
 }
 
-func (f *Family) calculateStanding() {
+func (f *Family) CalculateStanding() {
+	f.CalculateStanding(time.Now())
+}
+
+func (f *Family) calculateStanding(now time.Time) {
 	ntList := []Transaction{}
 	for _, s := range f.Standing {
 
@@ -66,9 +71,26 @@ func (f *Family) calculateStanding() {
 			ntList = append(ntList, lastTrans)
 		}
 		//Todo add dates between initial and today
+		nd := NextDate(lastTrans.Date, s.Delay, s.DelayType)
+		for time.Now().After(nd) {
+			ntList = append(ntList, Transaction{
+				BasicTransaction: s.BasicTransaction,
+				Date:             nd,
+				Status:           T_PAID,
+			})
+			nd := NextDate(nd, s.Delay, s.DelayType)
+		}
 
 	}
 
 	fam.Transactions = append(fam.Transactions, ntList...)
-	//TODO sort
+	sort.Sort(Transortable(fam.Transactions))
+
+}
+
+func NextDate(d time.Time, step int, steptype int) time.Time {
+	if steptype == D_NDAYS {
+		return d.AddDate(0, 0, step)
+	}
+	return d.AddDate(0, step, 0)
 }
