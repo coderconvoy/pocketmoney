@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"text/template"
+	"time"
 )
 
 func TemplateFuncs() template.FuncMap {
@@ -11,6 +12,7 @@ func TemplateFuncs() template.FuncMap {
 		"getuser":  GetUser,
 		"isparent": IsParent,
 		"money":    PrintMoney,
+		"date":     PrintDate,
 	}
 }
 
@@ -28,6 +30,10 @@ func PrintMoney(n int) string {
 		return "-£" + fmt.Sprintf("%.2f", float32(-n)/100)
 	}
 	return "£" + fmt.Sprintf("%.2f", float32(n)/100)
+}
+
+func PrintDate(t time.Time) string {
+	return t.Format("Mon 2/Jan/06")
 }
 
 func IsParent(uname string, fam *Family) bool {
