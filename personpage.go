@@ -80,14 +80,16 @@ func HandlePay(w http.ResponseWriter, r *http.Request) {
 	purpose := r.FormValue("purpose")
 
 	fam.Transactions = append(fam.Transactions, Transaction{
-		FromUser:   fUser,
-		FromAC:     fAcc,
-		DestUser:   toSpl[0],
-		DestAC:     toSpl[1],
-		Amount:     int(am * 100),
-		Authorised: true,
-		Purpose:    purpose,
-		Date:       time.Now(),
+		BasicTransaction: BasicTransaction{
+			FromUser: fUser,
+			FromAC:   fAcc,
+			DestUser: toSpl[0],
+			DestAC:   toSpl[1],
+			Amount:   int(am * 100),
+			Purpose:  purpose,
+		},
+		Status: T_PAID,
+		Date:   time.Now(),
 	})
 	fam.Calculate()
 	err = SaveFamily(fam)

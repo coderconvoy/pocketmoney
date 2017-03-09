@@ -41,7 +41,7 @@ func (f *Family) calculateTransaction(t Transaction) error {
 }
 
 func (f *Family) CalculateStanding() {
-	f.CalculateStanding(time.Now())
+	f.calculateStanding(time.Now())
 }
 
 func (f *Family) calculateStanding(now time.Time) {
@@ -49,7 +49,7 @@ func (f *Family) calculateStanding(now time.Time) {
 	for _, s := range f.Standing {
 
 		//Some standing orders will be set in the future.
-		if s.Start.After(time.Now()) {
+		if s.Start.After(now) {
 			continue
 		}
 
@@ -60,7 +60,7 @@ func (f *Family) calculateStanding(now time.Time) {
 				lastTrans = f.Transactions[i]
 				break
 			}
-			if s.Start.After(t.Transactions[i].Date) {
+			if s.Start.After(f.Transactions[i].Date) {
 				break
 			}
 		}
@@ -72,19 +72,19 @@ func (f *Family) calculateStanding(now time.Time) {
 		}
 		//Todo add dates between initial and today
 		nd := NextDate(lastTrans.Date, s.Delay, s.DelayType)
-		for time.Now().After(nd) {
+		for now.After(nd) {
 			ntList = append(ntList, Transaction{
 				BasicTransaction: s.BasicTransaction,
 				Date:             nd,
 				Status:           T_PAID,
 			})
-			nd := NextDate(nd, s.Delay, s.DelayType)
+			nd = NextDate(nd, s.Delay, s.DelayType)
 		}
 
 	}
 
-	fam.Transactions = append(fam.Transactions, ntList...)
-	sort.Sort(Transortable(fam.Transactions))
+	f.Transactions = append(f.Transactions, ntList...)
+	sort.Sort(Transortable(f.Transactions))
 
 }
 
