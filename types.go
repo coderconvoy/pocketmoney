@@ -22,6 +22,13 @@ type PageData struct {
 	Fam  *Family
 }
 
+type ACPageData struct {
+	Fmem string
+	AC   Account
+	List []Transaction
+	RT   []int
+}
+
 type Family struct {
 	FamilyName   string
 	Members      []User

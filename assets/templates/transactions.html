@@ -5,7 +5,8 @@
 <tr>
     <td>{{$v.FromUser}}:{{$v.FromAC}}</td>
     <td>{{$v.DestUser}}:{{$v.DestAC}}</td>
-    <td>{{$v.Amount}}</td>
+    <td>{{money $v.Amount}}</td>
+    <td>{{$v.Purpose}}</td>
 </tr>
 
 {{end}}

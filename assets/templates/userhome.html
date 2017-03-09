@@ -10,7 +10,7 @@
 {{$Fmem := .Fmem}}
 {{range $k, $v := .Fam.Accounts}}
     {{if eq $v.Username $Fmem}}
-    <li>{{$v.Name}} £{{$v.Current}}</li>
+    <li><a href="/view?uname={{$v.Username}}&ac={{$v.Name}}">{{$v.Name}}</a>&nbsp;{{money $v.Current}}</li>
     {{end}}
 {{end}}
 </ul>

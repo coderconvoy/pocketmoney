@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"text/template"
 )
 
@@ -9,6 +10,7 @@ func TemplateFuncs() template.FuncMap {
 	return template.FuncMap{
 		"getuser":  GetUser,
 		"isparent": IsParent,
+		"money":    PrintMoney,
 	}
 }
 
@@ -19,6 +21,13 @@ func GetUser(uname string, fam *Family) (*User, error) {
 		}
 	}
 	return nil, errors.New("No Member of that name")
+}
+
+func PrintMoney(n int) string {
+	if n < 0 {
+		return "-£" + fmt.Sprintf("%.2f", float32(-n)/100)
+	}
+	return "£" + fmt.Sprintf("%.2f", float32(n)/100)
 }
 
 func IsParent(uname string, fam *Family) bool {

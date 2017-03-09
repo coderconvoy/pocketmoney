@@ -109,3 +109,28 @@ func HandleTransactions(w http.ResponseWriter, r *http.Request) {
 	}
 	ExTemplate(GT, w, "transactions.html", PageData{"", fmem, fam})
 }
+
+func HandleViewAccount(w http.ResponseWriter, r *http.Request) {
+	fam, fmem, err := LoggedInFamily(w, r)
+	if err != nil {
+		GoIndex(w, r, err.Error())
+		return
+	}
+
+	rname := r.FormValue("uname")
+	rac := r.FormValue("ac")
+	//parent or own allowed
+	if !IsParent(fmem, fam) || fmem != rname {
+		ExTemplate(GT, w, "userpage.html", PageData{"Must be your own page", fmem, fam})
+
+		return
+	}
+	fam.Calculate()
+	ac, tList, rt, err := fam.ACTransactions(rname, rac)
+	if err != nil {
+		ExTemplate(GT, w, "userpage.html", PageData{err.Error(), fmem, fam})
+
+		return
+	}
+	ExTemplate(GT, w, "viewac.html", ACPageData{fmem, ac, tList, rt})
+}

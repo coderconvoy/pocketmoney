@@ -98,6 +98,7 @@ func main() {
 	http.HandleFunc("/family", HandleFamily)
 	http.HandleFunc("/pay", HandlePay)
 	http.HandleFunc("/chpass", HandlePasswordChange)
+	http.HandleFunc("/view", HandleViewAccount)
 	http.HandleFunc("/", Handle)
 
 	if *insecure {

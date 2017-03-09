@@ -8,6 +8,11 @@ import (
 )
 
 func (f *Family) Calculate() {
+	f.CalculateStanding()
+	f.CalculateTransactions()
+}
+
+func (f *Family) CalculateTransactions() {
 	fmt.Println("Calculating")
 	for _, a := range f.Accounts {
 		a.Current = 0
@@ -17,7 +22,6 @@ func (f *Family) Calculate() {
 		f.calculateTransaction(t)
 		//TODO, work out what to do with error transactions
 	}
-
 }
 
 func (f *Family) calculateTransaction(t Transaction) error {
@@ -93,4 +97,36 @@ func NextDate(d time.Time, step int, steptype int) time.Time {
 		return d.AddDate(0, 0, step)
 	}
 	return d.AddDate(0, step, 0)
+}
+
+func (f Family) ACTransactions(uname, ac string) (Account, []Transaction, []int, error) {
+	rList := []Transaction{}
+	var rac Account
+	score := []int{} //running totals
+	running := 0
+	fnd := false
+	for _, a := range f.Accounts {
+		if a.Username == uname && a.Name == ac {
+			rac = *a
+			fnd = true
+		}
+	}
+	if !fnd {
+		return rac, rList, score, errors.New("No Account by name " + uname)
+	}
+
+	for _, t := range f.Transactions {
+		if t.FromUser == uname && t.FromAC == ac {
+			running -= t.Amount
+			score = append(score, running)
+			rList = append(rList, t)
+		}
+		if t.DestUser == uname && t.DestAC == ac {
+			running += t.Amount
+			score = append(score, running)
+			rList = append(rList, t)
+		}
+	}
+	return rac, rList, score, nil
+
 }
