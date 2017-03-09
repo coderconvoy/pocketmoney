@@ -61,25 +61,29 @@
    "Username": "Matt",
    "Name": "checking",
    "StartDate": "2017-03-03T13:06:09.870173744Z",
-   "Current": -1700
+   "Current": -1650,
+   "Available": 0
   },
   {
    "Username": "Matt",
    "Name": "Poop",
    "StartDate": "2017-03-03T13:10:51.455749761Z",
-   "Current": 950
+   "Current": 950,
+   "Available": 0
   },
   {
    "Username": "Matt",
    "Name": "Plooop",
    "StartDate": "2017-03-03T15:56:59.829469209Z",
-   "Current": 700
+   "Current": 700,
+   "Available": 0
   },
   {
    "Username": "River",
    "Name": "Checking",
    "StartDate": "2017-03-03T16:33:34.528187798Z",
-   "Current": 50
+   "Current": 0,
+   "Available": 0
   }
  ],
  "Transactions": [
@@ -89,8 +93,8 @@
    "FromAC": "checking",
    "DestAC": "Poop",
    "Amount": 500,
-   "Authorised": false,
    "Purpose": "t3",
+   "Status": 0,
    "Date": "0001-01-01T00:00:00Z"
   },
   {
@@ -99,8 +103,8 @@
    "FromAC": "checking",
    "DestAC": "Poop",
    "Amount": 500,
-   "Authorised": true,
    "Purpose": "no reason",
+   "Status": 0,
    "Date": "2017-03-03T15:57:17.625839721Z"
   },
   {
@@ -109,8 +113,8 @@
    "FromAC": "checking",
    "DestAC": "Plooop",
    "Amount": 700,
-   "Authorised": true,
    "Purpose": "test",
+   "Status": 0,
    "Date": "2017-03-03T16:24:41.333599494Z"
   },
   {
@@ -119,9 +123,22 @@
    "FromAC": "Poop",
    "DestAC": "Checking",
    "Amount": 50,
-   "Authorised": true,
    "Purpose": "For Roo",
+   "Status": 0,
    "Date": "2017-03-03T16:34:01.738298033Z"
+  },
+  {
+   "FromUser": "Matt",
+   "DestUser": "River",
+   "FromAC": "checking",
+   "DestAC": "Checking",
+   "Amount": -50,
+   "Purpose": "Stealing",
+   "Status": 0,
+   "Date": "2017-03-09T13:47:48.453493266Z"
   }
- ]
+ ],
+ "Requests": null,
+ "Standing": null,
+ "LastStanding": "0001-01-01T00:00:00Z"
 }

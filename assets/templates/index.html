@@ -12,7 +12,7 @@
             Family: <input type="text" name="family" value="{{.Family}}"><br>
             Member Name : <input type="text" name="username" value="{{.Username}}"><br>
             Password : <input type="password" name="pwd"><br>
-            <input type="submit">
+            <input type="submit" text="Login" value="Login">
         </form>
 
 
@@ -24,6 +24,7 @@
             Password : <input type="password" pattern=".{5,20}" required title="5-20 characters" name="pwd1"><br>
             (Minimum 5 letters)<br>
             Confirm Password : <input type="password" name="pwd2"><br>
-            <input type="submit">
+            <input type="submit" text="Create" value="Create">
+
         </form>
 {{template "base"}}        

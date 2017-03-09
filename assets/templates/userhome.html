@@ -15,42 +15,9 @@
 {{end}}
 </ul>
 
-{{/*Add Account*/}}
-<form action="addaccount" method="post">
-<h3>Add Account</h3>
-<input type="text" name="username" readonly value="{{.Fmem}}" hidden>
-<input type="text" name="accountname" pattern=".{4,20}" required>
-<input type="submit" text="Add">
-</form>
+{{template "frm_add_account" .}}
 
-
-{{/*Pay Money*/}}
-<form action="pay" method="post">
-    <h3>Make a Payment</h3>
-<input type="text" name="username" readonly value="{{.Fmem}}" hidden>  
-From:
-<select name="from">
-    {{range $k , $v := .Fam.Accounts}}
-        {{if eq $v.Username $Fmem}}
-        <option value="{{$v.Name}}">{{$v.Name}} - {{$v.Current}}</option>
-        {{end}}
-    {{end}}
-</select>
-To:
-<select name="to">
-    {{range $k,$v := .Fam.Accounts}}
-    <option value="{{$v.Username}}:{{$v.Name}}">{{$v.Username}}:{{$v.Name}}</option>
-    {{end}}
-</select><br>
-Amount:  £<input type="number" step="0.01" name="amount">  Purpose:  <input type="text" name="purpose"><br>
-    <input type="submit" text="Pay Now">
-</form>
-<form action="chpass" method="post">
-    <h2>Change Password</h2>
-    Old Password : <input type="password" name="oldpwd"><br>
-    New password : <input type="password" name="pwd1"><br>
-    Confirm : <input type="password" name="pwd2"><br>
-    <input type="submit" text="Change">
-</form>
-
+{{template "frm_pay" .}}
+{{template "frm_standing" . }}
+{{template "frm_chpass" .}}
 {{template "base"}}

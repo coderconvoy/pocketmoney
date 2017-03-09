@@ -13,6 +13,7 @@ func TemplateFuncs() template.FuncMap {
 		"isparent": IsParent,
 		"money":    PrintMoney,
 		"date":     PrintDate,
+		"dateRFC":  PrintDateRFC,
 	}
 }
 
@@ -32,8 +33,18 @@ func PrintMoney(n int) string {
 	return "£" + fmt.Sprintf("%.2f", float32(n)/100)
 }
 
-func PrintDate(t time.Time) string {
-	return t.Format("Mon 2/Jan/06")
+func PrintDate(t ...time.Time) string {
+	if len(t) == 0 {
+		return time.Now().Format("Mon 2/Jan/06")
+	}
+	return t[0].Format("Mon 2/Jan/06")
+}
+
+func PrintDateRFC(t ...time.Time) string {
+	if len(t) == 0 {
+		return time.Now().Format("2006-01-02")
+	}
+	return t[0].Format("2006-01-02")
 }
 
 func IsParent(uname string, fam *Family) bool {
