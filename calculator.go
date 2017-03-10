@@ -128,3 +128,7 @@ func (f *Family) AccumulateTransactions(uname, ac string) []Accumulation {
 	}
 	return res
 }
+
+func (f *Family) Account(ACKey k) (Account, bool) {
+	return f.Accounts[k.String()]
+}

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"errors"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/coderconvoy/dbase2"
@@ -74,7 +76,7 @@ type ACPageData struct {
 type Family struct {
 	FamilyName           string
 	Members              []User
-	Accounts             []*Account
+	Accounts             map[string]Account
 	Transactions         []Transaction
 	Requests             []Transaction
 	Standing             []StandingOrder
@@ -117,6 +119,17 @@ type StandingOrder struct {
 type ACKey struct {
 	Username string
 	Name     string
+}
+
+func (k ACKey) String() {
+	return k.Username + ":" + k.Name
+}
+func NewACKey(s string) (ACKey, error) {
+	sp := strings.Split(":")
+	if len(sp) != 2 {
+		return ACKey{}, errors.New("Could not Parse Key")
+	}
+	return ACKey{sp[0], sp[1]}, nil
 }
 
 type Account struct {
