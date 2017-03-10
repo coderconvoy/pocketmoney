@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"net/http"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 
 var loginControl = NewLoginControl(time.Minute * 20)
 
-type LoginData struct {
+type LoginStore struct {
 	Familyname string
 	Username   string
 }
@@ -25,13 +26,54 @@ func NewLoginControl(md time.Duration) *LoginControl {
 }
 
 func (lc *LoginControl) Login(w http.ResponseWriter, familyname, username string) {
-	lc.SessionControl.Login(w, LoginData{familyname, username})
+	lc.SessionControl.Login(w, LoginStore{familyname, username})
 }
 
-func (lc *LoginControl) GetLogin(w http.ResponseWriter, r *http.Request) (LoginData, int) {
+func (lc *LoginControl) GetLogin(w http.ResponseWriter, r *http.Request) (LoginStore, int) {
 	a, rtype := lc.SessionControl.GetLogin(w, r)
 	if rtype != dbase2.OK {
-		return LoginData{}, rtype
+		return LoginStore{}, rtype
 	}
-	return a.Data.(LoginData), rtype
+	return a.Data.(LoginStore), rtype
+}
+
+type LoginData struct {
+	W      http.ResponseWriter
+	R      *http.Request
+	Fam    *Family
+	Fmem   string
+	LockID uint64
+}
+
+type LoggedFunc func(ld LoginData)
+
+type MuxFunc func(w http.ResponseWriter, r *http.Request)
+
+//Logged
+func LoggedInFunc(f LoggedFunc, lock bool) MuxFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		Fam, fmem, err := LoggedInFamily(w, r)
+		if err != nil {
+			GoIndex(w, r, err.Error())
+			return
+		}
+		ld := LoginData{
+			W:    w,
+			R:    r,
+			Fam:  Fam,
+			Fmem: fmem,
+		}
+		f(ld)
+	}
+}
+
+// Logged In Family returns the loaded family file the family in the cookie id.
+// TODO add boolean getLock
+func LoggedInFamily(w http.ResponseWriter, r *http.Request) (*Family, string, error) {
+	ld, iok := loginControl.GetLogin(w, r)
+	if iok != dbase2.OK {
+		return nil, "", errors.New("No login")
+	}
+	fam, err := LoadFamily(ld.Familyname)
+	return fam, ld.Username, err
 }

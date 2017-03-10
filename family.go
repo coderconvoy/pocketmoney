@@ -10,16 +10,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-func LoggedInFamily(w http.ResponseWriter, r *http.Request) (*Family, string, error) {
-	ld, iok := loginControl.GetLogin(w, r)
-	if iok != dbase2.OK {
-		return nil, "", errors.New("No login")
-	}
-	fam, err := LoadFamily(ld.Familyname)
-	return fam, ld.Username, err
-
-}
-
 // LoadFamily Reads and Unmarshals the Family File
 // Params family name,
 // Returns loaded family or nil, followed by error
@@ -50,13 +40,9 @@ func SaveFamily(f *Family) error {
 	return nil
 }
 
-func HandleFamily(w http.ResponseWriter, r *http.Request) {
-	fam, fmem, err := LoggedInFamily(w, r)
-	if err != nil {
-		GoIndex(w, r, err.Error())
-		return
-	}
-	ExTemplate(GT, w, "familypage.html", PageData{"", fmem, fam})
+func HandleFamily(ld LoginData) {
+	fmt.Println("Going Family")
+	ExTemplate(GT, ld.W, "familypage.html", PageData{"", ld.Fmem, ld.Fam})
 }
 
 func HandleLogin(w http.ResponseWriter, r *http.Request) {

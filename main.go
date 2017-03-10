@@ -95,7 +95,7 @@ func main() {
 	http.HandleFunc("/personal", HandlePersonal)
 	http.HandleFunc("/addaccount", HandleAddAccount)
 	http.HandleFunc("/transactions", HandleTransactions)
-	http.HandleFunc("/family", HandleFamily)
+	http.HandleFunc("/family", LoggedInFunc(HandleFamily, false))
 	http.HandleFunc("/pay", HandlePay)
 	http.HandleFunc("/chpass", HandlePasswordChange)
 	http.HandleFunc("/view", HandleViewAccount)
