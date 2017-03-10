@@ -93,6 +93,9 @@ func (f *Family) calculateStanding(now time.Time) {
 }
 
 func NextDate(d time.Time, step int, steptype int) time.Time {
+	if step <= 0 {
+		step = 1
+	}
 	if steptype == D_NDAYS {
 		return d.AddDate(0, 0, step)
 	}

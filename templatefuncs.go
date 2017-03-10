@@ -9,12 +9,14 @@ import (
 
 func TemplateFuncs() template.FuncMap {
 	return template.FuncMap{
-		"getuser":   GetUser,
-		"isparent":  IsParent,
-		"accessACs": FilterWriteableACs,
-		"money":     PrintMoney,
-		"date":      PrintDate,
-		"dateRFC":   PrintDateRFC,
+		"getuser":        GetUser,
+		"isparent":       IsParent,
+		"accessACs":      FilterWriteableACs,
+		"standingbyac":   FilterStandingByAC,
+		"standingbyuser": FilterStandingByUser,
+		"money":          PrintMoney,
+		"date":           PrintDate,
+		"dateRFC":        PrintDateRFC,
 	}
 }
 
@@ -65,6 +67,29 @@ func FilterWriteableACs(acs []*Account, uname string, fam *Family) []*Account {
 	res := []*Account{}
 	for _, v := range acs {
 		if WriteableAC(v, uname, fam) {
+			res = append(res, v)
+		}
+	}
+	return res
+}
+
+func FilterStandingByUser(st []StandingOrder, uname string) []StandingOrder {
+	res := []StandingOrder{}
+	for _, v := range st {
+		if (uname == v.FromUser) || (uname == v.DestUser) {
+
+			res = append(res, v)
+		}
+	}
+	return res
+}
+
+func FilterStandingByAC(st []StandingOrder, ac *Account) []StandingOrder {
+	res := []StandingOrder{}
+	for _, v := range st {
+		if (ac.Name == v.FromAC && ac.Username == v.FromUser) ||
+			(ac.Name == v.DestAC && ac.Username == v.DestUser) {
+
 			res = append(res, v)
 		}
 	}

@@ -77,7 +77,7 @@
    "Username": "Matt",
    "Name": "Poop",
    "StartDate": "2017-03-03T13:10:51.455749761Z",
-   "Current": 950,
+   "Current": -50,
    "Available": 0
   },
   {
@@ -91,7 +91,7 @@
    "Username": "River",
    "Name": "Checking",
    "StartDate": "2017-03-03T16:33:34.528187798Z",
-   "Current": 0,
+   "Current": 1000,
    "Available": 0
   },
   {
@@ -152,9 +152,31 @@
    "Purpose": "Stealing",
    "Status": 0,
    "Date": "2017-03-09T13:47:48.453493266Z"
+  },
+  {
+   "FromUser": "Matt",
+   "DestUser": "River",
+   "FromAC": "Poop",
+   "DestAC": "Checking",
+   "Amount": 1000,
+   "Purpose": "For Roo",
+   "Status": 0,
+   "Date": "2017-03-10T00:00:00Z"
   }
  ],
  "Requests": null,
- "Standing": null,
+ "Standing": [
+  {
+   "FromUser": "Matt",
+   "DestUser": "River",
+   "FromAC": "Poop",
+   "DestAC": "Checking",
+   "Amount": 1000,
+   "Purpose": "For Roo",
+   "Start": "2017-03-10T00:00:00Z",
+   "Delay": 1,
+   "DelayType": 0
+  }
+ ],
  "LastStanding": "0001-01-01T00:00:00Z"
 }
