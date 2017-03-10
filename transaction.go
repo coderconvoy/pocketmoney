@@ -52,11 +52,11 @@ func readPostBasicTransaction(ld LoginData) (BasicTransaction, error) {
 }
 
 func HandlePay(ld LoginData) {
-	w, fam, fmem := ld.W, ld.Fam, ld.Fmem
+	w, fam := ld.W, ld.Fam
 
 	bt, err := readPostBasicTransaction(ld)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", PageData{err.Error(), fmem, fam})
+		ExTemplate(GT, w, "userhome.html", ld.Pd(err.Error()))
 		return
 	}
 
@@ -73,12 +73,11 @@ func HandlePay(ld LoginData) {
 		mes = "Could not Save Family: " + err.Error()
 	}
 
-	ExTemplate(GT, w, "userhome.html", PageData{mes, fmem, fam})
+	ExTemplate(GT, w, "userhome.html", ld.Pd(mes))
 }
 
 func HandleTransactions(ld LoginData) {
-	w, fam, fmem := ld.W, ld.Fam, ld.Fmem
-	ExTemplate(GT, w, "transactions.html", PageData{"", fmem, fam})
+	ExTemplate(GT, ld.W, "transactions.html", ld.Pd(""))
 }
 
 func HandleViewAccount(ld LoginData) {
@@ -87,14 +86,14 @@ func HandleViewAccount(ld LoginData) {
 	rac := r.FormValue("ac")
 	//parent or own allowed
 	if !IsParent(fmem, fam) || fmem != rname {
-		ExTemplate(GT, w, "userpage.html", PageData{"Must be your own page", fmem, fam})
+		ExTemplate(GT, w, "userpage.html", ld.Pd("Must be your own page"))
 
 		return
 	}
 	fam.Calculate()
 	ac, tList, rt, err := fam.ACTransactions(rname, rac)
 	if err != nil {
-		ExTemplate(GT, w, "userpage.html", PageData{err.Error(), fmem, fam})
+		ExTemplate(GT, w, "userpage.html", ld.Pd(err.Error()))
 
 		return
 	}
@@ -102,11 +101,11 @@ func HandleViewAccount(ld LoginData) {
 }
 
 func HandleAddStanding(ld LoginData) {
-	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
+	w, r, fam := ld.W, ld.R, ld.Fam
 
 	bt, err := readPostBasicTransaction(ld)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", PageData{err.Error(), fmem, fam})
+		ExTemplate(GT, w, "userhome.html", ld.Pd(err.Error()))
 		return
 	}
 
@@ -114,21 +113,21 @@ func HandleAddStanding(ld LoginData) {
 	fmt.Println("start:", start)
 	stime, err := time.Parse("2006-01-02", start)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", PageData{"could not parse date" + err.Error(), fmem, fam})
+		ExTemplate(GT, w, "userhome.html", ld.Pd("could not parse date"+err.Error()))
 		return
 	}
 
 	if time.Now().AddDate(0, 0, -1).After(stime) {
-		ExTemplate(GT, w, "userhome.html", PageData{"Must be a future startdate", fmem, fam})
+		ExTemplate(GT, w, "userhome.html", ld.Pd("Must be a future startdate"))
 	}
 
 	delay, err := strconv.Atoi(r.FormValue("delay"))
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", PageData{"could not parse delay interval" + err.Error(), fmem, fam})
+		ExTemplate(GT, w, "userhome.html", ld.Pd("could not parse delay interval"+err.Error()))
 		return
 	}
 	if delay < 1 {
-		ExTemplate(GT, w, "userhome.html", PageData{"Must increment positive", fmem, fam})
+		ExTemplate(GT, w, "userhome.html", ld.Pd("Must increment positive"))
 		return
 	}
 
@@ -144,6 +143,7 @@ func HandleAddStanding(ld LoginData) {
 		Delay:            delay,
 		DelayType:        delayType,
 	}
+	nstand.Purpose = "$" + nstand.Purpose
 
 	fam.Standing = append(fam.Standing, nstand)
 	fam.Calculate()
@@ -154,6 +154,6 @@ func HandleAddStanding(ld LoginData) {
 		mes = "Could not Save Family: " + err.Error()
 	}
 
-	ExTemplate(GT, w, "userhome.html", PageData{mes, fmem, fam})
+	ExTemplate(GT, w, "userhome.html", ld.Pd(mes))
 
 }

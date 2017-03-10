@@ -37,14 +37,6 @@ func (lc *LoginControl) GetLogin(w http.ResponseWriter, r *http.Request) (LoginS
 	return a.Data.(LoginStore), rtype
 }
 
-type LoginData struct {
-	W      http.ResponseWriter
-	R      *http.Request
-	Fam    *Family
-	Fmem   string
-	LockID uint64
-}
-
 type LoggedFunc func(ld LoginData)
 
 type MuxFunc func(w http.ResponseWriter, r *http.Request)

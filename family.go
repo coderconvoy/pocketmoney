@@ -42,7 +42,7 @@ func SaveFamily(f *Family) error {
 
 func HandleFamily(ld LoginData) {
 	fmt.Println("Going Family")
-	ExTemplate(GT, ld.W, "familypage.html", PageData{"", ld.Fmem, ld.Fam})
+	ExTemplate(GT, ld.W, "familypage.html", NewPageData("", ld.Fmem, ld.Fam))
 }
 
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
@@ -80,7 +80,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	loginControl.Login(w, fam.FamilyName, uname)
-	ExTemplate(GT, w, "familypage.html", PageData{"", uname, fam})
+	ExTemplate(GT, w, "familypage.html", NewPageData("", uname, fam))
 
 }
 func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
@@ -142,14 +142,14 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 		//TODO
 	}
 	loginControl.Login(w, f.FamilyName, uname)
-	ExTemplate(GT, w, "familypage.html", PageData{"", uname, &f})
+	ExTemplate(GT, w, "familypage.html", NewPageData("", uname, &f))
 
 }
 
 func HandleAddMember(ld LoginData) {
 	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
 	if !IsParent(fmem, fam) {
-		ExTemplate(GT, w, "familypage.html", PageData{"Not a Parent", fmem, fam})
+		ExTemplate(GT, w, "familypage.html", NewPageData("Not a Parent", fmem, fam))
 		return
 	}
 
@@ -160,11 +160,11 @@ func HandleAddMember(ld LoginData) {
 	pwd2 := r.FormValue("pwd2")
 
 	if uname == "" {
-		ExTemplate(GT, w, "familypage.html", PageData{"No Username", fmem, fam})
+		ExTemplate(GT, w, "familypage.html", NewPageData("No Username", fmem, fam))
 		return
 	}
 	if pwd1 != pwd2 || pwd1 == "" {
-		ExTemplate(GT, w, "familypage.html", PageData{"Passwords not matching", fmem, fam})
+		ExTemplate(GT, w, "familypage.html", NewPageData("Passwords not matching", fmem, fam))
 		return
 	}
 
@@ -190,5 +190,5 @@ func HandleAddMember(ld LoginData) {
 	if err != nil {
 		//TODO
 	}
-	ExTemplate(GT, w, "familypage.html", PageData{"", fmem, fam})
+	ExTemplate(GT, w, "familypage.html", NewPageData("", fmem, fam))
 }

@@ -16,25 +16,25 @@ func HandlePasswordChange(ld LoginData) {
 
 	oldpwd := r.FormValue("oldpwd")
 	if !cmem.Password.Check(oldpwd) {
-		ExTemplate(GT, w, "userhome.html", PageData{"Error Saving password : Old password incorrect", fmem, fam})
+		ExTemplate(GT, w, "userhome.html", ld.Pd("Error Saving password : Old password incorrect"))
 		return
 	}
 
 	pwd1 := r.FormValue("pwd1")
 	pwd2 := r.FormValue("pwd2")
 	if len(pwd1) < 5 {
-		ExTemplate(GT, w, "userhome.html", PageData{"Error Saving password : New password too short (5 min)", fmem, fam})
+		ExTemplate(GT, w, "userhome.html", ld.Pd("Error Saving password : New password too short (5 min)"))
 		return
 	}
 
 	if pwd1 != pwd2 {
-		ExTemplate(GT, w, "userhome.html", PageData{"Error Saving password : Password confirmation doesn't match", fmem, fam})
+		ExTemplate(GT, w, "userhome.html", ld.Pd("Error Saving password : Password confirmation doesn't match"))
 		return
 	}
 
 	np, err := dbase2.NewPassword(pwd1)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", PageData{"Error Saving password : " + err.Error(), fmem, fam})
+		ExTemplate(GT, w, "userhome.html", ld.Pd("Error Saving password : "+err.Error()))
 		return
 	}
 
@@ -42,9 +42,9 @@ func HandlePasswordChange(ld LoginData) {
 
 	err = SaveFamily(fam)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", PageData{"Error Saving password : " + err.Error(), fmem, fam})
+		ExTemplate(GT, w, "userhome.html", ld.Pd("Error Saving password : "+err.Error()))
 		return
 	}
 
-	ExTemplate(GT, w, "userhome.html", PageData{"Saved", fmem, fam})
+	ExTemplate(GT, w, "userhome.html", ld.Pd("Saved"))
 }

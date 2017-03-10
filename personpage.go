@@ -18,7 +18,7 @@ func HandlePersonal(ld LoginData) {
 }
 
 func HandleAddAccount(ld LoginData) {
-	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
+	w, r, fam := ld.W, ld.R, ld.Fam
 	//TODO, check permission to add account
 
 	uname := r.FormValue("username")
@@ -40,5 +40,5 @@ func HandleAddAccount(ld LoginData) {
 		mes = "Could not Save Family: " + err.Error()
 	}
 
-	ExTemplate(GT, w, "userhome.html", PageData{mes, fmem, fam})
+	ExTemplate(GT, w, "userhome.html", ld.Pd(mes))
 }

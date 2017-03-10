@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/coderconvoy/dbase2"
@@ -20,6 +21,39 @@ type PageData struct {
 	Mes  string
 	Fmem string
 	Fam  *Family
+	Jobs []string
+	JobN int
+}
+
+func NewPageData(mes, fmem string, fam *Family) PageData {
+	return PageData{
+		Mes:  mes,
+		Fmem: fmem,
+		Fam:  fam,
+		Jobs: []string{},
+		JobN: 0,
+	}
+}
+
+type LoginData struct {
+	W      http.ResponseWriter
+	R      *http.Request
+	Fam    *Family
+	Fmem   string
+	LockID uint64
+}
+
+func (ld LoginData) Pd(s ...string) PageData {
+	if len(s) == 0 {
+		s = []string{""}
+	}
+	return PageData{
+		Mes:  s[0],
+		Fam:  ld.Fam,
+		Fmem: ld.Fmem,
+		Jobs: s[1:],
+		JobN: 0,
+	}
 }
 
 type ACPageData struct {
