@@ -1,6 +1,8 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -45,37 +47,62 @@ func HandleAddAccount(ld LoginData) {
 	ExTemplate(GT, w, "userhome.html", PageData{mes, fmem, fam})
 }
 
-func HandlePay(ld LoginData) {
-	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
-	fUser := r.FormValue("username")
-	fAcc := r.FormValue("from")
+func readPostBasicTransaction(ld LoginData) (BasicTransaction, error) {
+	r := ld.R
+	fData := r.FormValue("from")
 	toData := r.FormValue("to")
+	res := BasicTransaction{}
+
+	if fData == toData {
+		return res, errors.New("From and Destination are the same")
+	}
+
+	fSpl := strings.Split(fData, ":")
+	if len(fSpl) != 2 {
+		return res, errors.New("From account not parseable")
+	}
+	res.FromUser = fSpl[0]
+	res.FromAC = fSpl[1]
+
 	toSpl := strings.Split(toData, ":")
 	if len(toSpl) != 2 {
-		ExTemplate(GT, w, "userhome.html", PageData{"No ':' error", fmem, fam})
-		return
+		return res, errors.New("To account not parseable")
 	}
+	res.DestUser = toSpl[0]
+	res.DestAC = toSpl[1]
 
 	amount := r.FormValue("amount")
 	am, err := strconv.ParseFloat(amount, 64)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", PageData{"Amount must be a number", fmem, fam})
+		return res, errors.New("Could not parse amount")
+	}
+	if am < 0 {
+		return res, errors.New("Amount not Positive")
+	}
+	res.Amount = int(am * 100)
+
+	purpose := r.FormValue("purpose")
+	if purpose == "" {
+		return res, errors.New("Must have a purpose")
+	}
+	res.Purpose = purpose
+	return res, nil
+
+}
+
+func HandlePay(ld LoginData) {
+	w, fam, fmem := ld.W, ld.Fam, ld.Fmem
+
+	bt, err := readPostBasicTransaction(ld)
+	if err != nil {
+		ExTemplate(GT, w, "userhome.html", PageData{err.Error(), fmem, fam})
 		return
 	}
 
-	purpose := r.FormValue("purpose")
-
 	fam.Transactions = append(fam.Transactions, Transaction{
-		BasicTransaction: BasicTransaction{
-			FromUser: fUser,
-			FromAC:   fAcc,
-			DestUser: toSpl[0],
-			DestAC:   toSpl[1],
-			Amount:   int(am * 100),
-			Purpose:  purpose,
-		},
-		Status: T_PAID,
-		Date:   time.Now(),
+		BasicTransaction: bt,
+		Status:           T_PAID,
+		Date:             time.Now(),
 	})
 	fam.Calculate()
 	err = SaveFamily(fam)
@@ -87,6 +114,7 @@ func HandlePay(ld LoginData) {
 
 	ExTemplate(GT, w, "userhome.html", PageData{mes, fmem, fam})
 }
+
 func HandleTransactions(ld LoginData) {
 	w, fam, fmem := ld.W, ld.Fam, ld.Fmem
 	ExTemplate(GT, w, "transactions.html", PageData{"", fmem, fam})
@@ -110,4 +138,19 @@ func HandleViewAccount(ld LoginData) {
 		return
 	}
 	ExTemplate(GT, w, "viewac.html", ACPageData{fmem, ac, tList, rt})
+}
+
+func HandleAddStanding(ld LoginData) {
+	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
+
+	_, err := readPostBasicTransaction(ld)
+	if err != nil {
+		ExTemplate(GT, w, "userhome.html", PageData{err.Error(), fmem, fam})
+		return
+	}
+
+	start := r.FormValue("start")
+	fmt.Println("start:", start)
+	ExTemplate(GT, w, "userhome.html", PageData{"Standing not ready yet", fmem, fam})
+
 }

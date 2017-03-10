@@ -8,12 +8,9 @@
 {{end}}
 
 {{define "fmp_myaccounts"}}
-    {{$Fmem := .Fmem}}
     <select name="from">
-        {{range $k , $v := .Fam.Accounts}}
-            {{if eq $v.Username $Fmem}}
-            <option value="{{$v.Name}}">{{$v.Name}}:  {{money $v.Current}}</option>
-            {{end}}
+        {{range $k , $v := (accessACs .Fam.Accounts .Fmem .Fam)}}
+        <option value="{{$v.Username}}:{{$v.Name}}">{{$v.Username}}:{{$v.Name}}:  {{money $v.Current}}</option>
         {{end}}
     </select>
 {{end}}
@@ -39,7 +36,7 @@
 {{end}}
 
 {{define "frm_standing"}}
-    <form action="standing" method="post">
+    <form action="addstanding" method="post">
         <h3>Make a Standing Order</h3>
     From: {{template "fmp_myaccounts" .}}
     To: {{template "fmp_allaccounts" .}}<br>

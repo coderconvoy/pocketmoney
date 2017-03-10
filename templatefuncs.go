@@ -9,11 +9,12 @@ import (
 
 func TemplateFuncs() template.FuncMap {
 	return template.FuncMap{
-		"getuser":  GetUser,
-		"isparent": IsParent,
-		"money":    PrintMoney,
-		"date":     PrintDate,
-		"dateRFC":  PrintDateRFC,
+		"getuser":   GetUser,
+		"isparent":  IsParent,
+		"accessACs": FilterWriteableACs,
+		"money":     PrintMoney,
+		"date":      PrintDate,
+		"dateRFC":   PrintDateRFC,
 	}
 }
 
@@ -53,4 +54,19 @@ func IsParent(uname string, fam *Family) bool {
 		return false
 	}
 	return m.Parent
+}
+
+func WriteableAC(a *Account, uname string, fam *Family) bool {
+	isPar := IsParent(uname, fam)
+	return a.Username == uname || (a.Username == "WORLD" && isPar)
+}
+
+func FilterWriteableACs(acs []*Account, uname string, fam *Family) []*Account {
+	res := []*Account{}
+	for _, v := range acs {
+		if WriteableAC(v, uname, fam) {
+			res = append(res, v)
+		}
+	}
+	return res
 }

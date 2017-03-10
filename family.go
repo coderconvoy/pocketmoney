@@ -123,12 +123,19 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 		Parent:   true,
 	})
 
-	f.Accounts = append(f.Accounts, &Account{
-		Username:  uname,
-		Name:      "checking",
-		StartDate: time.Now(),
-		Current:   0,
-	})
+	f.Accounts = append(f.Accounts,
+		&Account{
+			Username:  "WORLD",
+			Name:      "main",
+			StartDate: time.Now(),
+			Current:   0,
+		},
+		&Account{
+			Username:  uname,
+			Name:      "checking",
+			StartDate: time.Now(),
+			Current:   0,
+		})
 
 	err = SaveFamily(&f)
 	if err != nil {

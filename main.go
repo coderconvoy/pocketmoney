@@ -99,6 +99,7 @@ func main() {
 	http.HandleFunc("/transactions", LoggedInFunc(HandleTransactions, false))
 	http.HandleFunc("/family", LoggedInFunc(HandleFamily, false))
 	http.HandleFunc("/pay", LoggedInFunc(HandlePay, false))
+	http.HandleFunc("/addstanding", LoggedInFunc(HandleAddStanding, false))
 	http.HandleFunc("/chpass", LoggedInFunc(HandlePasswordChange, true))
 	http.HandleFunc("/view", LoggedInFunc(HandleViewAccount, false))
 
