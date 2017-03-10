@@ -91,13 +91,8 @@ func HandleViewAccount(ld LoginData) {
 		return
 	}
 	fam.Calculate()
-	ac, tList, rt, err := fam.ACTransactions(rname, rac)
-	if err != nil {
-		ExTemplate(GT, w, "userpage.html", ld.Pd(err.Error()))
 
-		return
-	}
-	ExTemplate(GT, w, "viewac.html", ACPageData{fmem, ac, tList, rt})
+	ExTemplate(GT, w, "viewac.html", ld.Pd("", "ac", rac))
 }
 
 func HandleAddStanding(ld LoginData) {

@@ -72,13 +72,13 @@ type ACPageData struct {
 }
 
 type Family struct {
-	FamilyName   string
-	Members      []User
-	Accounts     []*Account
-	Transactions []Transaction
-	Requests     []Transaction
-	Standing     []StandingOrder
-	LastStanding time.Time
+	FamilyName           string
+	Members              []User
+	Accounts             []*Account
+	Transactions         []Transaction
+	Requests             []Transaction
+	Standing             []StandingOrder
+	LastCalc, LastChange time.Time
 }
 
 type User struct {
