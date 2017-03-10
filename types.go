@@ -21,8 +21,17 @@ type PageData struct {
 	Mes  string
 	Fmem string
 	Fam  *Family
-	Jobs []string
-	JobN int
+	Jobs map[string]string
+}
+
+// SetJob is intended to allow this to be passed around in
+func (pd PageData) SetJob(k, v string) PageData {
+	pd.Jobs[k] = v
+	return pd
+}
+
+func (pd PageData) Job(k string) string {
+	return pd.Jobs[k]
 }
 
 func NewPageData(mes, fmem string, fam *Family) PageData {
@@ -30,8 +39,7 @@ func NewPageData(mes, fmem string, fam *Family) PageData {
 		Mes:  mes,
 		Fmem: fmem,
 		Fam:  fam,
-		Jobs: []string{},
-		JobN: 0,
+		Jobs: make(map[string]string),
 	}
 }
 
@@ -43,16 +51,16 @@ type LoginData struct {
 	LockID uint64
 }
 
-func (ld LoginData) Pd(s ...string) PageData {
-	if len(s) == 0 {
-		s = []string{""}
+func (ld LoginData) Pd(mes string, js ...string) PageData {
+	jobs := make(map[string]string)
+	for i := 1; i < len(js); i += 2 {
+		jobs[js[i-1]] = js[i]
 	}
 	return PageData{
-		Mes:  s[0],
+		Mes:  mes,
 		Fam:  ld.Fam,
 		Fmem: ld.Fmem,
-		Jobs: s[1:],
-		JobN: 0,
+		Jobs: jobs,
 	}
 }
 
