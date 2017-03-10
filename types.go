@@ -114,9 +114,12 @@ type StandingOrder struct {
 	DelayType int
 }
 
+type ACKey struct {
+	Username string
+	Name     string
+}
+
 type Account struct {
-	Username  string
-	Name      string
 	StartDate time.Time
 	Current   int
 	Available int
