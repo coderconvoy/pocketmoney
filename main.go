@@ -87,19 +87,20 @@ func main() {
 		}
 	}
 
+	http.HandleFunc("/", Handle)
 	http.HandleFunc("/s/", HandleStatic)
 	http.HandleFunc("/newfamily", HandleNewFamily)
 	http.HandleFunc("/login", HandleLogin)
-	http.HandleFunc("/addmember", HandleAddMember)
 	http.HandleFunc("/logout", HandleLogout)
-	http.HandleFunc("/personal", HandlePersonal)
-	http.HandleFunc("/addaccount", HandleAddAccount)
-	http.HandleFunc("/transactions", HandleTransactions)
+
+	http.HandleFunc("/addmember", LoggedInFunc(HandleAddMember, true))
+	http.HandleFunc("/personal", LoggedInFunc(HandlePersonal, false))
+	http.HandleFunc("/addaccount", LoggedInFunc(HandleAddAccount, true))
+	http.HandleFunc("/transactions", LoggedInFunc(HandleTransactions, false))
 	http.HandleFunc("/family", LoggedInFunc(HandleFamily, false))
-	http.HandleFunc("/pay", HandlePay)
-	http.HandleFunc("/chpass", HandlePasswordChange)
-	http.HandleFunc("/view", HandleViewAccount)
-	http.HandleFunc("/", Handle)
+	http.HandleFunc("/pay", LoggedInFunc(HandlePay, false))
+	http.HandleFunc("/chpass", LoggedInFunc(HandlePasswordChange, true))
+	http.HandleFunc("/view", LoggedInFunc(HandleViewAccount, false))
 
 	if *insecure {
 		err = http.ListenAndServe(":8080", nil)

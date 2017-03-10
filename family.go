@@ -139,12 +139,8 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func HandleAddMember(w http.ResponseWriter, r *http.Request) {
-	fam, fmem, err := LoggedInFamily(w, r)
-	if err != nil {
-		GoIndex(w, r, "Not Logged In")
-		return
-	}
+func HandleAddMember(ld LoginData) {
+	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
 	if !IsParent(fmem, fam) {
 		ExTemplate(GT, w, "familypage.html", PageData{"Not a Parent", fmem, fam})
 		return

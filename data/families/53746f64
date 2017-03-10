@@ -54,6 +54,15 @@
     "Salt": "k2m8btAc2V9xwg=="
    },
    "Parent": false
+  },
+  {
+   "Username": "Peeki",
+   "Email": "",
+   "Password": {
+    "Hash": "gVGsSHZ05TjosFbyzhwkNITFNdALglSx+uzsZ70w3ZM=",
+    "Salt": "WEpOle3W3sehow=="
+   },
+   "Parent": true
   }
  ],
  "Accounts": [
@@ -82,6 +91,13 @@
    "Username": "River",
    "Name": "Checking",
    "StartDate": "2017-03-03T16:33:34.528187798Z",
+   "Current": 0,
+   "Available": 0
+  },
+  {
+   "Username": "Peeki",
+   "Name": "Checking",
+   "StartDate": "2017-03-10T09:04:31.931492919Z",
    "Current": 0,
    "Available": 0
   }

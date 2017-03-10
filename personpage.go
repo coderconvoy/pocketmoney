@@ -1,19 +1,13 @@
 package main
 
 import (
-	"net/http"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func HandlePersonal(w http.ResponseWriter, r *http.Request) {
-	fam, uname, err := LoggedInFamily(w, r)
-
-	if err != nil {
-		GoIndex(w, r, err.Error())
-		return
-	}
+func HandlePersonal(ld LoginData) {
+	w, fam, uname := ld.W, ld.Fam, ld.Fmem
 
 	pdat := PageData{
 		Mes:  "",
@@ -25,12 +19,8 @@ func HandlePersonal(w http.ResponseWriter, r *http.Request) {
 	ExTemplate(GT, w, "userhome.html", pdat)
 }
 
-func HandleAddAccount(w http.ResponseWriter, r *http.Request) {
-	fam, fmem, err := LoggedInFamily(w, r)
-	if err != nil {
-		GoIndex(w, r, err.Error())
-		return
-	}
+func HandleAddAccount(ld LoginData) {
+	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
 	//TODO, check permission to add account
 
 	uname := r.FormValue("username")
@@ -44,7 +34,7 @@ func HandleAddAccount(w http.ResponseWriter, r *http.Request) {
 	})
 
 	fam.Calculate()
-	err = SaveFamily(fam)
+	err := SaveFamily(fam)
 
 	mes := ""
 	if err != nil {
@@ -55,12 +45,8 @@ func HandleAddAccount(w http.ResponseWriter, r *http.Request) {
 	ExTemplate(GT, w, "userhome.html", PageData{mes, fmem, fam})
 }
 
-func HandlePay(w http.ResponseWriter, r *http.Request) {
-	fam, fmem, err := LoggedInFamily(w, r)
-	if err != nil {
-		GoIndex(w, r, err.Error())
-		return
-	}
+func HandlePay(ld LoginData) {
+	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
 	fUser := r.FormValue("username")
 	fAcc := r.FormValue("from")
 	toData := r.FormValue("to")
@@ -101,22 +87,13 @@ func HandlePay(w http.ResponseWriter, r *http.Request) {
 
 	ExTemplate(GT, w, "userhome.html", PageData{mes, fmem, fam})
 }
-func HandleTransactions(w http.ResponseWriter, r *http.Request) {
-	fam, fmem, err := LoggedInFamily(w, r)
-	if err != nil {
-		GoIndex(w, r, err.Error())
-		return
-	}
+func HandleTransactions(ld LoginData) {
+	w, fam, fmem := ld.W, ld.Fam, ld.Fmem
 	ExTemplate(GT, w, "transactions.html", PageData{"", fmem, fam})
 }
 
-func HandleViewAccount(w http.ResponseWriter, r *http.Request) {
-	fam, fmem, err := LoggedInFamily(w, r)
-	if err != nil {
-		GoIndex(w, r, err.Error())
-		return
-	}
-
+func HandleViewAccount(ld LoginData) {
+	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
 	rname := r.FormValue("uname")
 	rac := r.FormValue("ac")
 	//parent or own allowed

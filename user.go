@@ -1,17 +1,11 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/coderconvoy/dbase2"
 )
 
-func HandlePasswordChange(w http.ResponseWriter, r *http.Request) {
-	fam, fmem, err := LoggedInFamily(w, r)
-	if err != nil {
-		GoIndex(w, r, "Not Logged In"+err.Error())
-		return
-	}
+func HandlePasswordChange(ld LoginData) {
+	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
 
 	var cmem *User
 	for i, m := range fam.Members {
@@ -53,5 +47,4 @@ func HandlePasswordChange(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ExTemplate(GT, w, "userhome.html", PageData{"Saved", fmem, fam})
-
 }
