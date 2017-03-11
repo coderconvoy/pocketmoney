@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/coderconvoy/dbase2"
@@ -89,10 +91,9 @@ type User struct {
 }
 
 type BasicTransaction struct {
-	FromUser, DestUser string
-	FromAC, DestAC     string
-	Amount             int
-	Purpose            string
+	From, Dest ACKey
+	Amount     int
+	Purpose    string
 }
 
 type Transaction struct {
@@ -114,9 +115,22 @@ type StandingOrder struct {
 	DelayType int
 }
 
+type ACKey struct {
+	Username, Name string
+}
+
+func NewACKey(s string) (ACKey, error) {
+	sp := strings.Split(s, ":")
+	if len(sp) != 2 {
+		return ACKey{}, fmt.Errorf("Could not Parse '%s'.", s)
+	}
+	return ACKey{sp[0], sp[1]}, nil
+}
+
+func (a ACKey) String() string { return a.Username + ":" + a.Name }
+
 type Account struct {
-	Username  string
-	Name      string
+	ACKey
 	StartDate time.Time
 	Current   int
 	Available int

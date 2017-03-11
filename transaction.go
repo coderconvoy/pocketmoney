@@ -1,36 +1,31 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
-	"strings"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 func readPostBasicTransaction(ld LoginData) (BasicTransaction, error) {
 	r := ld.R
-	fData := r.FormValue("from")
-	toData := r.FormValue("to")
 	res := BasicTransaction{}
+	var err error
 
-	if fData == toData {
-		return res, errors.New("From and Destination are the same")
+	res.From, err = NewACKey(r.FormValue("from"))
+	if err != nil {
+		return res, errors.Wrap(err, "From account not parseable")
 	}
 
-	fSpl := strings.Split(fData, ":")
-	if len(fSpl) != 2 {
-		return res, errors.New("From account not parseable")
+	res.Dest, err = NewACKey(r.FormValue("to"))
+	if err != nil {
+		return res, errors.Wrap(err, "Dest account not parseable")
 	}
-	res.FromUser = fSpl[0]
-	res.FromAC = fSpl[1]
 
-	toSpl := strings.Split(toData, ":")
-	if len(toSpl) != 2 {
-		return res, errors.New("To account not parseable")
+	if res.From == res.Dest {
+		return res, errors.New("From and Destination are the same account")
 	}
-	res.DestUser = toSpl[0]
-	res.DestAC = toSpl[1]
 
 	amount := r.FormValue("amount")
 	am, err := strconv.ParseFloat(amount, 64)

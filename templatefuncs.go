@@ -76,7 +76,7 @@ func FilterWriteableACs(acs []*Account, uname string, fam *Family) []*Account {
 func FilterStandingByUser(st []StandingOrder, uname string) []StandingOrder {
 	res := []StandingOrder{}
 	for _, v := range st {
-		if (uname == v.FromUser) || (uname == v.DestUser) {
+		if (uname == v.From.Username) || (uname == v.Dest.Username) {
 
 			res = append(res, v)
 		}
@@ -87,9 +87,7 @@ func FilterStandingByUser(st []StandingOrder, uname string) []StandingOrder {
 func FilterStandingByAC(st []StandingOrder, ac *Account) []StandingOrder {
 	res := []StandingOrder{}
 	for _, v := range st {
-		if (ac.Name == v.FromAC && ac.Username == v.FromUser) ||
-			(ac.Name == v.DestAC && ac.Username == v.DestUser) {
-
+		if (ac.ACKey == v.From) || (ac.ACKey == v.Dest) {
 			res = append(res, v)
 		}
 	}

@@ -125,14 +125,12 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 
 	f.Accounts = append(f.Accounts,
 		&Account{
-			Username:  "WORLD",
-			Name:      "main",
+			ACKey:     ACKey{"WORLD", "main"},
 			StartDate: time.Now(),
 			Current:   0,
 		},
 		&Account{
-			Username:  uname,
-			Name:      "checking",
+			ACKey:     ACKey{uname, "checking"},
 			StartDate: time.Now(),
 			Current:   0,
 		})
@@ -180,8 +178,7 @@ func HandleAddMember(ld LoginData) {
 		Password: pw,
 	})
 	fam.Accounts = append(fam.Accounts, &Account{
-		Username:  uname,
-		Name:      "Checking",
+		ACKey:     ACKey{uname, "checking"},
 		Current:   0,
 		StartDate: time.Now(),
 	})
@@ -191,4 +188,13 @@ func HandleAddMember(ld LoginData) {
 		//TODO
 	}
 	ExTemplate(GT, w, "familypage.html", NewPageData("", fmem, fam))
+}
+
+func (f *Family) Account(k ACKey) (*Account, bool) {
+	for _, a := range f.Accounts {
+		if a.ACKey == k {
+			return a, true
+		}
+	}
+	return nil, false
 }

@@ -25,8 +25,7 @@ func HandleAddAccount(ld LoginData) {
 	aname := r.FormValue("accountname")
 
 	fam.Accounts = append(fam.Accounts, &Account{
-		Username:  uname,
-		Name:      aname,
+		ACKey:     ACKey{uname, aname},
 		StartDate: time.Now(),
 		Current:   0,
 	})

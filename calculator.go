@@ -31,21 +31,14 @@ func (f *Family) CalculateTransactions() {
 
 func (f *Family) calculateTransaction(t Transaction) error {
 
-	var from, dest *Account = nil, nil
+	fac, fok := f.Account(t.From)
+	dac, dok := f.Account(t.Dest)
 
-	for _, a := range f.Accounts {
-		if a.Username == t.FromUser && a.Name == t.FromAC {
-			from = a
-		}
-		if a.Username == t.DestUser && a.Name == t.DestAC {
-			dest = a
-		}
-	}
-	if from == nil || dest == nil {
+	if !(fok && dok) {
 		return errors.New("No Account for Transaction")
 	}
-	from.Current -= t.Amount
-	dest.Current += t.Amount
+	fac.Current -= t.Amount
+	dac.Current += t.Amount
 	return nil
 }
 
@@ -112,16 +105,16 @@ type Accumulation struct {
 	After int
 }
 
-func (f *Family) AccumulateTransactions(uname, ac string) []Accumulation {
+func (f *Family) AccumulateTransactions(ak ACKey) []Accumulation {
 	res := []Accumulation{}
 	running := 0
 
 	for _, t := range f.Transactions {
-		if t.FromUser == uname && t.FromAC == ac {
+		if t.From == ak {
 			running -= t.Amount
 			res = append(res, Accumulation{t, running})
 		}
-		if t.DestUser == uname && t.DestAC == ac {
+		if t.Dest == ak {
 			running += t.Amount
 			res = append(res, Accumulation{t, running})
 		}
