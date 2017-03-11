@@ -26,13 +26,6 @@ func HandleAddAccount(ld LoginData) {
 	})
 
 	fam.Calculate()
-	err := fam.Save()
 
-	mes := ""
-	if err != nil {
-		fam.Accounts = fam.Accounts[:len(fam.Accounts)-1]
-		mes = "Could not Save Family: " + err.Error()
-	}
-
-	ExTemplate(GT, w, "userhome.html", ld.Pd(mes))
+	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
 }

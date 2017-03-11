@@ -40,11 +40,5 @@ func HandlePasswordChange(ld LoginData) {
 
 	cmem.Password = np
 
-	err = fam.Save()
-	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("Error Saving password : "+err.Error()))
-		return
-	}
-
-	ExTemplate(GT, w, "userhome.html", ld.Pd("Saved"))
+	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
 }

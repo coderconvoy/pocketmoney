@@ -92,14 +92,16 @@ func main() {
 	http.HandleFunc("/newfamily", HandleNewFamily)
 	http.HandleFunc("/login", HandleLogin)
 	http.HandleFunc("/logout", HandleLogout)
+	//Edits
 
 	http.HandleFunc("/addmember", LoggedInFunc(HandleAddMember, true))
-	http.HandleFunc("/personal", LoggedInFunc(HandlePersonal, false))
 	http.HandleFunc("/addaccount", LoggedInFunc(HandleAddAccount, true))
+	http.HandleFunc("/pay", LoggedInFunc(HandlePay, true))
+	//Views
 	http.HandleFunc("/transactions", LoggedInFunc(HandleTransactions, false))
+	http.HandleFunc("/personal", LoggedInFunc(HandlePersonal, false))
 	http.HandleFunc("/family", LoggedInFunc(HandleFamily, false))
-	http.HandleFunc("/pay", LoggedInFunc(HandlePay, false))
-	http.HandleFunc("/addstanding", LoggedInFunc(HandleAddStanding, false))
+	http.HandleFunc("/addstanding", LoggedInFunc(HandleAddStanding, true))
 	http.HandleFunc("/chpass", LoggedInFunc(HandlePasswordChange, true))
 	http.HandleFunc("/view", LoggedInFunc(HandleViewAccount, false))
 

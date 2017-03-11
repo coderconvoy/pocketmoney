@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -9,6 +10,7 @@ import (
 )
 
 var loginControl = NewLoginControl(time.Minute * 20)
+var logLock = dbase2.NewLocker()
 
 type LoginStore struct {
 	Familyname string
@@ -42,9 +44,12 @@ type LoggedFunc func(ld LoginData)
 type MuxFunc func(w http.ResponseWriter, r *http.Request)
 
 //Logged
-func LoggedInFunc(f LoggedFunc, lock bool) MuxFunc {
+func LoggedInFunc(f LoggedFunc, edit bool) MuxFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		Fam, fmem, err := LoggedInFamily(w, r)
+		Fam, fmem, lockId, err := loggedInFamily(w, r)
+		if !edit {
+			logLock.Unlock(lockId)
+		}
 		if err != nil {
 			GoIndex(w, r, err.Error())
 			return
@@ -56,16 +61,29 @@ func LoggedInFunc(f LoggedFunc, lock bool) MuxFunc {
 			Fmem: fmem,
 		}
 		f(ld)
+		if edit {
+			err := Fam.Save()
+			if err != nil {
+				fmt.Println("Save Error:", err)
+			}
+			logLock.Unlock(lockId)
+		}
+
 	}
 }
 
 // Logged In Family returns the loaded family file the family in the cookie id.
 // TODO add boolean getLock
-func LoggedInFamily(w http.ResponseWriter, r *http.Request) (*Family, string, error) {
+func loggedInFamily(w http.ResponseWriter, r *http.Request) (*Family, string, uint64, error) {
 	ld, iok := loginControl.GetLogin(w, r)
 	if iok != dbase2.OK {
-		return nil, "", errors.New("No login")
+		return nil, "", 0, errors.New("No login")
 	}
+	id := logLock.Lock(ld.Familyname)
 	fam, err := LoadFamily(ld.Familyname)
-	return fam, ld.Username, err
+	if err != nil {
+		logLock.Unlock(id)
+	}
+
+	return fam, ld.Username, id, err
 }

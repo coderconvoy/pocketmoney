@@ -50,9 +50,5 @@ func HandleAddMember(ld LoginData) {
 		StartDate: time.Now(),
 	})
 
-	err = fam.Save()
-	if err != nil {
-		//TODO
-	}
 	ExTemplate(GT, w, "familypage.html", NewPageData("", fmem, fam))
 }
