@@ -30,7 +30,7 @@ func Test_Standing(t *testing.T) {
 
 func qstanding(fu, du, fa, da string, n int, purp string, dat time.Time, d, dt int) StandingOrder {
 	return StandingOrder{
-		BasicTransaction: BasicTransaction{fu, du, fa, da, n, purp},
+		BasicTransaction: BasicTransaction{ACKey{fu, fa}, ACKey{du, da}, n, purp},
 		Start:            dat,
 		Delay:            d,
 		DelayType:        dt,
@@ -39,7 +39,7 @@ func qstanding(fu, du, fa, da string, n int, purp string, dat time.Time, d, dt i
 
 func qtrans(fu, du, fa, da string, n int, purp string, dt time.Time) Transaction {
 	return Transaction{
-		BasicTransaction: BasicTransaction{fu, du, fa, da, n, purp},
+		BasicTransaction: BasicTransaction{ACKey{fu, fa}, ACKey{du, da}, n, purp},
 		Date:             dt,
 		Status:           T_PAID,
 	}
