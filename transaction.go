@@ -61,7 +61,7 @@ func HandlePay(ld LoginData) {
 		Date:             time.Now(),
 	})
 	fam.Calculate()
-	err = SaveFamily(fam)
+	err = fam.Save()
 	mes := ""
 	if err != nil {
 		fam.Accounts = fam.Accounts[:len(fam.Accounts)-1]
@@ -137,7 +137,7 @@ func HandleAddStanding(ld LoginData) {
 
 	fam.Standing = append(fam.Standing, nstand)
 	fam.Calculate()
-	err = SaveFamily(fam)
+	err = fam.Save()
 	mes := ""
 	if err != nil {
 		fam.Accounts = fam.Accounts[:len(fam.Accounts)-1]

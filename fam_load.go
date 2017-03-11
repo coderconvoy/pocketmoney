@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -27,7 +26,7 @@ func LoadFamily(fname string) (*Family, error) {
 	return &f, nil
 }
 
-func SaveFamily(f *Family) error {
+func (f *Family) Save() error {
 	mar, err := json.MarshalIndent(&f, "", " ")
 	if err != nil {
 		return err
@@ -38,11 +37,6 @@ func SaveFamily(f *Family) error {
 		return errors.New("Could not save Family")
 	}
 	return nil
-}
-
-func HandleFamily(ld LoginData) {
-	fmt.Println("Going Family")
-	ExTemplate(GT, ld.W, "familypage.html", NewPageData("", ld.Fmem, ld.Fam))
 }
 
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +78,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 }
 func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
-	var f Family
+	f := &Family{}
 	f.FamilyName = r.FormValue("familyname")
 	uname := r.FormValue("username")
 
@@ -135,59 +129,13 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 			Current:   0,
 		})
 
-	err = SaveFamily(&f)
+	err = f.Save()
 	if err != nil {
 		//TODO
 	}
 	loginControl.Login(w, f.FamilyName, uname)
-	ExTemplate(GT, w, "familypage.html", NewPageData("", uname, &f))
+	ExTemplate(GT, w, "familypage.html", NewPageData("", uname, f))
 
-}
-
-func HandleAddMember(ld LoginData) {
-	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
-	if !IsParent(fmem, fam) {
-		ExTemplate(GT, w, "familypage.html", NewPageData("Not a Parent", fmem, fam))
-		return
-	}
-
-	uname := r.FormValue("username")
-	parent := r.FormValue("parent")
-	fmt.Println("Parent == " + parent)
-	pwd1 := r.FormValue("pwd1")
-	pwd2 := r.FormValue("pwd2")
-
-	if uname == "" {
-		ExTemplate(GT, w, "familypage.html", NewPageData("No Username", fmem, fam))
-		return
-	}
-	if pwd1 != pwd2 || pwd1 == "" {
-		ExTemplate(GT, w, "familypage.html", NewPageData("Passwords not matching", fmem, fam))
-		return
-	}
-
-	pw, err := dbase2.NewPassword(pwd1)
-	if err != nil {
-		fmt.Println("Could not Password: ", err)
-		GoIndex(w, r, "Password Failed")
-		return
-	}
-	fam.Members = append(fam.Members, User{
-		Username: uname,
-		Parent:   parent == "on",
-		Password: pw,
-	})
-	fam.Accounts = append(fam.Accounts, &Account{
-		ACKey:     ACKey{uname, "checking"},
-		Current:   0,
-		StartDate: time.Now(),
-	})
-
-	err = SaveFamily(fam)
-	if err != nil {
-		//TODO
-	}
-	ExTemplate(GT, w, "familypage.html", NewPageData("", fmem, fam))
 }
 
 func (f *Family) Account(k ACKey) (*Account, bool) {

@@ -26,7 +26,7 @@ func HandleAddAccount(ld LoginData) {
 	})
 
 	fam.Calculate()
-	err := SaveFamily(fam)
+	err := fam.Save()
 
 	mes := ""
 	if err != nil {
