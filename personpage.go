@@ -5,16 +5,11 @@ import (
 )
 
 func HandlePersonal(ld LoginData) {
-	w, fam, uname := ld.W, ld.Fam, ld.Fmem
+	w, fam := ld.W, ld.Fam
 
-	pdat := PageData{
-		Mes:  "",
-		Fmem: uname,
-		Fam:  fam,
-	}
 	fam.Calculate()
 
-	ExTemplate(GT, w, "userhome.html", pdat)
+	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
 }
 
 func HandleAddAccount(ld LoginData) {

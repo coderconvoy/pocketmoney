@@ -15,6 +15,9 @@
 {{end}}
 </ul>
 
+{{$x11 := .SetJob "stand" .Fmem}}
+{{template "standing" .}}
+
 {{template "frm_add_account" .}}
 
 {{template "frm_pay" .}}

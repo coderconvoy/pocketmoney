@@ -1,0 +1,13 @@
+{{define "standing"}}
+{{$js := .Job "stand"}}
+{{$jt := plex $js $js .Fmem }}
+{{$list := standingbyuser .Fam.Standing .Fmem}}
+<h2>Standing Orders</h2>
+<table>
+{{range $k, $v := $list}}
+<tr>
+    <td>{{$v.From}}</td><td>{{$v.Dest}}</td><td>{{$v.Amount}}</td>
+</tr>
+{{end}}
+</table>
+{{end}}

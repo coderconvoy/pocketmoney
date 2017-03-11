@@ -10,6 +10,7 @@ import (
 
 func TemplateFuncs() template.FuncMap {
 	return template.FuncMap{
+		"plex":           Plex,
 		"getuser":        GetUser,
 		"isparent":       IsParent,
 		"accessACs":      FilterWriteableACs,
@@ -21,6 +22,14 @@ func TemplateFuncs() template.FuncMap {
 		"type":           PrintType,
 		"eq2":            Eq2,
 	}
+}
+
+func Plex(p, a, b interface{}) interface{} {
+	if p == nil || p == 0 || p == "" {
+		return b
+	}
+	return a
+
 }
 
 func GetUser(uname string, fam *Family) (*User, error) {

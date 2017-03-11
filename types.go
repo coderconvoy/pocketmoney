@@ -27,14 +27,15 @@ type PageData struct {
 }
 
 // SetJob is intended to allow this to be passed around in
-func (pd *PageData) SetJob(k string, v interface{}) {
+func (pd *PageData) SetJob(k string, v interface{}) *PageData {
 	for i, j := range pd.Jobs {
 		if j.s == k {
 			pd.Jobs[i] = JPar{k, v}
-			return
+			return pd
 		}
 	}
 	pd.Jobs = append(pd.Jobs, JPar{k, v})
+	return pd
 }
 
 func (pd PageData) Job(k string) interface{} {
@@ -46,8 +47,8 @@ func (pd PageData) Job(k string) interface{} {
 	return nil
 }
 
-func NewPageData(mes, fmem string, fam *Family) PageData {
-	return PageData{
+func NewPageData(mes, fmem string, fam *Family) *PageData {
+	return &PageData{
 		Mes:  mes,
 		Fmem: fmem,
 		Fam:  fam,
@@ -68,8 +69,8 @@ type JPar struct {
 	i interface{}
 }
 
-func (ld LoginData) Pd(mes string, js ...JPar) PageData {
-	return PageData{
+func (ld LoginData) Pd(mes string, js ...JPar) *PageData {
+	return &PageData{
 		Mes:  mes,
 		Fam:  ld.Fam,
 		Fmem: ld.Fmem,
