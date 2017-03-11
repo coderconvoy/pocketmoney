@@ -87,7 +87,7 @@ func HandleViewAccount(ld LoginData) {
 	}
 	fam.Calculate()
 
-	ExTemplate(GT, w, "viewac.html", ld.Pd("", "ac", rac))
+	ExTemplate(GT, w, "viewac.html", ld.Pd("", JPar{"ac", ACKey{rname, rac}}))
 }
 
 func HandleAddStanding(ld LoginData) {

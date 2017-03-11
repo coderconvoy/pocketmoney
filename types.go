@@ -23,17 +23,27 @@ type PageData struct {
 	Mes  string
 	Fmem string
 	Fam  *Family
-	Jobs map[string]string
+	Jobs []JPar
 }
 
 // SetJob is intended to allow this to be passed around in
-func (pd PageData) SetJob(k, v string) PageData {
-	pd.Jobs[k] = v
-	return pd
+func (pd *PageData) SetJob(k string, v interface{}) {
+	for i, j := range pd.Jobs {
+		if j.s == k {
+			pd.Jobs[i] = JPar{k, v}
+			return
+		}
+	}
+	pd.Jobs = append(pd.Jobs, JPar{k, v})
 }
 
-func (pd PageData) Job(k string) string {
-	return pd.Jobs[k]
+func (pd PageData) Job(k string) interface{} {
+	for _, v := range pd.Jobs {
+		if v.s == k {
+			return v.i
+		}
+	}
+	return nil
 }
 
 func NewPageData(mes, fmem string, fam *Family) PageData {
@@ -41,7 +51,7 @@ func NewPageData(mes, fmem string, fam *Family) PageData {
 		Mes:  mes,
 		Fmem: fmem,
 		Fam:  fam,
-		Jobs: make(map[string]string),
+		Jobs: []JPar{},
 	}
 }
 
@@ -53,16 +63,17 @@ type LoginData struct {
 	LockID uint64
 }
 
-func (ld LoginData) Pd(mes string, js ...string) PageData {
-	jobs := make(map[string]string)
-	for i := 1; i < len(js); i += 2 {
-		jobs[js[i-1]] = js[i]
-	}
+type JPar struct {
+	s string
+	i interface{}
+}
+
+func (ld LoginData) Pd(mes string, js ...JPar) PageData {
 	return PageData{
 		Mes:  mes,
 		Fam:  ld.Fam,
 		Fmem: ld.Fmem,
-		Jobs: jobs,
+		Jobs: js,
 	}
 }
 

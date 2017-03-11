@@ -3,8 +3,8 @@
 <table>
 {{range $k,$v := .Fam.Transactions }}
 <tr>
-    <td>{{$v.FromUser}}:{{$v.FromAC}}</td>
-    <td>{{$v.DestUser}}:{{$v.DestAC}}</td>
+    <td>{{$v.From}}</td>
+    <td>{{$v.Dest}}</td>
     <td>{{money $v.Amount}}</td>
     <td>{{$v.Purpose}}</td>
 </tr>

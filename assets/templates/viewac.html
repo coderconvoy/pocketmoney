@@ -1,7 +1,7 @@
 {{template "head"}}
     {{$top := .}}
     {{$ac := .Job "ac"}}
-<h2>{{.Fmem}} : {{$ac}}</h2>
+<h2>{{$ac}}</h2>
 <table>
     <tr>
         <th>Running</th>
@@ -10,15 +10,16 @@
         <th>Other</th>
         <th>Purpose</th>
     </tr>
-    {{$List := .Fam.AccumulateTransactions .Fmem $ac}}
+    {{$List := .Fam.AccumulateTransactions $ac}}
     {{range $k ,$v := $List}}
     <tr>
         <td><b>{{money $v.After}}</b></td>
-        {{if and (eq $top.Fmem $v.FromUser) (eq $ac $v.FromAC) }}
-
-        <td></td><td>{{money $v.Amount}}</td><td>{{$v.DestUser}} : {{$v.DestAC}}</td>
+        {{type $ac}}
+        {{type $v.From}}
+        {{if (eq2 $ac $v.From)}}
+        <td></td><td>{{money $v.Amount}}</td><td>{{$v.Dest}}</td>
         {{else}}
-        <td>{{money $v.Amount}}</td><td></td><td>{{$v.FromUser}} : {{$v.FromAC}}</td>
+        <td>{{money $v.Amount}}</td><td></td><td>{{$v.From}}</td>
         {{end}}
         <td>{{$v.Purpose}}</td>
         <td>{{date $v.Date}}</td>

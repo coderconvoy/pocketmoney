@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"text/template"
 	"time"
 )
@@ -17,6 +18,8 @@ func TemplateFuncs() template.FuncMap {
 		"money":          PrintMoney,
 		"date":           PrintDate,
 		"dateRFC":        PrintDateRFC,
+		"type":           PrintType,
+		"eq2":            Eq2,
 	}
 }
 
@@ -92,4 +95,12 @@ func FilterStandingByAC(st []StandingOrder, ac *Account) []StandingOrder {
 		}
 	}
 	return res
+}
+
+func PrintType(o interface{}) string {
+	return reflect.TypeOf(o).String()
+}
+
+func Eq2(a, b interface{}) bool {
+	return a == b
 }
