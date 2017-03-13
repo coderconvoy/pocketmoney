@@ -1,16 +1,26 @@
 package history
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
+
+func CreateAccount(u, a string) Account {
+	return Account{
+		ACKey:  ACKey{u, a},
+		Opened: time.Now(),
+	}
+}
 
 func (a Account) Merge(b Account) (Account, error) {
 	if a.End != b.Start {
 		return a, fmt.Errorf("a.End and b.Start not equal")
 	}
-	if a.Id != b.Id {
-		return a, fmt.Errorf("Merge Account Id's don't match")
+	if a.ACKey != b.ACKey {
+		return a, fmt.Errorf("Merge Account keys don't match")
 	}
 	return Account{
-		Id:     a.Id,
+		ACKey:  a.ACKey,
 		Start:  a.Start,
 		End:    b.End,
 		Opened: a.Opened,

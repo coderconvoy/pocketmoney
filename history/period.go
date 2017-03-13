@@ -17,6 +17,45 @@ func (p Period) StartNext() Period {
 	return res
 }
 
+func (p *Period) ApplyTransaction(ts ...Transaction) error {
+	for _, t := range ts {
+		if p.Start.After(t.Date) || t.Date.After(p.End) {
+			return fmt.Errorf("All dates must fit within range")
+		}
+
+		for _, a := range p.Accounts {
+			var f, d *Account
+			if a.ACKey == t.From {
+				f = a
+			}
+			if a.ACKey == t.Dest {
+				d = a
+			}
+			if f == nil || d == nil {
+				return fmt.Errorf("Transaction does not have matching account")
+			}
+		}
+	}
+	p.Transactions = append(p.Transactions, ts...)
+
+	sort.Sort(Transortable(p.Transactions))
+
+	for _, a := range p.Accounts {
+		a.End = a.Start
+	}
+	for _, t := range ts {
+		for _, a := range p.Accounts {
+			if a.ACKey == t.From {
+				a.End -= t.Amount
+			}
+			if a.ACKey == t.Dest {
+				a.End += t.Amount
+			}
+		}
+	}
+	return nil
+}
+
 func (p Period) Split(tt ...time.Time) []Period {
 	cp := Period{}
 	for _, v := range p.Accounts {
@@ -41,12 +80,12 @@ func (p Period) Split(tt ...time.Time) []Period {
 		//find from and to accounts and apply transaction
 		var fr, ds *Account
 
-		for i, ac := range cp.Accounts {
-			if ac.Id == tac.From {
-				fr = &cp.Accounts[i]
+		for _, ac := range cp.Accounts {
+			if ac.ACKey == tac.From {
+				fr = ac
 			}
-			if ac.Id == tac.Dest {
-				ds = &cp.Accounts[i]
+			if ac.ACKey == tac.Dest {
+				ds = ac
 			}
 		}
 		if !(fr == nil || ds == nil) {
@@ -68,7 +107,7 @@ func (p Period) Merge(p2 Period) (Period, error) {
 func (p Period) Accumulate(ak ACKey) []Accumulation {
 	running := 0
 	for _, ac := range p.Accounts {
-		if ak == ac.Id {
+		if ak == ac.ACKey {
 			running = ac.Start
 			break
 		}

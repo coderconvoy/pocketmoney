@@ -12,7 +12,7 @@ type Accumulation struct {
 	After int
 }
 type Account struct {
-	Id             ACKey
+	ACKey
 	Opened, Closed time.Time
 	Start, End     int
 }
@@ -32,6 +32,6 @@ func (t Transortable) Less(i, j int) bool { return t[j].Date.After(t[i].Date) }
 
 type Period struct {
 	Start, End   time.Time
-	Accounts     []Account
+	Accounts     []*Account
 	Transactions []Transaction
 }

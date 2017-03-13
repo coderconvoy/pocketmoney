@@ -1,7 +1,7 @@
 package main
 
 import (
-	"time"
+	"github.com/coderconvoy/pocketmoney/history"
 )
 
 func HandlePersonal(ld LoginData) {
@@ -19,13 +19,7 @@ func HandleAddAccount(ld LoginData) {
 	uname := r.FormValue("username")
 	aname := r.FormValue("accountname")
 
-	fam.Accounts = append(fam.Accounts, &Account{
-		ACKey:     ACKey{uname, aname},
-		StartDate: time.Now(),
-		Current:   0,
-	})
-
-	fam.Calculate()
+	fam.Period.Accounts = append(fam.Period.Accounts, history.CreateAccount(uname, aname))
 
 	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
 }

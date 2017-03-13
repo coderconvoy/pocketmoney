@@ -5,6 +5,8 @@ import (
 	"reflect"
 	"text/template"
 	"time"
+
+	"github.com/coderconvoy/pocketmoney/history"
 )
 
 func TemplateFuncs() template.FuncMap {
@@ -60,7 +62,7 @@ func FilterStandingByUser(st []StandingOrder, uname string) []StandingOrder {
 	return res
 }
 
-func FilterStandingByAC(st []StandingOrder, ac *Account) []StandingOrder {
+func FilterStandingByAC(st []StandingOrder, ac history.Account) []StandingOrder {
 	res := []StandingOrder{}
 	for _, v := range st {
 		if (ac.ACKey == v.From) || (ac.ACKey == v.Dest) {

@@ -5,10 +5,11 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/coderconvoy/pocketmoney/history"
 	"github.com/pkg/errors"
 )
 
-func readPostBasicTransaction(ld LoginData) (BasicTransaction, error) {
+func readPostTransaction(ld LoginData) (history.Transaction, error) {
 	r := ld.R
 	res := BasicTransaction{}
 	var err error
@@ -55,12 +56,17 @@ func HandlePay(ld LoginData) {
 		return
 	}
 
+	err := fam.Period.ApplyTransaction(bt)
+	if err != nil {
+		ExTemplate(GT, w, "userhome.html", ld.Pd(err.Error()))
+		return
+	}
+
 	fam.Transactions = append(fam.Transactions, Transaction{
 		BasicTransaction: bt,
 		Status:           T_PAID,
 		Date:             time.Now(),
 	})
-	fam.Calculate()
 
 	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
 }

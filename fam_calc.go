@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"time"
 
 	"github.com/coderconvoy/pocketmoney/history"
@@ -13,19 +12,6 @@ func (f *Family) Calculate() {
 	}
 	//	f.CalculateStanding()
 
-}
-
-func (f *Family) calculateTransaction(t history.Transaction) error {
-
-	fac, fok := f.Account(t.From)
-	dac, dok := f.Account(t.Dest)
-
-	if !(fok && dok) {
-		return errors.New("No Account for Transaction")
-	}
-	fac.Current -= t.Amount
-	dac.Current += t.Amount
-	return nil
 }
 
 func NextDate(d time.Time, step int, steptype int) time.Time {

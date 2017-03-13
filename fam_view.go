@@ -1,6 +1,10 @@
 package main
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/coderconvoy/pocketmoney/history"
+)
 
 func (fam *Family) GetUser(uname string) (*User, error) {
 	for i, m := range fam.Members {
@@ -19,16 +23,16 @@ func (fam *Family) IsParent(uname string) bool {
 	return m.Parent
 }
 
-func (fam *Family) WriteAccess(a *Account, uname string) bool {
+func (fam *Family) WriteAccess(a history.Account, uname string) bool {
 	if a.Username == uname {
 		return true
 	}
 	return a.Username == "WORLD" && fam.IsParent(uname)
 }
 
-func (fam *Family) ListWriteAccess(uname string) []*Account {
-	res := []*Account{}
-	for _, v := range fam.Accounts {
+func (fam *Family) ListWriteAccess(uname string) []history.Account {
+	res := []history.Account{}
+	for _, v := range fam.Period.Accounts {
 		if fam.WriteAccess(v, uname) {
 			res = append(res, v)
 		}

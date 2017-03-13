@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/coderconvoy/dbase2"
+	"github.com/coderconvoy/pocketmoney/history"
 )
 
 func HandleFamily(ld LoginData) {
@@ -44,10 +45,9 @@ func HandleAddMember(ld LoginData) {
 		Parent:   parent == "on",
 		Password: pw,
 	})
-	fam.Accounts = append(fam.Accounts, &Account{
-		ACKey:     ACKey{uname, "checking"},
-		Current:   0,
-		StartDate: time.Now(),
+	fam.Period.Accounts = append(fam.Period.Accounts, history.Account{
+		ACKey:  history.ACKey{uname, "checking"},
+		Opened: time.Now(),
 	})
 
 	ExTemplate(GT, w, "familypage.html", NewPageData("", fmem, fam))

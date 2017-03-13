@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/coderconvoy/dbase2"
+	"github.com/coderconvoy/pocketmoney/history"
 	"github.com/pkg/errors"
 )
 
@@ -117,17 +118,12 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 		Parent:   true,
 	})
 
-	f.Accounts = append(f.Accounts,
-		&Account{
-			ACKey:     ACKey{"WORLD", "main"},
-			StartDate: time.Now(),
-			Current:   0,
+	f.Period = history.Period{
+		Accounts: []history.Account{
+			history.CreateAccount("WORLD", "main"),
+			history.CreateAccount(uname, "checking"),
 		},
-		&Account{
-			ACKey:     ACKey{uname, "checking"},
-			StartDate: time.Now(),
-			Current:   0,
-		})
+	}
 
 	err = f.Save()
 	if err != nil {
@@ -136,13 +132,4 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 	loginControl.Login(w, f.FamilyName, uname)
 	ExTemplate(GT, w, "familypage.html", NewPageData("", uname, f))
 
-}
-
-func (f *Family) Account(k ACKey) (*Account, bool) {
-	for _, a := range f.Accounts {
-		if a.ACKey == k {
-			return a, true
-		}
-	}
-	return nil, false
 }
