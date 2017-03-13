@@ -6,7 +6,7 @@
             {{.Username}} -- {{bSelect .Parent "Parent" "Child"}}<br>
             <ul>
                 {{range ($.Fam.Period.UserAccounts .Username)}}
-                <li>{{.Name}} {{.End}}</li>
+                <li>{{.Name}} {{money .End}}</li>
                 {{end}}
             </ul>
         </li>
