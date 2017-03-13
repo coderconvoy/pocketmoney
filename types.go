@@ -81,8 +81,8 @@ func (ld LoginData) Pd(mes string, js ...JPar) *PageData {
 
 type ACPageData struct {
 	Fmem string
-	AC   Account
-	List []Transaction
+	AC   history.Account
+	List []history.Transaction
 	RT   []int
 }
 
@@ -90,7 +90,7 @@ type Family struct {
 	FamilyName           string
 	Members              []User
 	Period               history.Period
-	Requests             []Transaction
+	Requests             []history.Transaction
 	Standing             []StandingOrder
 	LastCalc, LastChange time.Time
 }

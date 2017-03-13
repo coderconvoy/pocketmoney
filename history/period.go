@@ -1,6 +1,7 @@
 package history
 
 import (
+	"fmt"
 	"sort"
 	"time"
 )
@@ -57,6 +58,33 @@ func (p Period) Split(tt ...time.Time) []Period {
 
 	}
 	res = append(res, cp)
+	return res
+}
+
+func (p Period) Merge(p2 Period) (Period, error) {
+	return p, fmt.Errorf("Merge not ready yet")
+}
+
+func (p Period) Accumulate(ak ACKey) []Accumulation {
+	running := 0
+	for _, ac := range p.Accounts {
+		if ak == ac.Id {
+			running = ac.Start
+			break
+		}
+	}
+	res := []Accumulation{}
+
+	for _, t := range p.Transactions {
+		if t.From == ak {
+			running -= t.Amount
+			res = append(res, Accumulation{t, running})
+		}
+		if t.Dest == ak {
+			running += t.Amount
+			res = append(res, Accumulation{t, running})
+		}
+	}
 	return res
 
 }

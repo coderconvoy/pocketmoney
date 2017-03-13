@@ -1,9 +1,15 @@
 package history
 
-import "time"
+import (
+	"time"
+)
 
 type ACKey struct {
 	Username, Name string
+}
+type Accumulation struct {
+	Transaction
+	After int
 }
 type Account struct {
 	Id             ACKey
