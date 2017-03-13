@@ -10,13 +10,13 @@
 {{define "fmp_myaccounts"}}
     <select name="from">
         {{range $k , $v := (.Fam.ListWriteAccess .Fmem)}}
-        <option value="{{$v.Username}}:{{$v.Name}}">{{$v.Username}}:{{$v.Name}}:  {{money $v.Current}}</option>
+        <option value="{{$v.Username}}:{{$v.Name}}">{{$v.Username}}:{{$v.Name}}:  {{money $v.End}}</option>
         {{end}}
     </select>
 {{end}}
 {{define "fmp_allaccounts"}}
     <select name="to">
-        {{range $k,$v := .Fam.Accounts}}
+        {{range $k,$v := .Fam.Period.Accounts}}
         <option value="{{$v.Username}}:{{$v.Name}}">{{$v.Username}}:{{$v.Name}}</option>
         {{end}}
     </select>

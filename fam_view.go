@@ -23,15 +23,15 @@ func (fam *Family) IsParent(uname string) bool {
 	return m.Parent
 }
 
-func (fam *Family) WriteAccess(a history.Account, uname string) bool {
+func (fam *Family) WriteAccess(a *history.Account, uname string) bool {
 	if a.Username == uname {
 		return true
 	}
 	return a.Username == "WORLD" && fam.IsParent(uname)
 }
 
-func (fam *Family) ListWriteAccess(uname string) []history.Account {
-	res := []history.Account{}
+func (fam *Family) ListWriteAccess(uname string) []*history.Account {
+	res := []*history.Account{}
 	for _, v := range fam.Period.Accounts {
 		if fam.WriteAccess(v, uname) {
 			res = append(res, v)

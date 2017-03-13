@@ -119,7 +119,7 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 	})
 
 	f.Period = history.Period{
-		Accounts: []history.Account{
+		Accounts: []*history.Account{
 			history.CreateAccount("WORLD", "main"),
 			history.CreateAccount(uname, "checking"),
 		},

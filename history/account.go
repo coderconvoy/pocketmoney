@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
-func CreateAccount(u, a string) Account {
-	return Account{
+func CreateAccount(u, a string) *Account {
+	return &Account{
 		ACKey:  ACKey{u, a},
 		Opened: time.Now(),
 	}

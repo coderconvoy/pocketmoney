@@ -8,9 +8,9 @@
 
 <ul>
 {{$Fmem := .Fmem}}
-{{range $k, $v := .Fam.Accounts}}
+{{range $k, $v := .Fam.Period.Accounts}}
     {{if eq $v.Username $Fmem}}
-    <li><a href="/view?uname={{$v.Username}}&ac={{$v.Name}}">{{$v.Name}}</a>&nbsp;{{money $v.Current}}</li>
+    <li><a href="/view?uname={{$v.Username}}&ac={{$v.Name}}">{{$v.Name}}</a>&nbsp;{{money $v.End}}</li>
     {{end}}
 {{end}}
 </ul>

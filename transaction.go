@@ -11,15 +11,15 @@ import (
 
 func readPostTransaction(ld LoginData) (history.Transaction, error) {
 	r := ld.R
-	res := BasicTransaction{}
+	res := history.Transaction{}
 	var err error
 
-	res.From, err = NewACKey(r.FormValue("from"))
+	res.From, err = history.NewACKey(r.FormValue("from"))
 	if err != nil {
 		return res, errors.Wrap(err, "From account not parseable")
 	}
 
-	res.Dest, err = NewACKey(r.FormValue("to"))
+	res.Dest, err = history.NewACKey(r.FormValue("to"))
 	if err != nil {
 		return res, errors.Wrap(err, "Dest account not parseable")
 	}
@@ -50,23 +50,18 @@ func readPostTransaction(ld LoginData) (history.Transaction, error) {
 func HandlePay(ld LoginData) {
 	w, fam := ld.W, ld.Fam
 
-	bt, err := readPostBasicTransaction(ld)
+	bt, err := readPostTransaction(ld)
 	if err != nil {
 		ExTemplate(GT, w, "userhome.html", ld.Pd(err.Error()))
 		return
 	}
+	bt.Date = time.Now()
 
-	err := fam.Period.ApplyTransaction(bt)
+	err = fam.Period.ApplyTransaction(bt)
 	if err != nil {
 		ExTemplate(GT, w, "userhome.html", ld.Pd(err.Error()))
 		return
 	}
-
-	fam.Transactions = append(fam.Transactions, Transaction{
-		BasicTransaction: bt,
-		Status:           T_PAID,
-		Date:             time.Now(),
-	})
 
 	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
 }
@@ -87,13 +82,13 @@ func HandleViewAccount(ld LoginData) {
 	}
 	fam.Calculate()
 
-	ExTemplate(GT, w, "viewac.html", ld.Pd("", JPar{"ac", ACKey{rname, rac}}))
+	ExTemplate(GT, w, "viewac.html", ld.Pd("", JPar{"ac", history.ACKey{rname, rac}}))
 }
 
 func HandleAddStanding(ld LoginData) {
 	w, r, fam := ld.W, ld.R, ld.Fam
 
-	bt, err := readPostBasicTransaction(ld)
+	bt, err := readPostTransaction(ld)
 	if err != nil {
 		ExTemplate(GT, w, "userhome.html", ld.Pd(err.Error()))
 		return
@@ -128,15 +123,14 @@ func HandleAddStanding(ld LoginData) {
 	}
 
 	nstand := StandingOrder{
-		BasicTransaction: bt,
-		Start:            stime,
-		Interval:         delay,
-		IntervalType:     delayType,
+		Transaction:  bt,
+		Interval:     delay,
+		IntervalType: delayType,
 	}
+	nstand.Date = stime
 	nstand.Purpose = "$" + nstand.Purpose
 
 	fam.Standing = append(fam.Standing, nstand)
-	fam.Calculate()
 
 	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
 

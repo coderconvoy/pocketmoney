@@ -19,21 +19,21 @@ func (p Period) StartNext() Period {
 
 func (p *Period) ApplyTransaction(ts ...Transaction) error {
 	for _, t := range ts {
-		if p.Start.After(t.Date) || t.Date.After(p.End) {
+		if p.Start.After(t.Date) || (p.End.After(time.Time{}) && t.Date.After(p.End)) {
 			return fmt.Errorf("All dates must fit within range")
 		}
 
+		ffnd, dfnd := false, false
 		for _, a := range p.Accounts {
-			var f, d *Account
 			if a.ACKey == t.From {
-				f = a
+				ffnd = true
 			}
 			if a.ACKey == t.Dest {
-				d = a
+				dfnd = true
 			}
-			if f == nil || d == nil {
-				return fmt.Errorf("Transaction does not have matching account")
-			}
+		}
+		if !ffnd || !dfnd {
+			return fmt.Errorf("Transaction does not have matching account")
 		}
 	}
 	p.Transactions = append(p.Transactions, ts...)
@@ -43,7 +43,7 @@ func (p *Period) ApplyTransaction(ts ...Transaction) error {
 	for _, a := range p.Accounts {
 		a.End = a.Start
 	}
-	for _, t := range ts {
+	for _, t := range p.Transactions {
 		for _, a := range p.Accounts {
 			if a.ACKey == t.From {
 				a.End -= t.Amount

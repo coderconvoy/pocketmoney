@@ -45,7 +45,7 @@ func HandleAddMember(ld LoginData) {
 		Parent:   parent == "on",
 		Password: pw,
 	})
-	fam.Period.Accounts = append(fam.Period.Accounts, history.Account{
+	fam.Period.Accounts = append(fam.Period.Accounts, &history.Account{
 		ACKey:  history.ACKey{uname, "checking"},
 		Opened: time.Now(),
 	})
