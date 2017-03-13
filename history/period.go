@@ -125,5 +125,14 @@ func (p Period) Accumulate(ak ACKey) []Accumulation {
 		}
 	}
 	return res
+}
 
+func (p Period) UserAccounts(uname string) []*Account {
+	res := []*Account{}
+	for _, a := range p.Accounts {
+		if a.Username == uname {
+			res = append(res, a)
+		}
+	}
+	return res
 }
