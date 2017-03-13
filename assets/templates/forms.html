@@ -9,7 +9,7 @@
 
 {{define "fmp_myaccounts"}}
     <select name="from">
-        {{range $k , $v := (accessACs .Fam.Accounts .Fmem .Fam)}}
+        {{range $k , $v := (.Fam.ListWriteAccess .Fmem)}}
         <option value="{{$v.Username}}:{{$v.Name}}">{{$v.Username}}:{{$v.Name}}:  {{money $v.Current}}</option>
         {{end}}
     </select>

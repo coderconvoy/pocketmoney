@@ -8,7 +8,7 @@
     {{end}}
     </ul>
     <br><br>
-    {{if (isparent .Fmem .Fam)}}
+    {{if (.Fam.IsParent .Fmem)}}
     <form action="addmember" method="post"> 
         {{if .Mes}}
         <h3 class="message">{{.Mes }}</h3>

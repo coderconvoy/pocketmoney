@@ -74,7 +74,7 @@ func HandleViewAccount(ld LoginData) {
 	rname := r.FormValue("uname")
 	rac := r.FormValue("ac")
 	//parent or own allowed
-	if !IsParent(fmem, fam) && fmem != rname {
+	if !fam.IsParent(fmem) && fmem != rname {
 		ExTemplate(GT, w, "userhome.html", ld.Pd("Must be your own page"))
 
 		return

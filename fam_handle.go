@@ -13,7 +13,7 @@ func HandleFamily(ld LoginData) {
 }
 func HandleAddMember(ld LoginData) {
 	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
-	if !IsParent(fmem, fam) {
+	if !fam.IsParent(fmem) {
 		ExTemplate(GT, w, "familypage.html", NewPageData("Not a Parent", fmem, fam))
 		return
 	}

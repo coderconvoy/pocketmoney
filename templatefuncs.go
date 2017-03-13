@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"reflect"
 	"text/template"
@@ -11,9 +10,6 @@ import (
 func TemplateFuncs() template.FuncMap {
 	return template.FuncMap{
 		"plex":           Plex,
-		"getuser":        GetUser,
-		"isparent":       IsParent,
-		"accessACs":      FilterWriteableACs,
 		"standingbyac":   FilterStandingByAC,
 		"standingbyuser": FilterStandingByUser,
 		"money":          PrintMoney,
@@ -30,15 +26,6 @@ func Plex(p, a, b interface{}) interface{} {
 	}
 	return a
 
-}
-
-func GetUser(uname string, fam *Family) (*User, error) {
-	for i, m := range fam.Members {
-		if m.Username == uname {
-			return &fam.Members[i], nil
-		}
-	}
-	return nil, errors.New("No Member of that name")
 }
 
 func PrintMoney(n int) string {
@@ -60,29 +47,6 @@ func PrintDateRFC(t ...time.Time) string {
 		return time.Now().Format("2006-01-02")
 	}
 	return t[0].Format("2006-01-02")
-}
-
-func IsParent(uname string, fam *Family) bool {
-	m, err := GetUser(uname, fam)
-	if err != nil {
-		return false
-	}
-	return m.Parent
-}
-
-func WriteableAC(a *Account, uname string, fam *Family) bool {
-	isPar := IsParent(uname, fam)
-	return a.Username == uname || (a.Username == "WORLD" && isPar)
-}
-
-func FilterWriteableACs(acs []*Account, uname string, fam *Family) []*Account {
-	res := []*Account{}
-	for _, v := range acs {
-		if WriteableAC(v, uname, fam) {
-			res = append(res, v)
-		}
-	}
-	return res
 }
 
 func FilterStandingByUser(st []StandingOrder, uname string) []StandingOrder {
