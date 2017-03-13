@@ -122,9 +122,10 @@ func (t Transortable) Less(i, j int) bool { return t[j].Date.After(t[i].Date) }
 
 type StandingOrder struct {
 	BasicTransaction
-	Start     time.Time
-	Delay     int
-	DelayType int
+	Start, Stop  time.Time
+	Rules        string
+	Interval     int
+	IntervalType int
 }
 
 type ACKey struct {

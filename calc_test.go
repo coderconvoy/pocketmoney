@@ -32,8 +32,8 @@ func qstanding(fu, du, fa, da string, n int, purp string, dat time.Time, d, dt i
 	return StandingOrder{
 		BasicTransaction: BasicTransaction{ACKey{fu, fa}, ACKey{du, da}, n, purp},
 		Start:            dat,
-		Delay:            d,
-		DelayType:        dt,
+		Interval:         d,
+		IntervalType:     dt,
 	}
 }
 

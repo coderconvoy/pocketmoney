@@ -124,8 +124,8 @@ func HandleAddStanding(ld LoginData) {
 	nstand := StandingOrder{
 		BasicTransaction: bt,
 		Start:            stime,
-		Delay:            delay,
-		DelayType:        delayType,
+		Interval:         delay,
+		IntervalType:     delayType,
 	}
 	nstand.Purpose = "$" + nstand.Purpose
 

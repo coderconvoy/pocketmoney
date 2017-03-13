@@ -73,14 +73,14 @@ func (f *Family) calculateStanding(now time.Time) {
 			ntList = append(ntList, lastTrans)
 		}
 		//Todo add dates between initial and today
-		nd := NextDate(lastTrans.Date, s.Delay, s.DelayType)
+		nd := NextDate(lastTrans.Date, s.Interval, s.IntervalType)
 		for now.After(nd) {
 			ntList = append(ntList, Transaction{
 				BasicTransaction: s.BasicTransaction,
 				Date:             nd,
 				Status:           T_PAID,
 			})
-			nd = NextDate(nd, s.Delay, s.DelayType)
+			nd = NextDate(nd, s.Interval, s.IntervalType)
 		}
 
 	}
