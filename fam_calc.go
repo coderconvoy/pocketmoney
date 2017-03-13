@@ -12,9 +12,7 @@ func (f *Family) Calculate() {
 		return
 	}
 	f.CalculateStanding()
-	f.CalculateTransactions()
 
-	f.LastCalc = time.Now()
 }
 
 func (f *Family) CalculateTransactions() {

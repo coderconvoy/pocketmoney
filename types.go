@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/coderconvoy/dbase2"
+	"github.com/coderconvoy/pocketmoney/history"
 )
 
 const (
@@ -88,8 +89,7 @@ type ACPageData struct {
 type Family struct {
 	FamilyName           string
 	Members              []User
-	Accounts             []*Account
-	Transactions         []Transaction
+	Period               history.Period
 	Requests             []Transaction
 	Standing             []StandingOrder
 	LastCalc, LastChange time.Time
@@ -102,34 +102,12 @@ type User struct {
 	Parent   bool
 }
 
-type BasicTransaction struct {
-	From, Dest ACKey
-	Amount     int
-	Purpose    string
-}
-
-type Transaction struct {
-	BasicTransaction
-	Status int
-	Date   time.Time
-}
-
-type Transortable []Transaction
-
-func (t Transortable) Len() int           { return len(t) }
-func (t Transortable) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
-func (t Transortable) Less(i, j int) bool { return t[j].Date.After(t[i].Date) }
-
 type StandingOrder struct {
-	BasicTransaction
-	Start, Stop  time.Time
+	history.Transaction
+	Stop         time.Time
 	Rules        string
 	Interval     int
 	IntervalType int
-}
-
-type ACKey struct {
-	Username, Name string
 }
 
 func NewACKey(s string) (ACKey, error) {
@@ -141,10 +119,3 @@ func NewACKey(s string) (ACKey, error) {
 }
 
 func (a ACKey) String() string { return a.Username + ":" + a.Name }
-
-type Account struct {
-	ACKey
-	StartDate time.Time
-	Current   int
-	Available int
-}
