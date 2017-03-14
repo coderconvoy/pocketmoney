@@ -51,8 +51,8 @@ func PrintDateRFC(t ...time.Time) string {
 	return t[0].Format("2006-01-02")
 }
 
-func FilterStandingByUser(st []StandingOrder, uname string) []StandingOrder {
-	res := []StandingOrder{}
+func FilterStandingByUser(st []*StandingOrder, uname string) []*StandingOrder {
+	res := []*StandingOrder{}
 	for _, v := range st {
 		if (uname == v.From.Username) || (uname == v.Dest.Username) {
 
@@ -62,8 +62,8 @@ func FilterStandingByUser(st []StandingOrder, uname string) []StandingOrder {
 	return res
 }
 
-func FilterStandingByAC(st []StandingOrder, ac history.Account) []StandingOrder {
-	res := []StandingOrder{}
+func FilterStandingByAC(st []*StandingOrder, ac history.Account) []*StandingOrder {
+	res := []*StandingOrder{}
 	for _, v := range st {
 		if (ac.ACKey == v.From) || (ac.ACKey == v.Dest) {
 			res = append(res, v)

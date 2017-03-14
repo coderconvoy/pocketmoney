@@ -1,27 +1,21 @@
 package main
 
 import (
-	"time"
-
 	"github.com/coderconvoy/pocketmoney/history"
 )
 
-func (f *Family) Calculate() {
-	if f.LastCalc.After(f.LastChange) && time.Now().After(f.LastCalc.Add(time.Hour*5)) {
-		return
+func (f *Family) Calculate() bool {
+	res := false
+	for _, o := range f.Standing {
+		nt, ok := o.Next()
+		for ok {
+			res = true
+			f.Period.ApplyTransaction(nt)
+			nt, ok = o.Next()
+		}
 	}
-	//	f.CalculateStanding()
+	return res
 
-}
-
-func NextDate(d time.Time, step int, steptype int) time.Time {
-	if step <= 0 {
-		step = 1
-	}
-	if steptype == D_NDAYS {
-		return d.AddDate(0, 0, step)
-	}
-	return d.AddDate(0, step, 0)
 }
 
 func (f *Family) AccumulateTransactions(ak history.ACKey) []history.Accumulation {

@@ -89,7 +89,7 @@ type Family struct {
 	Members              []User
 	Period               history.Period
 	Requests             []history.Transaction
-	Standing             []StandingOrder
+	Standing             []*StandingOrder
 	LastCalc, LastChange time.Time
 }
 
@@ -102,7 +102,7 @@ type User struct {
 
 type StandingOrder struct {
 	history.Transaction
-	Stop         time.Time
+	Stop, Start  time.Time
 	Rules        string
 	Interval     int
 	IntervalType int

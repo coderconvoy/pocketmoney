@@ -122,15 +122,17 @@ func HandleAddStanding(ld LoginData) {
 		delayType = D_OFMONTH
 	}
 
-	nstand := StandingOrder{
+	nstand := &StandingOrder{
 		Transaction:  bt,
+		Start:        stime,
 		Interval:     delay,
 		IntervalType: delayType,
 	}
-	nstand.Date = stime
 	nstand.Purpose = "$" + nstand.Purpose
 
 	fam.Standing = append(fam.Standing, nstand)
+
+	fam.Calculate()
 
 	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
 

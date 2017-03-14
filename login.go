@@ -47,12 +47,13 @@ type MuxFunc func(w http.ResponseWriter, r *http.Request)
 func LoggedInFunc(f LoggedFunc, edit bool) MuxFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		Fam, fmem, lockId, err := loggedInFamily(w, r)
-		if !edit {
-			logLock.Unlock(lockId)
-		}
 		if err != nil {
 			GoIndex(w, r, err.Error())
 			return
+		}
+		change := edit || Fam.Calculate()
+		if !change {
+			logLock.Unlock(lockId)
 		}
 		ld := LoginData{
 			W:    w,
@@ -61,7 +62,7 @@ func LoggedInFunc(f LoggedFunc, edit bool) MuxFunc {
 			Fmem: fmem,
 		}
 		f(ld)
-		if edit {
+		if change {
 			err := Fam.Save()
 			if err != nil {
 				fmt.Println("Save Error:", err)
