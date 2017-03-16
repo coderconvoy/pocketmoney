@@ -1,6 +1,8 @@
 package main
 
 import (
+	"math/rand"
+
 	"github.com/coderconvoy/pocketmoney/history"
 )
 
@@ -21,4 +23,19 @@ func (f *Family) Calculate() bool {
 func (f *Family) AccumulateTransactions(ak history.ACKey) []history.Accumulation {
 	return f.Period.Accumulate(ak)
 
+}
+
+func (f *Family) NewStandingID() int32 {
+	for {
+		n := rand.Int31n(1000)
+		fnd := false
+		for _, s := range f.Standing {
+			if s.ID == n {
+				fnd = true
+			}
+		}
+		if !fnd {
+			return n
+		}
+	}
 }

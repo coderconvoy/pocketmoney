@@ -115,7 +115,7 @@ func HandleAddStanding(ld LoginData) {
 		return
 	}
 
-	//lazy fix if new types are added
+	//lazy, fix if new types are added
 	delayType := D_NDAYS
 	if r.FormValue("delaytype") == "days" {
 		delayType = D_OFMONTH
@@ -126,6 +126,7 @@ func HandleAddStanding(ld LoginData) {
 		Start:        stime,
 		Interval:     delay,
 		IntervalType: delayType,
+		ID:           fam.NewStandingID(),
 	}
 	nstand.Purpose = "$" + nstand.Purpose
 

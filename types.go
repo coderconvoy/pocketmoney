@@ -106,4 +106,5 @@ type StandingOrder struct {
 	Rules        string
 	Interval     int
 	IntervalType int
+	ID           int32
 }
