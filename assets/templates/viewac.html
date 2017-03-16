@@ -11,11 +11,9 @@
         <th>Purpose</th>
     </tr>
     {{$List := .Fam.AccumulateTransactions $ac}}
-    {{range $k ,$v := $List}}
+    {{range $k, $v := $List}}
     <tr>
         <td><b>{{money $v.After}}</b></td>
-        {{type $ac}}
-        {{type $v.From}}
         {{if (eq2 $ac $v.From)}}
         <td></td><td>{{money $v.Amount}}</td><td>{{$v.Dest}}</td>
         {{else}}

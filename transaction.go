@@ -80,7 +80,6 @@ func HandleViewAccount(ld LoginData) {
 
 		return
 	}
-	fam.Calculate()
 
 	ExTemplate(GT, w, "viewac.html", ld.Pd("", JPar{"ac", history.ACKey{rname, rac}}))
 }
