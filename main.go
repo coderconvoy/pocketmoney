@@ -92,11 +92,13 @@ func main() {
 	http.HandleFunc("/newfamily", HandleNewFamily)
 	http.HandleFunc("/login", HandleLogin)
 	http.HandleFunc("/logout", HandleLogout)
-	//Edits
 
+	//Edits
 	http.HandleFunc("/addmember", LoggedInFunc(HandleAddMember, true))
 	http.HandleFunc("/addaccount", LoggedInFunc(HandleAddAccount, true))
 	http.HandleFunc("/pay", LoggedInFunc(HandlePay, true))
+	http.HandleFunc("/cancelstanding", LoggedInFunc(HandleCancelStanding, true))
+
 	//Views
 	http.HandleFunc("/transactions", LoggedInFunc(HandleTransactions, false))
 	http.HandleFunc("/personal", LoggedInFunc(HandlePersonal, false))

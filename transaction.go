@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 
@@ -82,58 +81,4 @@ func HandleViewAccount(ld LoginData) {
 	}
 
 	ExTemplate(GT, w, "viewac.html", ld.Pd("", JPar{"ac", history.ACKey{rname, rac}}))
-}
-
-func HandleAddStanding(ld LoginData) {
-	w, r, fam := ld.W, ld.R, ld.Fam
-
-	bt, err := readPostTransaction(ld)
-	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd(err.Error()))
-		return
-	}
-
-	start := r.FormValue("start")
-	fmt.Println("start:", start)
-	stime, err := time.Parse("2006-01-02", start)
-	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("could not parse date"+err.Error()))
-		return
-	}
-
-	if time.Now().AddDate(0, 0, -1).After(stime) {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("Must be a future startdate"))
-	}
-
-	delay, err := strconv.Atoi(r.FormValue("delay"))
-	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("could not parse delay interval"+err.Error()))
-		return
-	}
-	if delay < 1 {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("Must increment positive"))
-		return
-	}
-
-	//lazy, fix if new types are added
-	delayType := D_NDAYS
-	if r.FormValue("delaytype") == "days" {
-		delayType = D_OFMONTH
-	}
-
-	nstand := &StandingOrder{
-		Transaction:  bt,
-		Start:        stime,
-		Interval:     delay,
-		IntervalType: delayType,
-		ID:           fam.NewStandingID(),
-	}
-	nstand.Purpose = "$" + nstand.Purpose
-
-	fam.Standing = append(fam.Standing, nstand)
-
-	fam.Calculate()
-
-	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
-
 }
