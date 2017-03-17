@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 
+	"github.com/coderconvoy/dbase2"
 	"github.com/coderconvoy/pocketmoney/history"
 )
 
@@ -43,7 +43,7 @@ func HandleAddStanding(ld LoginData) {
 	}
 
 	start := r.FormValue("start")
-	fmt.Println("start:", start)
+	dbase2.QLog("start:" + start)
 	stime, err := time.Parse("2006-01-02", start)
 	if err != nil {
 		ExTemplate(GT, w, "userhome.html", ld.Pd("could not parse date"+err.Error()))

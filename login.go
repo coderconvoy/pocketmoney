@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -65,7 +64,7 @@ func LoggedInFunc(f LoggedFunc, edit bool) MuxFunc {
 		if change {
 			err := Fam.Save()
 			if err != nil {
-				fmt.Println("Save Error:", err)
+				dbase2.QLog("Save Error:" + err.Error())
 			}
 			logLock.Unlock(lockId)
 		}

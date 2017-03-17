@@ -42,7 +42,7 @@ func ExTemplate(t *template.Template, w http.ResponseWriter, name string, data i
 }
 
 func Handle(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Host, "--", r.URL.Path)
+	dbase2.QLog(r.Host + "--" + r.URL.Path)
 	GoIndex(w, r, "")
 }
 
@@ -55,7 +55,7 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 	p := r.URL.Path
 	ass, err := Asset(path.Join("assets", p))
 	if err != nil {
-		fmt.Println("Could not serve static, ", p, ":", err)
+		dbase2.QLog("Could not serve static, " + p + ":" + err.Error())
 		return
 	}
 	switch path.Ext(p) {
@@ -69,7 +69,11 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	insecure := flag.Bool("i", false, "Run without https")
+	debug := flag.Bool("d", false, "Debug, log to fmt.Println")
 	flag.Parse()
+	if *debug {
+		dbase2.SetQLogger(dbase2.FmtLog{})
+	}
 
 	GT = template.New("index").Funcs(tempower.FMap()).Funcs(TemplateFuncs())
 	ad, err := AssetDir("assets/templates")
@@ -78,10 +82,11 @@ func main() {
 			continue
 		}
 		t, err := Asset("assets/templates/" + n)
-		fmt.Println("Parsing :" + n)
+		dbase2.QLog("Parsing :" + n)
 		GT = GT.New(n)
 		_, err = GT.Parse(string(t))
 		if err != nil {
+			dbase2.QLog(err.Error())
 			fmt.Println(err)
 			return
 		}
