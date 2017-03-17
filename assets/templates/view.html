@@ -1,13 +1,17 @@
 {{define "standing"}}
+{{$Fam := .Fam}}
 {{$js := .Job "stand"}}
 {{$jt := plex $js $js .Fmem }}
-{{$list := standingbyuser .Fam.Standing .Fmem}}
+{{$list := .Fam.FilterStandingByUser .Fmem}}
 <h2>Standing Orders</h2>
 <table>
 {{range $k, $v := $list}}
 <tr>
-    <td>{{$v.From}}</td><td>{{$v.Dest}}</td><td>{{$v.Amount}}</td>
-    <td><a href="cancelstanding?id={{$v.ID}}">Cancel</a></td>
+    <td>{{$v.From}}</td><td>{{$v.Dest}}</td><td>{{money $v.Amount}}</td>
+    <td>{{if $Fam.CanEditStanding $v $jt}}
+        <a href="cancelstanding?id={{$v.ID}}">Cancel</a>
+        {{end -}}
+    </td>
 </tr>
 {{end}}
 </table>

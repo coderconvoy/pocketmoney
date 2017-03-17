@@ -39,3 +39,24 @@ func (fam *Family) ListWriteAccess(uname string) []*history.Account {
 	}
 	return res
 }
+
+func (fam *Family) FilterStandingByUser(uname string) []*StandingOrder {
+	res := []*StandingOrder{}
+	isPar := fam.IsParent(uname)
+	for _, v := range fam.Standing {
+		if v.From.Username == uname ||
+			(v.From.Username == "WORLD" && isPar) {
+			res = append(res, v)
+		} else if v.Dest.Username == uname ||
+			(v.Dest.Username == "WORLD" && isPar) {
+			res = append(res, v)
+		}
+	}
+	return res
+}
+
+func (fam *Family) CanEditStanding(so *StandingOrder, uname string) bool {
+	return so.From.Username == uname ||
+		(so.From.Username == "WORLD" && fam.IsParent(uname))
+
+}

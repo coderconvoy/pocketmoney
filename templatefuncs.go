@@ -11,14 +11,13 @@ import (
 
 func TemplateFuncs() template.FuncMap {
 	return template.FuncMap{
-		"plex":           Plex,
-		"standingbyac":   FilterStandingByAC,
-		"standingbyuser": FilterStandingByUser,
-		"money":          PrintMoney,
-		"date":           PrintDate,
-		"dateRFC":        PrintDateRFC,
-		"type":           PrintType,
-		"eq2":            Eq2,
+		"plex":         Plex,
+		"standingbyac": FilterStandingByAC,
+		"money":        PrintMoney,
+		"date":         PrintDate,
+		"dateRFC":      PrintDateRFC,
+		"type":         PrintType,
+		"eq2":          Eq2,
 	}
 }
 
@@ -49,17 +48,6 @@ func PrintDateRFC(t ...time.Time) string {
 		return time.Now().Format("2006-01-02")
 	}
 	return t[0].Format("2006-01-02")
-}
-
-func FilterStandingByUser(st []*StandingOrder, uname string) []*StandingOrder {
-	res := []*StandingOrder{}
-	for _, v := range st {
-		if (uname == v.From.Username) || (uname == v.Dest.Username) {
-
-			res = append(res, v)
-		}
-	}
-	return res
 }
 
 func FilterStandingByAC(st []*StandingOrder, ac history.Account) []*StandingOrder {
