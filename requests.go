@@ -14,10 +14,10 @@ func HandleMakeRequest(ld LoginData) {
 
 	fam.Requests = append(fam.Requests,
 		&PaymentRequest{
-			//Transaction: bt,
-			ID:        fam.NewRequestID(),
-			Requester: ld.Fmem,
-			Returns:   0,
+			Transaction: bt,
+			ID:          fam.NewRequestID(),
+			Requester:   ld.Fmem,
+			Returns:     0,
 		})
 
 	ExTemplate(GT, w, "userhome.html", ld.Pd("Request Added"))

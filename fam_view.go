@@ -64,7 +64,7 @@ func (fam *Family) CanEditStanding(so *StandingOrder, uname string) bool {
 func (fam *Family) GetMustRequests(uname string) []*PaymentRequest {
 	res := []*PaymentRequest{}
 	for _, pr := range fam.Requests {
-		if (pr.From == uname && pr.Returns%2 == 0) ||
+		if (pr.From.Username == uname && pr.Returns%2 == 0) ||
 			(pr.Requester == uname && pr.Returns%2 != 0) {
 			res = append(res, pr)
 		}

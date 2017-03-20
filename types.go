@@ -105,10 +105,7 @@ type StandingOrder struct {
 }
 
 type PaymentRequest struct {
-	From      string
-	Dest      history.ACKey
-	Date      time.Time
-	Amount    int
+	history.Transaction
 	Requester string
 	ID        int32
 	Returns   int

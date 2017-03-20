@@ -71,7 +71,7 @@
         <h3>Request a Payment</h3>
         <p>The owner of the sending account will have to authorise this payment</p>
     <input type="text" name="username" readonly value="{{.Fmem}}" hidden>  
-    From: <select name="from">{{template "fmp_allusers" .}}</select>
+    From: <select name="fromuser">{{template "fmp_allusers" .}}</select>
     To: <select name="to">{{template "fmp_allaccounts" .}}</select><br>
     Amount:  £<input type="number" step="0.01" min="0" name="amount"><br>
     Purpose:  <input type="text" name="purpose"><br>
