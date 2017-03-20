@@ -39,3 +39,18 @@ func (f *Family) NewStandingID() int32 {
 		}
 	}
 }
+
+func (f *Family) NewRequestID() int32 {
+	for {
+		n := rand.Int31n(1000)
+		fnd := false
+		for _, s := range f.Requests {
+			if s.ID == n {
+				fnd = true
+			}
+		}
+		if !fnd {
+			return n
+		}
+	}
+}

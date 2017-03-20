@@ -83,7 +83,7 @@ type Family struct {
 	FamilyName           string
 	Members              []User
 	Period               history.Period
-	Requests             []PaymentRequest
+	Requests             []*PaymentRequest
 	Standing             []*StandingOrder
 	LastCalc, LastChange time.Time
 }
@@ -105,8 +105,11 @@ type StandingOrder struct {
 }
 
 type PaymentRequest struct {
-	history.Transaction
+	From      string
+	Dest      history.ACKey
+	Date      time.Time
+	Amount    int
 	Requester string
 	ID        int32
-	Rejected  bool
+	Returns   int
 }

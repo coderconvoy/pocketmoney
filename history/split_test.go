@@ -10,7 +10,7 @@ func Test_split(t *testing.T) {
 	p := Period{
 		Start: qdate(2017, 01, 01),
 		End:   qdate(2017, 03, 01),
-		Accounts: []Account{
+		Accounts: []*Account{
 			qac(AC1, 0, 0),
 			qac(AC2, 5, 0),
 			qac(AC3, 0, 0),
@@ -33,7 +33,7 @@ func Test_split(t *testing.T) {
 		fmt.Println("Period:", r)
 		fmt.Println(" AC:")
 		for _, ac := range p.Accounts {
-			fmt.Println("  ", ac.Id, ac.Start, ac.End)
+			fmt.Println("  ", ac.Username, ac.Start, ac.End)
 		}
 		fmt.Println(" TC:")
 		for _, tr := range p.Transactions {
@@ -72,13 +72,34 @@ func qtran(f, d, a int, p string, t time.Time) Transaction {
 	}
 }
 
-func qac(k, s, e int) Account {
-	return Account{
-		Id:    qkey(k),
+func qac(k, s, e int) *Account {
+	return &Account{
+		ACKey: qkey(k),
 		Start: s,
 		End:   e,
 	}
 }
 func qdate(y, m, d int) time.Time {
 	return time.Date(y, time.Month(m), d, 0, 0, 0, 0, time.UTC)
+}
+
+func Test_Amount(t *testing.T) {
+	tr := []struct {
+		In  string
+		Out int
+		Err bool
+	}{
+		{"helo", 0, true},
+		{"0.4", 40, false},
+		{"-1.7", 0, true},
+	}
+
+	for _, ti := range tr {
+		o, err := ParseAmount(ti.In)
+		if o != ti.Out || ((err == nil) == ti.Err) {
+			t.Log("expected :%d,%b. Got %d,%s", ti.Out, ti.Err, o, err)
+			t.Fail()
+		}
+
+	}
 }

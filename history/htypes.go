@@ -1,7 +1,9 @@
 package history
 
 import (
+	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -16,6 +18,17 @@ func NewACKey(s string) (ACKey, error) {
 		return ACKey{}, fmt.Errorf("Could not Parse '%s'.", s)
 	}
 	return ACKey{sp[0], sp[1]}, nil
+}
+
+func ParseAmount(s string) (int, error) {
+	am, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		return 0, errors.New("Could not parse amount")
+	}
+	if am < 0 {
+		return 0, errors.New("Amount not Positive")
+	}
+	return int(am * 100), nil
 }
 
 func (a ACKey) String() string { return a.Username + ":" + a.Name }

@@ -24,6 +24,17 @@ func LoadFamily(fname string) (*Family, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "Corrupted Family File")
 	}
+	if len(f.Members) == 0 {
+		return nil, errors.New("No Family Members")
+	}
+
+	if f.Members[0].Username != "WORLD" {
+		f.Members = append([]User{
+			{
+				Username: "WORLD",
+			},
+		}, f.Members...)
+	}
 	return &f, nil
 }
 

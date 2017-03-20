@@ -1,7 +1,6 @@
 package main
 
 import (
-	"strconv"
 	"time"
 
 	"github.com/coderconvoy/pocketmoney/history"
@@ -27,15 +26,11 @@ func readPostTransaction(ld LoginData) (history.Transaction, error) {
 		return res, errors.New("From and Destination are the same account")
 	}
 
-	amount := r.FormValue("amount")
-	am, err := strconv.ParseFloat(amount, 64)
+	amount, err := history.ParseAmount(r.FormValue("amount"))
 	if err != nil {
-		return res, errors.New("Could not parse amount")
+		return res, errors.Wrap(err, "Cannot parse amount")
+
 	}
-	if am < 0 {
-		return res, errors.New("Amount not Positive")
-	}
-	res.Amount = int(am * 100)
 
 	purpose := r.FormValue("purpose")
 	if purpose == "" {

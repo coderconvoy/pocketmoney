@@ -8,18 +8,19 @@
 {{end}}
 
 {{define "fmp_myaccounts"}}
-    <select name="from">
         {{range $k , $v := (.Fam.ListWriteAccess .Fmem)}}
         <option value="{{$v.Username}}:{{$v.Name}}">{{$v.Username}}:{{$v.Name}}:  {{money $v.End}}</option>
         {{end}}
-    </select>
 {{end}}
 {{define "fmp_allaccounts"}}
-    <select name="to">
         {{range $k,$v := .Fam.Period.Accounts}}
         <option value="{{$v.Username}}:{{$v.Name}}">{{$v.Username}}:{{$v.Name}}</option>
         {{end}}
-    </select>
+{{end}}
+{{define "fmp_allusers"}}
+    {{range $k, $v := .Fam.Members}}
+    <option value="{{$v.Username}}">{{$v.Username}}</option>
+    {{end}}
 {{end}}
 
 
@@ -27,8 +28,8 @@
     <form action="pay" method="post">
         <h3>Make a Payment</h3>
     <input type="text" name="username" readonly value="{{.Fmem}}" hidden>  
-    From: {{template "fmp_myaccounts" .}}
-    To: {{template "fmp_allaccounts" .}}<br>
+    From: <select name="from">{{template "fmp_myaccounts" .}}</select>
+    To: <select name="to">{{template "fmp_allaccounts" .}}</select><br>
     Amount:  £<input type="number" step="0.01" min="0" name="amount"><br>
     Purpose:  <input type="text" name="purpose"><br>
         <input type="submit" text="Pay Now" value="Pay Now">
@@ -38,8 +39,8 @@
 {{define "frm_standing"}}
     <form action="addstanding" method="post">
         <h3>Make a Standing Order</h3>
-    From: {{template "fmp_myaccounts" .}}
-    To: {{template "fmp_allaccounts" .}}<br>
+        From: <select name="from">{{template "fmp_myaccounts" .}}</select>
+        To: <select name="to">{{template "fmp_allaccounts" .}}</select><br>
     Amount:  £<input type="number" step="0.01" min="0" name="amount"><br>
     Purpose:  <input type="text" name="purpose"><br>
 
@@ -70,8 +71,8 @@
         <h3>Request a Payment</h3>
         <p>The owner of the sending account will have to authorise this payment</p>
     <input type="text" name="username" readonly value="{{.Fmem}}" hidden>  
-    From: {{template "fmp_allaccounts" .}}
-    To: {{template "fmp_allaccounts" .}}<br>
+    From: <select name="from">{{template "fmp_allusers" .}}</select>
+    To: <select name="to">{{template "fmp_allaccounts" .}}</select><br>
     Amount:  £<input type="number" step="0.01" min="0" name="amount"><br>
     Purpose:  <input type="text" name="purpose"><br>
         <input type="submit" text="Pay Now" value="Pay Now">
