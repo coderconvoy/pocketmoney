@@ -9,11 +9,6 @@ import (
 )
 
 const (
-	T_PAID = iota
-	T_REQUESTED
-	T_REJECTED
-)
-const (
 	D_NDAYS = iota
 	D_OFMONTH
 )
@@ -88,7 +83,7 @@ type Family struct {
 	FamilyName           string
 	Members              []User
 	Period               history.Period
-	Requests             []history.Transaction
+	Requests             []PaymentRequest
 	Standing             []*StandingOrder
 	LastCalc, LastChange time.Time
 }
@@ -107,4 +102,11 @@ type StandingOrder struct {
 	Interval     int
 	IntervalType int
 	ID           int32
+}
+
+type PaymentRequest struct {
+	history.Transaction
+	Requester string
+	ID        int32
+	Rejected  bool
 }

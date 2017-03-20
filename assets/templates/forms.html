@@ -63,3 +63,18 @@
     <input type="submit" text="Change" value="Change">
 </form>
 {{end}}
+
+{{define "frm_request"}}
+<form action="makerequest" method="post">
+    <form action="pay" method="post">
+        <h3>Request a Payment</h3>
+        <p>The owner of the sending account will have to authorise this payment</p>
+    <input type="text" name="username" readonly value="{{.Fmem}}" hidden>  
+    From: {{template "fmp_allaccounts" .}}
+    To: {{template "fmp_allaccounts" .}}<br>
+    Amount:  £<input type="number" step="0.01" min="0" name="amount"><br>
+    Purpose:  <input type="text" name="purpose"><br>
+        <input type="submit" text="Pay Now" value="Pay Now">
+    </form>
+</form>
+{{end}}

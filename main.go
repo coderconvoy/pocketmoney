@@ -103,6 +103,8 @@ func main() {
 	http.HandleFunc("/addaccount", LoggedInFunc(HandleAddAccount, true))
 	http.HandleFunc("/pay", LoggedInFunc(HandlePay, true))
 	http.HandleFunc("/cancelstanding", LoggedInFunc(HandleCancelStanding, true))
+	http.HandleFunc("/makerequest", LoggedInFunc(HandleMakeRequest, true))
+	http.HandleFunc("/respondrequest", LoggedInFunc(HandleRespondRequest, true))
 
 	//Views
 	http.HandleFunc("/transactions", LoggedInFunc(HandleTransactions, false))
