@@ -24,5 +24,34 @@ func HandleMakeRequest(ld LoginData) {
 }
 
 func HandleRespondRequest(ld LoginData) {
+	w, r := ld.W, ld.R
+
+	act := r.FormValue("action")
+	id := r.FormValue("id")
+	var req PaymentRequest = nil
+	for _, rq := range ld.Fam.Requests {
+		if rq.ID == id {
+			req = rq
+			break
+		}
+	}
+	if req == nil {
+		ExTemplate(GT, ld.W, "userhome.html", ld.PD("No request of that ID"))
+		return
+	}
+
+	switch act {
+	case "accept":
+		if req.From.Username != ld.Fmem {
+			ExTemplate(GT, ld.W, "userhome.html", ld.PD("Cannot accept someone else's request"))
+			return
+		}
+		//Todo set date, and then add to transactions
+
+	case "reject":
+	case "cancel":
+	case "insist":
+	}
+
 	ExTemplate(GT, ld.W, "userhome.html", ld.Pd("Response handler not ready"))
 }
