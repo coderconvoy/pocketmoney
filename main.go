@@ -105,14 +105,14 @@ func main() {
 	http.HandleFunc("/cancelstanding", LoggedInFunc(HandleCancelStanding, true))
 	http.HandleFunc("/makerequest", LoggedInFunc(HandleMakeRequest, true))
 	http.HandleFunc("/respondrequest", LoggedInFunc(HandleRespondRequest, true))
-
-	//Views
-	http.HandleFunc("/transactions", LoggedInFunc(HandleTransactions, false))
-	http.HandleFunc("/personal", LoggedInFunc(HandlePersonal, false))
-	http.HandleFunc("/family", LoggedInFunc(HandleFamily, false))
 	http.HandleFunc("/addstanding", LoggedInFunc(HandleAddStanding, true))
 	http.HandleFunc("/chpass", LoggedInFunc(HandlePasswordChange, true))
-	http.HandleFunc("/view", LoggedInFunc(HandleViewAccount, false))
+
+	//Views
+	http.HandleFunc("/transactions", LoggedInVTemp("transactions.html"))
+	http.HandleFunc("/personal", LoggedInVTemp("userhome.html"))
+	http.HandleFunc("/family", LoggedInVTemp("familypage.html"))
+	http.HandleFunc("/view", LoggedInView("viewac.html"))
 
 	if *insecure {
 		err = http.ListenAndServe(":8080", nil)

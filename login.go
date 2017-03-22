@@ -46,13 +46,21 @@ type ViewFunc func(PageData) string
 
 type MuxFunc func(w http.ResponseWriter, r *http.Request)
 
-func LoggedInView(tname string) MuxFunc {
+func LoggedInVTemp(tname string) MuxFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		pdata, lockId, err := loggedInFamily(w, r)
 		//Consider adding a calculate and save if changed here
 		ExTemplate(GT, w, tname, pdata)
 		logLock.Unlock(lockId)
+	}
+}
 
+func LoggedInView(f ViewFunc) MuxFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		pdata, lockId, err := loggedInFamily(w, r)
+		//Consider adding a calculate and save if changed here
+		f(pdata)
+		logLock.Unlock(lockId)
 	}
 }
 
