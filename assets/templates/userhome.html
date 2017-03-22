@@ -13,7 +13,7 @@
     {{if eq .From.Username $Fmem}}
     <form class="request" action="respondrequest" method="post">
         <input type="text" value="{{.ID}}" hidden readonly name="id">
-        <input type="text" value="reject" hidden readonly name="action">
+        <input type="text" value="accept" hidden readonly name="action">
         {{.Requester}} has requested a payment of {{money .Amount}} from you into {{.Dest}}.
         <select name="from">{{template "fmp_myaccounts" $top}}</select>
         <input type="submit" value="Accept">

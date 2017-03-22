@@ -1,6 +1,9 @@
 package main
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
 
 func HandleMakeRequest(ld LoginData) {
 	w, fam := ld.W, ld.Fam
@@ -24,34 +27,46 @@ func HandleMakeRequest(ld LoginData) {
 }
 
 func HandleRespondRequest(ld LoginData) {
-	w, r := ld.W, ld.R
+	fam, w, r := ld.Fam, ld.W, ld.R
 
 	act := r.FormValue("action")
-	id := r.FormValue("id")
-	var req PaymentRequest = nil
-	for _, rq := range ld.Fam.Requests {
+	rmid64, err := strconv.ParseInt(ld.R.FormValue("id"), 10, 32)
+	if err != nil {
+		ExTemplate(GT, w, "userhome.html", ld.Pd("No id Given"))
+		return
+	}
+	id := int32(rmid64)
+	var req *PaymentRequest = nil
+	remloc := -1
+	for i, rq := range ld.Fam.Requests {
 		if rq.ID == id {
 			req = rq
+			remloc = i
 			break
 		}
 	}
 	if req == nil {
-		ExTemplate(GT, ld.W, "userhome.html", ld.PD("No request of that ID"))
+		ExTemplate(GT, w, "userhome.html", ld.Pd("No request of that ID"))
 		return
 	}
 
 	switch act {
 	case "accept":
 		if req.From.Username != ld.Fmem {
-			ExTemplate(GT, ld.W, "userhome.html", ld.PD("Cannot accept someone else's request"))
+			ExTemplate(GT, w, "userhome.html", ld.Pd("Cannot accept someone else's request"))
 			return
 		}
-		//Todo set date, and then add to transactions
+		//Set date, and then add to transactions
+
+		req.Date = time.Now()
+		fam.Period.ApplyTransaction(req.Transaction)
+		fam.Requests = append(fam.Requests[:remloc], fam.Requests[remloc+1:]...)
 
 	case "reject":
+		req.Returns++
 	case "cancel":
 	case "insist":
 	}
 
-	ExTemplate(GT, ld.W, "userhome.html", ld.Pd("Response handler not ready"))
+	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
 }
