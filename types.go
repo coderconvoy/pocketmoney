@@ -13,11 +13,15 @@ const (
 	D_OFMONTH
 )
 
+type LoginStore struct {
+	Familyname string
+	Fmem       string
+	Jobs       []JPar
+}
+
 type PageData struct {
-	Mes  string
-	Fmem string
-	Fam  *Family
-	Jobs []JPar
+	Fam *Family
+	LoginStore
 }
 
 // SetJob is intended to allow this to be passed around in
@@ -61,6 +65,17 @@ type LoginData struct {
 type JPar struct {
 	s string
 	i interface{}
+}
+
+func JPars(js ...string) {
+	if len(js) == 1 {
+		return []JPar{{"mes", js[0]}}
+	}
+	res := []JPar{}
+	for i := 1; i < len(js); i += 2 {
+		res = append(res, JPar{js[i-1], js[i]})
+	}
+	return res
 }
 
 func (ld LoginData) Pd(mes string, js ...JPar) *PageData {
