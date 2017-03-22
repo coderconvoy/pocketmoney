@@ -38,11 +38,11 @@ func (lc *LoginControl) EditLogin(r *http.Request, ls LoginStore) error {
 }
 
 // PostFunc Performs the post operation on the given data
-// Returns redirectloc , jobs
-type PostFunc func(PageData) (string, []JPar)
+// Returns redirectloc , message
+type PostFunc func(*PageHand) (string, string)
 
 // ViewFunc Shows what the world looks like returning, the expected template name.
-type ViewFunc func(PageData) string
+type ViewFunc func(*PageHand) string
 
 type MuxFunc func(w http.ResponseWriter, r *http.Request)
 
@@ -58,9 +58,11 @@ func LoggedInVTemp(tname string) MuxFunc {
 func LoggedInView(f ViewFunc) MuxFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		pdata, lockId, err := loggedInFamily(w, r)
+		phand := &PageHand{PageData: pdata, W: w, R: r}
 		//Consider adding a calculate and save if changed here
-		f(pdata)
 		logLock.Unlock(lockId)
+		page := f(phand)
+		ExTemplate(GT, w, page, pdata)
 	}
 }
 
@@ -72,16 +74,20 @@ func LoggedInPost(f PostFunc) MuxFunc {
 			GoIndex(w, r, err.Error())
 			return
 		}
-		path, jobs := f(pdata)
+		phand := &PageHand{PageData: pdata, W: w, R: r}
+
+		path, mes := f(phand)
+		phand.SetJob("mes", mes)
 
 		err = pdata.Fam.Save()
 		if err != nil {
 			dbase2.QLog("Save Error:" + err.Error())
 		}
 
-		pp := pdata.LoginStore
-		pp.Jobs = jobs
-		err = loginControl.EditLogin(r, pp)
+		err = loginControl.EditLogin(r, phand.LoginStore)
+		if err != nil {
+			dbase2.QLog("Could not edit login ")
+		}
 
 		logLock.Unlock(lockId)
 

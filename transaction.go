@@ -63,23 +63,21 @@ func readPostTransaction(ld LoginData) (history.Transaction, error) {
 
 }
 
-func HandlePay(ld LoginData) {
+func HandlePay(ld *PageHand) (string, string) {
 	w, fam := ld.W, ld.Fam
 
 	bt, err := readPostTransaction(ld)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd(err.Error()))
-		return
+		return "/personal", err.Error()
 	}
 	bt.Date = time.Now()
 
 	err = fam.Period.ApplyTransaction(bt)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd(err.Error()))
-		return
+		return "/personal", err.Error()
 	}
 
-	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
+	return "/personal", ""
 }
 
 func HandleTransactions(ld LoginData) {

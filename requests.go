@@ -5,13 +5,12 @@ import (
 	"time"
 )
 
-func HandleMakeRequest(ld LoginData) {
+func HandleMakeRequest(ld *PageHand) (string, string) {
 	w, fam := ld.W, ld.Fam
 
 	bt, err := readPostTransaction(ld)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd(err.Error()))
-		return
+		return "/personal", err.Error()
 	}
 	bt.Date = time.Now()
 
@@ -23,10 +22,10 @@ func HandleMakeRequest(ld LoginData) {
 			Returns:     0,
 		})
 
-	ExTemplate(GT, w, "userhome.html", ld.Pd("Request Added"))
+	return "/personal", "Request Added"
 }
 
-func HandleRespondRequest(ld LoginData) {
+func HandleRespondRequest(ld *PageHand) (string, string) {
 	fam, w, r := ld.Fam, ld.W, ld.R
 
 	act := r.FormValue("action")

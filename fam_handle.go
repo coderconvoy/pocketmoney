@@ -7,16 +7,10 @@ import (
 	"github.com/coderconvoy/pocketmoney/history"
 )
 
-// HandleFamily show the Family page
-func HandleFamily(ld LoginData) {
-	ExTemplate(GT, ld.W, "familypage.html", NewPageData("", ld.Fmem, ld.Fam))
-}
-
-func HandleAddMember(ld LoginData) {
+func HandleAddMember(ld *PageHand) (string, string) {
 	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
 	if !fam.IsParent(fmem) {
-		ExTemplate(GT, w, "familypage.html", NewPageData("Not a Parent", fmem, fam))
-		return
+		return "/family", "Not a Parent"
 	}
 
 	uname := r.FormValue("username")
@@ -25,20 +19,17 @@ func HandleAddMember(ld LoginData) {
 	pwd2 := r.FormValue("pwd2")
 
 	if uname == "" {
-		ExTemplate(GT, w, "familypage.html", NewPageData("No Username", fmem, fam))
-		return
+		return "/family", "No Username"
 	}
 	if pwd1 != pwd2 || pwd1 == "" {
-		ExTemplate(GT, w, "familypage.html", NewPageData("Passwords not matching", fmem, fam))
-		return
+		return "/family", "Passwords not matching"
 	}
 
 	pw, err := dbase2.NewPassword(pwd1)
 	if err != nil {
-		dbase2.QLog("Could not Password: " + err.Error())
-		GoIndex(w, r, "Password Failed")
-		return
+		return "/family", "Could not Password: " + err.Error()
 	}
+
 	fam.Members = append(fam.Members, User{
 		Username: uname,
 		Parent:   parent == "on",
@@ -49,5 +40,5 @@ func HandleAddMember(ld LoginData) {
 		Opened: time.Now(),
 	})
 
-	ExTemplate(GT, w, "familypage.html", NewPageData("", fmem, fam))
+	return "/family", ""
 }

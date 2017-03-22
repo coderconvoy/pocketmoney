@@ -22,6 +22,13 @@ type LoginStore struct {
 type PageData struct {
 	Fam *Family
 	LoginStore
+	Mes string
+}
+
+type PageHand struct {
+	PageData
+	W http.ResponseWriter
+	R *http.Request
 }
 
 // SetJob is intended to allow this to be passed around in

@@ -33,35 +33,31 @@ func NextDate(d time.Time, step int, steptype int) time.Time {
 	return d.AddDate(0, step, 0)
 }
 
-func HandleAddStanding(ld LoginData) {
+func HandleAddStanding(ld *PageHand) (string, string) {
 	w, r, fam := ld.W, ld.R, ld.Fam
 
 	bt, err := readPostTransaction(ld)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd(err.Error()))
-		return
+		return "/personal", err.Error()
 	}
 
 	start := r.FormValue("start")
 	dbase2.QLog("start:" + start)
 	stime, err := time.Parse("2006-01-02", start)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("could not parse date"+err.Error()))
-		return
+		return "/personal", "could not parse date:" + err.Error()
 	}
 
 	if time.Now().AddDate(0, 0, -1).After(stime) {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("Must be a future startdate"))
+		return "/personal", "Must be a future date"
 	}
 
 	delay, err := strconv.Atoi(r.FormValue("delay"))
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("could not parse delay interval"+err.Error()))
-		return
+		return "/personal", "could not parse delay interval"
 	}
 	if delay < 1 {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("Must increment positive"))
-		return
+		return "/personal", "interval must be positive"
 	}
 
 	//lazy, fix if new types are added
@@ -83,14 +79,13 @@ func HandleAddStanding(ld LoginData) {
 
 	fam.Calculate()
 
-	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
+	return "/personal", ""
 }
 
-func HandleCancelStanding(ld LoginData) {
+func HandleCancelStanding(ld *PageHand) (string, string) {
 	rmid64, err := strconv.ParseInt(ld.R.FormValue("id"), 10, 32)
 	if err != nil {
-		ExTemplate(GT, ld.W, "userhome.html", ld.Pd("No id Given"))
-		return
+		return "/personal", "No Id Given"
 	}
 	rmid := int32(rmid64)
 
@@ -101,12 +96,11 @@ func HandleCancelStanding(ld LoginData) {
 		}
 	}
 	if fnd < 0 {
-		ExTemplate(GT, ld.W, "userhome.html", ld.Pd("No order matches ID given"))
-		return
+		return "/personal", "No Order matches ID given"
 	}
 
 	ld.Fam.Standing = append(ld.Fam.Standing[:fnd], ld.Fam.Standing[fnd+1:]...)
 
-	ExTemplate(GT, ld.W, "userhome.html", ld.Pd(""))
+	return "/personal", ""
 
 }

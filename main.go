@@ -99,14 +99,14 @@ func main() {
 	http.HandleFunc("/logout", HandleLogout)
 
 	//Edits
-	http.HandleFunc("/addmember", LoggedInFunc(HandleAddMember, true))
-	http.HandleFunc("/addaccount", LoggedInFunc(HandleAddAccount, true))
-	http.HandleFunc("/pay", LoggedInFunc(HandlePay, true))
-	http.HandleFunc("/cancelstanding", LoggedInFunc(HandleCancelStanding, true))
-	http.HandleFunc("/makerequest", LoggedInFunc(HandleMakeRequest, true))
-	http.HandleFunc("/respondrequest", LoggedInFunc(HandleRespondRequest, true))
-	http.HandleFunc("/addstanding", LoggedInFunc(HandleAddStanding, true))
-	http.HandleFunc("/chpass", LoggedInFunc(HandlePasswordChange, true))
+	http.HandleFunc("/addmember", LoggedInPost(HandleAddMember))
+	http.HandleFunc("/addaccount", LoggedInPost(HandleAddAccount))
+	http.HandleFunc("/pay", LoggedInPost(HandlePay))
+	http.HandleFunc("/cancelstanding", LoggedInPost(HandleCancelStanding))
+	http.HandleFunc("/makerequest", LoggedInPost(HandleMakeRequest))
+	http.HandleFunc("/respondrequest", LoggedInPost(HandleRespondRequest))
+	http.HandleFunc("/addstanding", LoggedInPost(HandleAddStanding))
+	http.HandleFunc("/chpass", LoggedInPost(HandlePasswordChange))
 
 	//Views
 	http.HandleFunc("/transactions", LoggedInVTemp("transactions.html"))
