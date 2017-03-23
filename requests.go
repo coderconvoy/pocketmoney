@@ -61,7 +61,12 @@ func HandleRespondRequest(ld *PageHand) (string, string) {
 	case "reject":
 		req.Returns++
 	case "cancel":
+		if req.Requester != ld.Fmem {
+			return "/personal", "only requester can cancel a request"
+		}
+		fam.Requests = append(fam.Requests[:remloc], fam.Requests[remloc+1:]...)
 	case "insist":
+		req.Returns++
 	}
 
 	return "/personal", ""

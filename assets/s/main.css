@@ -11,6 +11,17 @@ form {
     margin:5px;
 }
 
+.request{
+    border:3px solid black;
+    margin:5px;
+    background:#ff99bb;
+}
+.request form{
+    border:0px;
+    margin:0px;
+}
+
+
 input , button {
     margin:5px;
 }

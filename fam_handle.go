@@ -30,6 +30,11 @@ func HandleAddMember(ld *PageHand) (string, string) {
 		return "/family", "Could not Password: " + err.Error()
 	}
 
+	for _, m := range fam.Members {
+		if m.Username == uname {
+			return "/family", "Username already in use"
+		}
+	}
 	fam.Members = append(fam.Members, User{
 		Username: uname,
 		Parent:   parent == "on",

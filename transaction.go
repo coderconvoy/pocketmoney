@@ -90,6 +90,6 @@ func HandleViewAccount(ld *PageHand) string {
 		return "userhome.html"
 	}
 
-	ld.SetJob("ac", rac)
+	ld.SetJob("ac", history.ACKey{rname, rac})
 	return "viewac.html"
 }

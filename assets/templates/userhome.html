@@ -6,27 +6,8 @@
 {{if .Mes}}
 <h3 class="message">{{.Mes}}</h3>
 {{end}}
-{{$req := .Fam.GetMustRequests .Fmem}}
-{{if len $req}}
-    <h2>Pending Requests</h2>
-    {{range $req}}
-    {{if eq .From.Username $Fmem}}
-    <form class="request" action="respondrequest" method="post">
-        <input type="text" value="{{.ID}}" hidden readonly name="id">
-        <input type="text" value="accept" hidden readonly name="action">
-        {{.Requester}} has requested a payment of {{money .Amount}} from you into {{.Dest}}.
-        <select name="from">{{template "fmp_myaccounts" $top}}</select>
-        <input type="submit" value="Accept">
-        <a href="/respondrequest?id={{.ID}}&action=reject">Reject</a>
-    </form>
-    {{else }}
-    <a href="/respondrequest?id={{.ID}}&action=cancel">Cancel</a>
-    <a href="/respondrequest?id={{.ID}}&action=insist">Insist</a>
-    {{end}}
-    {{end}}
-{{end}}
 
-
+{{template "live_standing" .}}
 
 {{/*Show Accounts*/}}
 

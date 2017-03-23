@@ -17,16 +17,16 @@ type LoginStore struct {
 	Familyname string
 	Fmem       string
 	Jobs       []JPar
+	Mes        interface{}
 }
 
 type PageData struct {
 	Fam *Family
 	LoginStore
-	Mes string
 }
 
 type PageHand struct {
-	PageData
+	*PageData
 	W http.ResponseWriter
 	R *http.Request
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -22,7 +23,7 @@ func NewLoginControl(md time.Duration) *LoginControl {
 }
 
 func (lc *LoginControl) Login(w http.ResponseWriter, familyname, username string) LoginStore {
-	ls := LoginStore{familyname, username, []JPar{}}
+	ls := LoginStore{familyname, username, []JPar{}, ""}
 	lc.SessionControl.Login(w, ls)
 	return ls
 }
@@ -49,16 +50,9 @@ type ViewFunc func(*PageHand) string
 type MuxFunc func(w http.ResponseWriter, r *http.Request)
 
 func LoggedInVTemp(tname string) MuxFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		pdata, lockId, err := loggedInFamily(w, r)
-		if err != nil {
-			GoIndex(w, r, err.Error())
-			return
-		}
-		//Consider adding a calculate and save if changed here
-		ExTemplate(GT, w, tname, pdata)
-		logLock.Unlock(lockId)
-	}
+	return LoggedInView(func(ph *PageHand) string {
+		return tname
+	})
 }
 
 func LoggedInView(f ViewFunc) MuxFunc {
@@ -68,12 +62,21 @@ func LoggedInView(f ViewFunc) MuxFunc {
 			GoIndex(w, r, err.Error())
 			return
 		}
+		dbase2.QLog(fmt.Sprintln("PData : ", pdata))
 		phand := &PageHand{PageData: pdata, W: w, R: r}
 		//Consider adding a calculate and save if changed here
-		logLock.Unlock(lockId)
 		page := f(phand)
+
 		ExTemplate(GT, w, page, pdata)
+		pdata.Jobs = []JPar{}
+		pdata.Mes = ""
+		err = loginControl.EditLogin(r, pdata.LoginStore)
+		if err != nil {
+			dbase2.QLog("Could not edit login ")
+		}
+		logLock.Unlock(lockId)
 	}
+
 }
 
 //Logged
@@ -87,14 +90,15 @@ func LoggedInPost(f PostFunc) MuxFunc {
 		phand := &PageHand{PageData: pdata, W: w, R: r}
 
 		path, mes := f(phand)
-		phand.SetJob("mes", mes)
+		pdata.Mes = mes
 
 		err = pdata.Fam.Save()
 		if err != nil {
 			dbase2.QLog("Save Error:" + err.Error())
 		}
 
-		err = loginControl.EditLogin(r, phand.LoginStore)
+		dbase2.QLog(fmt.Sprintln("Storing: ", pdata.LoginStore))
+		err = loginControl.EditLogin(r, pdata.LoginStore)
 		if err != nil {
 			dbase2.QLog("Could not edit login ")
 		}
@@ -106,10 +110,10 @@ func LoggedInPost(f PostFunc) MuxFunc {
 }
 
 // Logged In Family returns the loaded family file the family in the cookie id.
-func loggedInFamily(w http.ResponseWriter, r *http.Request) (PageData, uint64, error) {
+func loggedInFamily(w http.ResponseWriter, r *http.Request) (*PageData, uint64, error) {
 	ld, iok := loginControl.GetLogin(w, r)
 	if iok != dbase2.OK {
-		return PageData{}, 0, errors.New("No login")
+		return nil, 0, errors.New("No login")
 	}
 	id := logLock.Lock(ld.Familyname)
 	fam, err := LoadFamily(ld.Familyname)
@@ -117,5 +121,5 @@ func loggedInFamily(w http.ResponseWriter, r *http.Request) (PageData, uint64, e
 		logLock.Unlock(id)
 	}
 
-	return PageData{Fam: fam, LoginStore: ld}, id, err
+	return &PageData{Fam: fam, LoginStore: ld}, id, err
 }
