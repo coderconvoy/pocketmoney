@@ -34,7 +34,7 @@ func NextDate(d time.Time, step int, steptype int) time.Time {
 }
 
 func HandleAddStanding(ld *PageHand) (string, string) {
-	w, r, fam := ld.W, ld.R, ld.Fam
+	r, fam := ld.R, ld.Fam
 
 	bt, err := readPostTransaction(ld)
 	if err != nil {

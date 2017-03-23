@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func readPostTransaction(ld LoginData) (history.Transaction, error) {
+func readPostTransaction(ld *PageHand) (history.Transaction, error) {
 
 	r := ld.R
 	res := history.Transaction{}
@@ -64,7 +64,7 @@ func readPostTransaction(ld LoginData) (history.Transaction, error) {
 }
 
 func HandlePay(ld *PageHand) (string, string) {
-	w, fam := ld.W, ld.Fam
+	fam := ld.Fam
 
 	bt, err := readPostTransaction(ld)
 	if err != nil {
@@ -80,20 +80,16 @@ func HandlePay(ld *PageHand) (string, string) {
 	return "/personal", ""
 }
 
-func HandleTransactions(ld LoginData) {
-	ExTemplate(GT, ld.W, "transactions.html", ld.Pd(""))
-}
-
-func HandleViewAccount(ld LoginData) {
-	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
+func HandleViewAccount(ld *PageHand) string {
+	r, fam, fmem := ld.R, ld.Fam, ld.Fmem
 	rname := r.FormValue("uname")
 	rac := r.FormValue("ac")
 	//parent or own allowed
 	if !fam.IsParent(fmem) && fmem != rname {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("Must be your own page"))
-
-		return
+		ld.Mes = "Must be your own page"
+		return "userhome.html"
 	}
 
-	ExTemplate(GT, w, "viewac.html", ld.Pd("", JPar{"ac", history.ACKey{rname, rac}}))
+	ld.SetJob("ac", rac)
+	return "viewac.html"
 }

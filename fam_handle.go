@@ -8,7 +8,7 @@ import (
 )
 
 func HandleAddMember(ld *PageHand) (string, string) {
-	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
+	r, fam, fmem := ld.R, ld.Fam, ld.Fmem
 	if !fam.IsParent(fmem) {
 		return "/family", "Not a Parent"
 	}

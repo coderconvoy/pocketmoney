@@ -5,7 +5,7 @@ import (
 )
 
 func HandleAddAccount(ld *PageHand) (string, string) {
-	w, r, fam := ld.W, ld.R, ld.Fam
+	r, fam := ld.R, ld.Fam
 	//TODO, check permission to add account
 
 	aname := r.FormValue("accountname")

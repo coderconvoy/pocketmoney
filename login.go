@@ -21,8 +21,10 @@ func NewLoginControl(md time.Duration) *LoginControl {
 	}
 }
 
-func (lc *LoginControl) Login(w http.ResponseWriter, familyname, username string) {
-	lc.SessionControl.Login(w, LoginStore{familyname, username, []JPar{}})
+func (lc *LoginControl) Login(w http.ResponseWriter, familyname, username string) LoginStore {
+	ls := LoginStore{familyname, username, []JPar{}}
+	lc.SessionControl.Login(w, ls)
+	return ls
 }
 
 func (lc *LoginControl) GetLogin(w http.ResponseWriter, r *http.Request) (LoginStore, int) {
@@ -49,6 +51,10 @@ type MuxFunc func(w http.ResponseWriter, r *http.Request)
 func LoggedInVTemp(tname string) MuxFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		pdata, lockId, err := loggedInFamily(w, r)
+		if err != nil {
+			GoIndex(w, r, err.Error())
+			return
+		}
 		//Consider adding a calculate and save if changed here
 		ExTemplate(GT, w, tname, pdata)
 		logLock.Unlock(lockId)
@@ -58,6 +64,10 @@ func LoggedInVTemp(tname string) MuxFunc {
 func LoggedInView(f ViewFunc) MuxFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		pdata, lockId, err := loggedInFamily(w, r)
+		if err != nil {
+			GoIndex(w, r, err.Error())
+			return
+		}
 		phand := &PageHand{PageData: pdata, W: w, R: r}
 		//Consider adding a calculate and save if changed here
 		logLock.Unlock(lockId)

@@ -52,15 +52,6 @@ func (pd PageData) Job(k string) interface{} {
 	return nil
 }
 
-func NewPageData(mes, fmem string, fam *Family) *PageData {
-	return &PageData{
-		Mes:  mes,
-		Fmem: fmem,
-		Fam:  fam,
-		Jobs: []JPar{},
-	}
-}
-
 type LoginData struct {
 	W      http.ResponseWriter
 	R      *http.Request
@@ -74,7 +65,7 @@ type JPar struct {
 	i interface{}
 }
 
-func JPars(js ...string) {
+func JPars(js ...string) []JPar {
 	if len(js) == 1 {
 		return []JPar{{"mes", js[0]}}
 	}
@@ -83,15 +74,6 @@ func JPars(js ...string) {
 		res = append(res, JPar{js[i-1], js[i]})
 	}
 	return res
-}
-
-func (ld LoginData) Pd(mes string, js ...JPar) *PageData {
-	return &PageData{
-		Mes:  mes,
-		Fam:  ld.Fam,
-		Fmem: ld.Fmem,
-		Jobs: js,
-	}
 }
 
 type ACPageData struct {

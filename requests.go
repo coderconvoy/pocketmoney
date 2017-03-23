@@ -6,7 +6,7 @@ import (
 )
 
 func HandleMakeRequest(ld *PageHand) (string, string) {
-	w, fam := ld.W, ld.Fam
+	fam := ld.Fam
 
 	bt, err := readPostTransaction(ld)
 	if err != nil {
@@ -26,13 +26,12 @@ func HandleMakeRequest(ld *PageHand) (string, string) {
 }
 
 func HandleRespondRequest(ld *PageHand) (string, string) {
-	fam, w, r := ld.Fam, ld.W, ld.R
+	fam, r := ld.Fam, ld.R
 
 	act := r.FormValue("action")
 	rmid64, err := strconv.ParseInt(ld.R.FormValue("id"), 10, 32)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("No id Given"))
-		return
+		return "/personal", "No ID given"
 	}
 	id := int32(rmid64)
 	var req *PaymentRequest = nil
@@ -45,15 +44,13 @@ func HandleRespondRequest(ld *PageHand) (string, string) {
 		}
 	}
 	if req == nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("No request of that ID"))
-		return
+		return "/personal", "No Request exists with that ID"
 	}
 
 	switch act {
 	case "accept":
 		if req.From.Username != ld.Fmem {
-			ExTemplate(GT, w, "userhome.html", ld.Pd("Cannot accept someone else's request"))
-			return
+			return "/personal", "Cannot accept someone else's request"
 		}
 		//Set date, and then add to transactions
 
@@ -67,5 +64,5 @@ func HandleRespondRequest(ld *PageHand) (string, string) {
 	case "insist":
 	}
 
-	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
+	return "/personal", ""
 }

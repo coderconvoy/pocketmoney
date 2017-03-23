@@ -4,8 +4,8 @@ import (
 	"github.com/coderconvoy/dbase2"
 )
 
-func HandlePasswordChange(ld LoginData) {
-	w, r, fam, fmem := ld.W, ld.R, ld.Fam, ld.Fmem
+func HandlePasswordChange(ld *PageHand) (string, string) {
+	r, fam, fmem := ld.R, ld.Fam, ld.Fmem
 
 	var cmem *User
 	for i, m := range fam.Members {
@@ -16,29 +16,25 @@ func HandlePasswordChange(ld LoginData) {
 
 	oldpwd := r.FormValue("oldpwd")
 	if !cmem.Password.Check(oldpwd) {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("Error Saving password : Old password incorrect"))
-		return
+		return "/personal", "Old Password Incorrect"
 	}
 
 	pwd1 := r.FormValue("pwd1")
 	pwd2 := r.FormValue("pwd2")
 	if len(pwd1) < 5 {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("Error Saving password : New password too short (5 min)"))
-		return
+		return "/personal", "New Password too short (5 chars min)"
 	}
 
 	if pwd1 != pwd2 {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("Error Saving password : Password confirmation doesn't match"))
-		return
+		return "/personal", "Password Confirmation doesn't match"
 	}
 
 	np, err := dbase2.NewPassword(pwd1)
 	if err != nil {
-		ExTemplate(GT, w, "userhome.html", ld.Pd("Error Saving password : "+err.Error()))
-		return
+		return "/personal", "Password error: " + err.Error()
 	}
 
 	cmem.Password = np
 
-	ExTemplate(GT, w, "userhome.html", ld.Pd(""))
+	return "/.personal", ""
 }

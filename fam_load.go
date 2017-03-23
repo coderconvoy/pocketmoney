@@ -85,8 +85,8 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	loginControl.Login(w, fam.FamilyName, uname)
-	ExTemplate(GT, w, "familypage.html", NewPageData("", uname, fam))
+	lstore := loginControl.Login(w, fam.FamilyName, uname)
+	ExTemplate(GT, w, "familypage.html", PageData{LoginStore: lstore, Fam: fam})
 
 }
 func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
@@ -140,7 +140,7 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		//TODO
 	}
-	loginControl.Login(w, f.FamilyName, uname)
-	ExTemplate(GT, w, "familypage.html", NewPageData("", uname, f))
+	lstore := loginControl.Login(w, f.FamilyName, uname)
+	ExTemplate(GT, w, "familypage.html", PageData{LoginStore: lstore, Fam: f})
 
 }

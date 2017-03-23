@@ -112,7 +112,7 @@ func main() {
 	http.HandleFunc("/transactions", LoggedInVTemp("transactions.html"))
 	http.HandleFunc("/personal", LoggedInVTemp("userhome.html"))
 	http.HandleFunc("/family", LoggedInVTemp("familypage.html"))
-	http.HandleFunc("/view", LoggedInView("viewac.html"))
+	http.HandleFunc("/view", LoggedInView(HandleViewAccount))
 
 	if *insecure {
 		err = http.ListenAndServe(":8080", nil)
