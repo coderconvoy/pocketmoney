@@ -12,12 +12,11 @@ func (f *Family) Calculate() bool {
 		nt, ok := o.Next()
 		for ok {
 			res = true
-			f.Period.ApplyTransaction(nt)
+			f.ApplyTransaction(nt)
 			nt, ok = o.Next()
 		}
 	}
 	return res
-
 }
 
 func (f *Family) AccumulateTransactions(ak history.ACKey) []history.Accumulation {

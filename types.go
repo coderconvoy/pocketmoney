@@ -84,9 +84,9 @@ type ACPageData struct {
 }
 
 type Family struct {
+	history.Period       `json:"Period"`
 	FamilyName           string
 	Members              []User
-	Period               history.Period
 	Requests             []*PaymentRequest
 	Standing             []*StandingOrder
 	LastCalc, LastChange time.Time
