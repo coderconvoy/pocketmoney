@@ -60,15 +60,55 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//Check family member exists
 	uname := r.FormValue("username")
+	ufound := false
+	for _, m := range fam.Members {
+		if m.Username == uname {
+			ufound = true
+		}
+	}
+	if !ufound {
+		GoIndex(w, r, "No Family Member of that name")
+	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:    "LastLog",
-		Value:   famname + ":" + uname,
-		Expires: time.Now().Add(time.Hour * 24 * 30),
-	})
+	lpart := LoginPart{famname, uname}
+	//Grab LastLogs from cookie
+	LastLogs := []LoginPart{}
+	c, err := r.Cookie("LastLog")
 
-	//Check Password
+	if err == nil {
+		var p []LoginPart
+		err := json.Unmarshal([]byte(c.Value), &p)
+		if err == nil {
+			LastLogs = p
+		}
+	}
+
+	//Swap most recent to front or add
+	logfound := false
+	for i, l := range LastLogs {
+		if l == lpart {
+			logfound = true
+			if i != 0 {
+				LastLogs[0], LastLogs[i] = LastLogs[i], LastLogs[0]
+			}
+		}
+	}
+	if !logfound {
+		LastLogs = append([]LoginPart{lpart}, LastLogs...)
+	}
+
+	mlogs, err := json.Marshal(LastLogs)
+	if err == nil {
+		http.SetCookie(w, &http.Cookie{
+			Name:    "LastLog",
+			Value:   mlogs,
+			Expires: time.Now().Add(time.Hour * 24 * 30),
+		})
+	}
+
+	//Check Password After cookie to keep user form info, on retry
 	pw := r.FormValue("pwd")
 
 	sel := -1
@@ -81,7 +121,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if sel == -1 {
-		ExTemplate(GT, w, "index.html", IndexData{"No Username-Password match", famname, uname})
+		ExTemplate(GT, w, "index.html", IndexData{"No Username-Password match", LastLogs})
 		return
 	}
 

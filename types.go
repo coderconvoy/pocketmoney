@@ -13,6 +13,11 @@ const (
 	D_OFMONTH
 )
 
+type LoginPart struct {
+	Fam  string
+	User string
+}
+
 type LoginStore struct {
 	Familyname string
 	Fmem       string

@@ -94,7 +94,7 @@ func assetsSMainCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/s/main.css", size: 313, mode: os.FileMode(420), modTime: time.Unix(1490276725, 0)}
+	info := bindataFileInfo{name: "assets/s/main.css", size: 313, mode: os.FileMode(420), modTime: time.Unix(1490286250, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -134,7 +134,7 @@ func assetsTemplatesFormsHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/templates/forms.html", size: 3146, mode: os.FileMode(420), modTime: time.Unix(1490274733, 0)}
+	info := bindataFileInfo{name: "assets/templates/forms.html", size: 3146, mode: os.FileMode(420), modTime: time.Unix(1490286250, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -234,7 +234,7 @@ func assetsTemplatesStandingHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/templates/standing.html", size: 1677, mode: os.FileMode(420), modTime: time.Unix(1490278382, 0)}
+	info := bindataFileInfo{name: "assets/templates/standing.html", size: 1677, mode: os.FileMode(420), modTime: time.Unix(1490286250, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -274,7 +274,7 @@ func assetsTemplatesUserhomeHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/templates/userhome.html", size: 649, mode: os.FileMode(420), modTime: time.Unix(1490278378, 0)}
+	info := bindataFileInfo{name: "assets/templates/userhome.html", size: 649, mode: os.FileMode(420), modTime: time.Unix(1490286250, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

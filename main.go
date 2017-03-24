@@ -16,7 +16,8 @@ var GT *template.Template
 var FamDB = dbase2.DBase{"data/families"}
 
 type IndexData struct {
-	Mes, Family, Username string
+	Mes string
+	LoginPart
 }
 
 func GoIndex(w http.ResponseWriter, r *http.Request, m string) {
