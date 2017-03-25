@@ -103,7 +103,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		http.SetCookie(w, &http.Cookie{
 			Name:    "LastLog",
-			Value:   mlogs,
+			Value:   string(mlogs),
 			Expires: time.Now().Add(time.Hour * 24 * 30),
 		})
 	}

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"net/http"
 	"path"
-	"strings"
 	"text/template"
 
 	"github.com/coderconvoy/dbase2"
@@ -16,22 +16,24 @@ var GT *template.Template
 var FamDB = dbase2.DBase{"data/families"}
 
 type IndexData struct {
-	Mes string
-	LoginPart
+	Mes  string
+	Logs []LoginPart
 }
 
 func GoIndex(w http.ResponseWriter, r *http.Request, m string) {
 	c, err := r.Cookie("LastLog")
+
 	if err != nil {
-		ExTemplate(GT, w, "index.html", IndexData{m, "", ""})
+		ExTemplate(GT, w, "index.html", IndexData{m, []LoginPart{}})
 		return
 	}
-	s := strings.Split(c.Value, ":")
-	if len(s) != 2 {
-		ExTemplate(GT, w, "index.html", IndexData{m, c.Value, ""})
-		return
+	var ll []LoginPart
+	err = json.Unmarshal([]byte(c.Value), &ll)
+	if err != nil {
+		ll = []LoginPart{}
 	}
-	ExTemplate(GT, w, "index.html", IndexData{m, s[0], s[1]})
+
+	ExTemplate(GT, w, "index.html", IndexData{m, ll})
 
 }
 
