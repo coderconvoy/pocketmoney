@@ -79,7 +79,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	if err == nil {
 		var p []LoginPart
-		err := json.Unmarshal([]byte(c.Value), &p)
+		err := CookieUnmarshal(c.Value, &p)
 		if err == nil {
 			LastLogs = p
 		}
@@ -99,11 +99,11 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		LastLogs = append([]LoginPart{lpart}, LastLogs...)
 	}
 
-	mlogs, err := json.Marshal(LastLogs)
+	mlogs, err := CookieMarshal(LastLogs)
 	if err == nil {
 		http.SetCookie(w, &http.Cookie{
 			Name:    "LastLog",
-			Value:   string(mlogs),
+			Value:   mlogs,
 			Expires: time.Now().Add(time.Hour * 24 * 30),
 		})
 	}

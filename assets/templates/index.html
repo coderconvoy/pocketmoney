@@ -1,16 +1,21 @@
 {{template "head"}}
         <h1>Pocket Money</h1>
 
-        {{if .}}
+        {{if .Mes}}
         <b>{{.Mes}}</b>
         {{end}}
 
+        {{range $k,$v := .Logs}}
+        <button>{{$v.Fam}},{{$v.User}}</button>
+        {{end}}
+
+        {{$tlog := loginpart0 .Logs}}
 
 
         <form action="login" method="post">
             <h2>Login</h2>
-            Family: <input type="text" name="family" value="{{.Family}}"><br>
-            Member Name : <input type="text" name="username" value="{{.Username}}"><br>
+            Family: <input type="text" name="family" value="{{$tlog.Fam}}"><br>
+            Member Name : <input type="text" name="username" value="{{$tlog.User}}"><br>
             Password : <input type="password" name="pwd"><br>
             <input type="submit" text="Login" value="Login">
         </form>

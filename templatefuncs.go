@@ -12,6 +12,7 @@ import (
 func TemplateFuncs() template.FuncMap {
 	return template.FuncMap{
 		"plex":         Plex,
+		"loginpart0":   LoginPart0,
 		"standingbyac": FilterStandingByAC,
 		"money":        PrintMoney,
 		"date":         PrintDate,
@@ -66,4 +67,11 @@ func PrintType(o interface{}) string {
 
 func Eq2(a, b interface{}) bool {
 	return a == b
+}
+
+func LoginPart0(lar []LoginPart) LoginPart {
+	if len(lar) > 0 {
+		return lar[0]
+	}
+	return LoginPart{}
 }

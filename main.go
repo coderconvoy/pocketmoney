@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"net/http"
@@ -28,7 +27,7 @@ func GoIndex(w http.ResponseWriter, r *http.Request, m string) {
 		return
 	}
 	var ll []LoginPart
-	err = json.Unmarshal([]byte(c.Value), &ll)
+	err = CookieUnmarshal(c.Value, &ll)
 	if err != nil {
 		ll = []LoginPart{}
 	}
