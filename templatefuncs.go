@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"path"
 	"reflect"
 	"text/template"
 	"time"
@@ -19,6 +20,7 @@ func TemplateFuncs() template.FuncMap {
 		"dateRFC":      PrintDateRFC,
 		"type":         PrintType,
 		"eq2":          Eq2,
+		"js":           LoadJSAsset,
 	}
 }
 
@@ -74,4 +76,10 @@ func LoginPart0(lar []LoginPart) LoginPart {
 		return lar[0]
 	}
 	return LoginPart{}
+}
+
+func LoadJSAsset(f string) (string, error) {
+	p := path.Join("assets/js", f)
+	b, err := Asset(p)
+	return "<script>" + string(b) + "</script>", err
 }

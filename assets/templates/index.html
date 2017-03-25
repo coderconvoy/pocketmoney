@@ -1,4 +1,6 @@
 {{template "head"}}
+        {{js "logpopulate.js"}}
+
         <h1>Pocket Money</h1>
 
         {{if .Mes}}
@@ -6,7 +8,7 @@
         {{end}}
 
         {{range $k,$v := .Logs}}
-        <button>{{$v.Fam}},{{$v.User}}</button>
+        <button onclick="logpopulate('{{$v.Fam}}','{{$v.User}}')">{{$v.Fam}},{{$v.User}}</button>
         {{end}}
 
         {{$tlog := loginpart0 .Logs}}
@@ -14,9 +16,9 @@
 
         <form action="login" method="post">
             <h2>Login</h2>
-            Family: <input type="text" name="family" value="{{$tlog.Fam}}"><br>
-            Member Name : <input type="text" name="username" value="{{$tlog.User}}"><br>
-            Password : <input type="password" name="pwd"><br>
+            Family: <input id="linfam" type="text" name="family" value="{{$tlog.Fam}}"><br>
+            Member Name : <input id="linusr" type="text" name="username" value="{{$tlog.User}}"><br>
+            Password : <input id="linpass" type="password" name="pwd"><br>
             <input type="submit" text="Login" value="Login">
         </form>
 
