@@ -64,6 +64,9 @@ func LoggedInView(f ViewFunc) MuxFunc {
 		}
 		dbase2.QLog(fmt.Sprintln("PData : ", pdata))
 		phand := &PageHand{PageData: pdata, W: w, R: r}
+		if pdata.Fam.Calculate() {
+			pdata.Fam.Save()
+		}
 		//Consider adding a calculate and save if changed here
 		page := f(phand)
 
@@ -88,6 +91,8 @@ func LoggedInPost(f PostFunc) MuxFunc {
 			return
 		}
 		phand := &PageHand{PageData: pdata, W: w, R: r}
+
+		pdata.Fam.Calculate()
 
 		path, mes := f(phand)
 		pdata.Mes = mes
