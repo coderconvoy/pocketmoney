@@ -126,6 +126,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	lstore := loginControl.Login(w, fam.FamilyName, uname)
+	fam.Calculate()
 	ExTemplate(GT, w, "familypage.html", PageData{LoginStore: lstore, Fam: fam})
 
 }
