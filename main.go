@@ -7,12 +7,12 @@ import (
 	"path"
 	"text/template"
 
-	"github.com/coderconvoy/dbase2"
+	"github.com/coderconvoy/dbase"
 	"github.com/coderconvoy/templater/tempower"
 )
 
 var GT *template.Template
-var FamDB = dbase2.DBase{"data/families"}
+var FamDB = dbase.DBase{"data/families"}
 
 type IndexData struct {
 	Mes  string
@@ -44,7 +44,7 @@ func ExTemplate(t *template.Template, w http.ResponseWriter, name string, data i
 }
 
 func Handle(w http.ResponseWriter, r *http.Request) {
-	dbase2.QLog(r.Host + "--" + r.URL.Path)
+	dbase.QLog(r.Host + "--" + r.URL.Path)
 	GoIndex(w, r, "")
 }
 
@@ -57,7 +57,7 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 	p := r.URL.Path
 	ass, err := Asset(path.Join("assets", p))
 	if err != nil {
-		dbase2.QLog("Could not serve static, " + p + ":" + err.Error())
+		dbase.QLog("Could not serve static, " + p + ":" + err.Error())
 		return
 	}
 	switch path.Ext(p) {
@@ -74,7 +74,7 @@ func main() {
 	debug := flag.Bool("d", false, "Debug, log to fmt.Println")
 	flag.Parse()
 	if *debug {
-		dbase2.SetQLogger(dbase2.FmtLog{})
+		dbase.SetQLogger(dbase.FmtLog{})
 	}
 
 	GT = template.New("index").Funcs(tempower.FMap()).Funcs(TemplateFuncs())
@@ -84,11 +84,11 @@ func main() {
 			continue
 		}
 		t, err := Asset("assets/templates/" + n)
-		dbase2.QLog("Parsing :" + n)
+		dbase.QLog("Parsing :" + n)
 		GT = GT.New(n)
 		_, err = GT.Parse(string(t))
 		if err != nil {
-			dbase2.QLog(err.Error())
+			dbase.QLog(err.Error())
 			fmt.Println(err)
 			return
 		}

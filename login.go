@@ -6,19 +6,19 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/coderconvoy/dbase2"
+	"github.com/coderconvoy/dbase"
 )
 
 var loginControl = NewLoginControl(time.Minute * 20)
-var logLock = dbase2.NewLocker()
+var logLock = dbase.NewLocker()
 
 type LoginControl struct {
-	*dbase2.SessionControl
+	*dbase.SessionControl
 }
 
 func NewLoginControl(md time.Duration) *LoginControl {
 	return &LoginControl{
-		SessionControl: dbase2.NewSessionControl(md),
+		SessionControl: dbase.NewSessionControl(md),
 	}
 }
 
@@ -30,7 +30,7 @@ func (lc *LoginControl) Login(w http.ResponseWriter, familyname, username string
 
 func (lc *LoginControl) GetLogin(w http.ResponseWriter, r *http.Request) (LoginStore, int) {
 	a, rtype := lc.SessionControl.GetLogin(w, r)
-	if rtype != dbase2.OK {
+	if rtype != dbase.OK {
 		return LoginStore{}, rtype
 	}
 	return a.Data.(LoginStore), rtype
@@ -62,7 +62,7 @@ func LoggedInView(f ViewFunc) MuxFunc {
 			GoIndex(w, r, err.Error())
 			return
 		}
-		dbase2.QLog(fmt.Sprintln("PData : ", pdata))
+		dbase.QLog(fmt.Sprintln("PData : ", pdata))
 		phand := &PageHand{PageData: pdata, W: w, R: r}
 		if pdata.Fam.Calculate() {
 			pdata.Fam.Save()
@@ -75,7 +75,7 @@ func LoggedInView(f ViewFunc) MuxFunc {
 		pdata.Mes = ""
 		err = loginControl.EditLogin(r, pdata.LoginStore)
 		if err != nil {
-			dbase2.QLog("Could not edit login ")
+			dbase.QLog("Could not edit login ")
 		}
 		logLock.Unlock(lockId)
 	}
@@ -99,13 +99,13 @@ func LoggedInPost(f PostFunc) MuxFunc {
 
 		err = pdata.Fam.Save()
 		if err != nil {
-			dbase2.QLog("Save Error:" + err.Error())
+			dbase.QLog("Save Error:" + err.Error())
 		}
 
-		dbase2.QLog(fmt.Sprintln("Storing: ", pdata.LoginStore))
+		dbase.QLog(fmt.Sprintln("Storing: ", pdata.LoginStore))
 		err = loginControl.EditLogin(r, pdata.LoginStore)
 		if err != nil {
-			dbase2.QLog("Could not edit login ")
+			dbase.QLog("Could not edit login ")
 		}
 
 		logLock.Unlock(lockId)
@@ -117,7 +117,7 @@ func LoggedInPost(f PostFunc) MuxFunc {
 // Logged In Family returns the loaded family file the family in the cookie id.
 func loggedInFamily(w http.ResponseWriter, r *http.Request) (*PageData, uint64, error) {
 	ld, iok := loginControl.GetLogin(w, r)
-	if iok != dbase2.OK {
+	if iok != dbase.OK {
 		return nil, 0, errors.New("No login")
 	}
 	id := logLock.Lock(ld.Familyname)

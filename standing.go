@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/coderconvoy/dbase2"
+	"github.com/coderconvoy/dbase"
 	"github.com/coderconvoy/pocketmoney/history"
 )
 
@@ -42,7 +42,7 @@ func HandleAddStanding(ld *PageHand) (string, string) {
 	}
 
 	start := r.FormValue("start")
-	dbase2.QLog("start:" + start)
+	dbase.QLog("start:" + start)
 	stime, err := time.Parse("2006-01-02", start)
 	if err != nil {
 		return "/personal", "could not parse date:" + err.Error()

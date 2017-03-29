@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/coderconvoy/dbase2"
+	"github.com/coderconvoy/dbase"
 	"github.com/coderconvoy/pocketmoney/history"
 )
 
@@ -100,7 +100,7 @@ type Family struct {
 type User struct {
 	Username string
 	Email    string
-	Password dbase2.Password
+	Password dbase.Password
 	Parent   bool
 }
 

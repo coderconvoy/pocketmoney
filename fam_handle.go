@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/coderconvoy/dbase2"
+	"github.com/coderconvoy/dbase"
 	"github.com/coderconvoy/pocketmoney/history"
 )
 
@@ -25,7 +25,7 @@ func HandleAddMember(ld *PageHand) (string, string) {
 		return "/family", "Passwords not matching"
 	}
 
-	pw, err := dbase2.NewPassword(pwd1)
+	pw, err := dbase.NewPassword(pwd1)
 	if err != nil {
 		return "/family", "Could not Password: " + err.Error()
 	}

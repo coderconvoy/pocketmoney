@@ -5,7 +5,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/coderconvoy/dbase2"
+	"github.com/coderconvoy/dbase"
 )
 
 func (p Period) StartNext() Period {
@@ -20,12 +20,12 @@ func (p Period) StartNext() Period {
 }
 
 func (p *Period) ApplyTransaction(ts ...Transaction) error {
-	dbase2.QLog("Applying transaction")
+	dbase.QLog("Applying transaction")
 	fmt.Println("Applying ftransaction")
 	if len(ts) == 0 {
 		return nil
 	}
-	dbase2.QLog(fmt.Sprintln(ts[0]))
+	dbase.QLog(fmt.Sprintln(ts[0]))
 	for _, t := range ts {
 		if p.Start.After(t.Date) || (p.End.After(time.Time{}) && t.Date.After(p.End)) {
 			return fmt.Errorf("All dates must fit within range")

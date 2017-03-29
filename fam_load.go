@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/coderconvoy/dbase2"
+	"github.com/coderconvoy/dbase"
 	"github.com/coderconvoy/pocketmoney/history"
 	"github.com/pkg/errors"
 )
@@ -156,7 +156,7 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pw, err := dbase2.NewPassword(p1)
+	pw, err := dbase.NewPassword(p1)
 	if err != nil {
 		GoIndex(w, r, "Passwords error: "+err.Error())
 		return

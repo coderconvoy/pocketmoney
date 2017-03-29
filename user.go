@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/coderconvoy/dbase2"
+	"github.com/coderconvoy/dbase"
 )
 
 func HandlePasswordChange(ld *PageHand) (string, string) {
@@ -29,7 +29,7 @@ func HandlePasswordChange(ld *PageHand) (string, string) {
 		return "/personal", "Password Confirmation doesn't match"
 	}
 
-	np, err := dbase2.NewPassword(pwd1)
+	np, err := dbase.NewPassword(pwd1)
 	if err != nil {
 		return "/personal", "Password error: " + err.Error()
 	}
