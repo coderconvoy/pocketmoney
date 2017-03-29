@@ -64,7 +64,9 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 	case ".css":
 		w.Header().Set("Content-Type", "text/css")
 	case ".js":
-
+		w.Header().Set("Content-Type", "text/javascript")
+	case ".svg":
+		w.Header().Set("Content-Type","image/svg+xml")
 	}
 	w.Write(ass)
 }

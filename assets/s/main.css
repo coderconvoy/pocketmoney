@@ -1,15 +1,30 @@
+:root{
+	--mainbg: #fdc83e;
+}
+h1 {
+	font-size:4vw;
+}
+
+
 body{
-    background:#99ffbb;
+    background:var(--mainbg);
 }
 
 .menu {
-    background:#55ffaa;
+    background:var(--mainbg);
 }
 
 form {
     border:5px solid black;
     margin:5px;
 }
+
+.banner img{
+	float:left;
+	width:10vw;
+	margin:8px;
+}
+
 
 .request{
     border:3px solid black;
