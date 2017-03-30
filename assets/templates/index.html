@@ -16,6 +16,8 @@ function showlogin(f,u){
 
 		
 	var ftxt = document.getElementById("linfam");
+	var lpass = document.getElementById("linpass");
+	lpass.value = "";
 	ftxt.focus();
 	if (f !== undefined ){
 		ftxt.value = f;
@@ -25,7 +27,7 @@ function showlogin(f,u){
 		var utxt = document.getElementById("linusr");
 		utxt.value = u;
 		
-		document.getElementById("linpass").focus();
+		lpass.focus();
 	}
 	
 }
@@ -36,11 +38,13 @@ function showlogin(f,u){
 	<b>{{.Mes}}</b><br>
         {{end}}
 
-	<button onclick="shownewfam()">New Family</button>
-	<button onclick="showlogin()">Login</button>
-        {{range $k,$v := .Logs}}
-        <button onclick="showlogin('{{$v.Fam}}','{{$v.User}}')">{{$v.Fam}},{{$v.User}}</button>
-        {{end}}
+	<div id="loginoptions">
+		<button onclick="shownewfam()">New Family</button>
+		<button onclick="showlogin()">Login</button>
+		{{range $k,$v := .Logs}}
+		<button onclick="showlogin('{{$v.Fam}}','{{$v.User}}')">{{$v.Fam}}<br>{{$v.User}}</button>
+		{{end}}
+	</div>
 
         {{$tlog := loginpart0 .Logs}}
 

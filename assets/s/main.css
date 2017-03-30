@@ -1,40 +1,73 @@
 :root{
+	--paleblu : #9dc5e8;
+	--midblu : #4a6382;
+	--darkblu : #3e3435;
 	--mainbg: #fdc83e;
+	--minibg: #fdb704;
 }
 
 h1 {
-	font-size:4vw;
+	font-size:6vw;
 }
 
 button{
 	background-image:url("/s/svg/button.svg");
 	background-color:transparent;
 	background-size:100% 100%;
+	
 	border:none;
 	padding:15px;
 	font-size:200%;
 	font-weight:bold;
 }
 
+button:hover{
+	background-color:var(--minibg);
+}
+
 
 body{
-    background:var(--mainbg);
+    background:var(--paleblu);
 }
 
 .menu {
-    background:var(--mainbg);
+    background:var(--minibg);
+    min-height:30px;
+}
+
+input[type=submit]{
+	background-image:url("/s/svg/button.svg");
+	background-color:transparent;
+	background-size:100% 100%;
+	
+	border:none;
+	padding:15px;
+	font-size:200%;
+	font-weight:bold;
+	float:right;
+
 }
 
 form {
-    border:5px solid black;
-    margin:5px;
-    padding:20px;
+	background-image:url("/s/svg/formbackmid.svg");
+	background-color:transparent;
+	background-size:100% 100%;
+	fill:var(--midblu);
+    margin:5px auto;
+    max-width:500px;
+    width:75%;
+    padding:40px;
+    //background:var(--paleblu);
 }
 
 .banner img{
 	float:left;
 	width:10vw;
 	margin:8px;
+}
+
+#loginoptions{
+	text-align:center;
 }
 
 

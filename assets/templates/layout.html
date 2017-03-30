@@ -11,14 +11,14 @@
 	    <img src="/s/svg/logo.svg">
 	    <h1>Pocket Money</h1>
 	    {{$ls := .FamOptions}}
-	{{if gt (len $ls) 0 }}
+	{{/*if gt (len $ls) 0 */}}
 	    
         <div class="menu">
 		{{range $ls}}
 		<a href="{{.Dest}}">{{.Name}}</a>
 	    	{{end}}
         </div>
-	{{end}}
+	{{/*end*/}}
     </div>
     <div style="clear:both"> </div>
 
