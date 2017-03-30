@@ -19,6 +19,11 @@ type IndexData struct {
 	Logs []LoginPart
 }
 
+func (id IndexData)FamOptions()[]Link {
+	return []Link{}
+}
+
+
 func GoIndex(w http.ResponseWriter, r *http.Request, m string) {
 	c, err := r.Cookie("LastLog")
 

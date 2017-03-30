@@ -1,8 +1,19 @@
 :root{
 	--mainbg: #fdc83e;
 }
+
 h1 {
 	font-size:4vw;
+}
+
+button{
+	background-image:url("/s/svg/button.svg");
+	background-color:transparent;
+	background-size:100% 100%;
+	border:none;
+	padding:15px;
+	font-size:200%;
+	font-weight:bold;
 }
 
 
@@ -17,6 +28,7 @@ body{
 form {
     border:5px solid black;
     margin:5px;
+    padding:20px;
 }
 
 .banner img{
@@ -31,6 +43,7 @@ form {
     margin:5px;
     background:#ff99bb;
 }
+
 .request form{
     border:0px;
     margin:0px;
