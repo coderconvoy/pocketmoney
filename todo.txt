@@ -1,3 +1,2 @@
-Add Locker and Unlocker 
-Add Autosaver on outside for editing files
+Fix option for paying requests.
 

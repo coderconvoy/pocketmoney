@@ -3,6 +3,7 @@ package main
 import (
 	"strconv"
 	"time"
+	"github.com/coderconvoy/pocketmoney/history"
 )
 
 func HandleMakeRequest(ld *PageHand) (string, string) {
@@ -52,7 +53,16 @@ func HandleRespondRequest(ld *PageHand) (string, string) {
 		if req.From.Username != ld.Fmem {
 			return "/personal", "Cannot accept someone else's request"
 		}
+		//Check from is valid,
+		from,err := history.NewACKey(r.FormValue("from"))
+		if err != nil {
+			return "/personal", "Account not parseable - " + err.Error()
+		}
+		if !fam.HasWriteAccess(from,ld.Fmem) {
+			return "/personal", "You do not have write access to that account, "
+		}
 		//Set date, and then add to transactions
+		req.From = from
 
 		req.Date = time.Now()
 		fam.Period.ApplyTransaction(req.Transaction)

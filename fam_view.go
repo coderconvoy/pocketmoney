@@ -30,6 +30,15 @@ func (fam *Family) WriteAccess(a *history.Account, uname string) bool {
 	return a.Username == "WORLD" && fam.IsParent(uname)
 }
 
+func (fam *Family) HasWriteAccess(k history.ACKey, username string) bool{
+	for _,ac := range fam.Accounts {
+		if ac.ACKey == k {
+			return fam.WriteAccess(ac,username)
+		}
+	}
+	return false
+}
+
 func (fam *Family) ListWriteAccess(uname string) []*history.Account {
 	res := []*history.Account{}
 	for _, v := range fam.Period.Accounts {
