@@ -1,20 +1,28 @@
 {{template "head" .}}
-    <h1>Family Page: {{.Fam.FamilyName}}</h1>
-    <ul>
-    {{range .Fam.Members}}
-        <li>
-            {{.Username}} -- {{bSelect .Parent "Parent" "Child"}}<br>
-            <ul>
-                {{range ($.Fam.Period.UserAccounts .Username)}}
-                <li>{{.Name}} {{money .End}}</li>
-                {{end}}
-            </ul>
-        </li>
-    {{end}}
-    </ul>
+    <h2>Family Page: {{.Fam.FamilyName}}</h2>
     <br><br>
     {{if (.Fam.IsParent .Fmem)}}
-    <form action="addmember" method="post"> 
+    <div "allforms">
+        <div id="actionlist">
+            <button onclick="showform('frm_add_member');">Add Family Member</button>
+            <button onclick="showform('view_members');">View Members</button>
+        </div>
+    <div id="formlist">
+        <div id="view_members">
+            <ul>
+            {{range .Fam.Members}}
+                <li>
+                    {{.Username}} -- {{bSelect .Parent "Parent" "Child"}}<br>
+                    <ul>
+                        {{range ($.Fam.Period.UserAccounts .Username)}}
+                        <li>{{.Name}} {{money .End}}</li>
+                        {{end}}
+                    </ul>
+                </li>
+            {{end}}
+            </ul>
+        </div><!--view_members-->
+    <form id="frm_add_member" action="addmember" method="post"> 
         {{if .Mes}}
         <h3 class="message">{{.Mes }}</h3>
         {{end}}
@@ -26,5 +34,9 @@
         Confirm Password : <input type="password" name="pwd2"><br>
         <input type="submit" value="Add">
     </form>
+    </div><!--formlist-->
+    </div><!--allforms-->
+    {{js "showform.js"}}
+    <script>showform("view_members");</script>
     {{end}}
 {{template "base"}}

@@ -22,25 +22,13 @@
 {{$x11 := .SetJob "stand" .Fmem}}
 {{template "standing" .}}
 
-    <script>
-        function setform(fid){
-            var fdiv = document.getElementById("formlist");
-            for( c in fdiv.children){
-                console.log(fdiv.children[c]);
-                if (fdiv.children[c].style) {
-                    fdiv.children[c].style.display = "none";
-                }
-            }
-            document.getElementById(fid).style.display= "";
-        }
-    </script>
     <div id="allform">
     <div id="actionlist">
-        <button onclick="setform('frm_add_account')">Add Account</button>
-        <button onclick="setform('frm_pay')">Pay Someone</button>
-        <button onclick="setform('frm_request')">Request Money</button>
-        <button onclick="setform('frm_standing')">Setup Regular Payment</button>
-        <button onclick="setform('frm_chpass')">Change Password</button>
+        <button onclick="showform('frm_add_account')">Add Account</button>
+        <button onclick="showform('frm_pay')">Pay Someone</button>
+        <button onclick="showform('frm_request')">Request Money</button>
+        <button onclick="showform('frm_standing')">Setup Regular Payment</button>
+        <button onclick="showform('frm_chpass')">Change Password</button>
     </div>
 
 
@@ -52,5 +40,6 @@
 {{template "frm_chpass" .}}
     </div>
     </div> <!--All forms-->
-    <script> setform("frm_pay"); </script>
+    {{js "showform.js"}}
+    <script> showform("frm_pay"); </script>
 {{template "base"}}
