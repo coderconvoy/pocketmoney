@@ -19,14 +19,12 @@ type IndexData struct {
 	Logs []LoginPart
 }
 
-func (id IndexData)FamOptions()[]Link {
+func (id IndexData) FamOptions() []Link {
 	return []Link{}
 }
 
-
 func GoIndex(w http.ResponseWriter, r *http.Request, m string) {
 	c, err := r.Cookie("LastLog")
-
 	if err != nil {
 		ExTemplate(GT, w, "index.html", IndexData{m, []LoginPart{}})
 		return
@@ -71,7 +69,7 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 	case ".js":
 		w.Header().Set("Content-Type", "text/javascript")
 	case ".svg":
-		w.Header().Set("Content-Type","image/svg+xml")
+		w.Header().Set("Content-Type", "image/svg+xml")
 	}
 	w.Write(ass)
 }
