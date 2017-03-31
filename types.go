@@ -13,8 +13,8 @@ const (
 	D_OFMONTH
 )
 
-type Link struct{
-	Name,Dest string
+type Link struct {
+	Name, Dest string
 }
 
 type LoginPart struct {
@@ -34,15 +34,14 @@ type PageData struct {
 	LoginStore
 }
 
-func (pd PageData) FamOptions()[]Link {
+func (pd PageData) FamOptions() []Link {
 	res := []Link{
-		{"Family","/family"},
-		{"Personal","/personal"},
-		{"Logout","/logout"},
+		{"Personal", "/personal"},
 	}
-	if pd.Fam.IsParent(pd.Fmem){
-		res = append(res,Link{"Transaction History","/transactions"})
+	if pd.Fam.IsParent(pd.Fmem) {
+		res = append(res, Link{"Family", "/family"}, Link{"Transaction History", "/transactions"})
 	}
+	res = append(res, Link{"Logout", "/logout"})
 	return res
 }
 
