@@ -27,12 +27,19 @@ button:hover{
 
 
 body{
-    background:var(--paleblu);
+    background:var(--midblu);
+    padding:0px;
+    margin:0px;
+    border:0px;
 }
 
 .menu {
     background:var(--minibg);
+    padding:3px 40px;
     min-height:30px;
+}
+.menu a {
+    margin:0px 5px;
 }
 
 input[type=submit]{
@@ -49,7 +56,7 @@ input[type=submit]{
 }
 
 form {
-	background-image:url("/s/svg/formbackmid.svg");
+	background-image:url("/s/svg/formback.svg");
 	background-color:transparent;
 	background-size:100% 100%;
 	fill:var(--midblu);
@@ -60,14 +67,35 @@ form {
     //background:var(--paleblu);
 }
 
+.banner{
+    margin:0px;
+    padding:20px 0px 0px 0px;
+    background:var(--paleblu);
+}
 .banner img{
 	float:left;
 	width:10vw;
-	margin:8px;
+	margin:0px 20px;
 }
 
 #loginoptions{
 	text-align:center;
+}
+
+#actionlist{
+    float:left;
+    width:25vw;
+}
+
+#actionlist button{
+    width:100%;
+}
+
+
+#formlist{
+    float:left;
+    text-align:center;
+    width:70vw;
 }
 
 

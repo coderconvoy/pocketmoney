@@ -1,5 +1,5 @@
 {{define "frm_add_account"}}
-    <form action="addaccount" method="post">
+<form id="frm_add_account" action="addaccount" method="post">
     <h3>Add Account</h3>
     <input type="text" name="username" readonly value="{{.Fmem}}" hidden>
     <input type="text" name="accountname" pattern=".{4,20}" required>
@@ -25,7 +25,7 @@
 
 
 {{define "frm_pay"}}
-    <form action="pay" method="post">
+    <form id="frm_pay" action="pay" method="post">
         <h3>Make a Payment</h3>
     <input type="text" name="username" readonly value="{{.Fmem}}" hidden>  
     From: <select name="from">{{template "fmp_myaccounts" .}}</select>
@@ -37,7 +37,7 @@
 {{end}}
 
 {{define "frm_standing"}}
-    <form action="addstanding" method="post">
+    <form id="frm_standing" action="addstanding" method="post">
         <h3>Make a Standing Order</h3>
         From: <select name="from">{{template "fmp_myaccounts" .}}</select>
         To: <select name="to">{{template "fmp_allaccounts" .}}</select><br>
@@ -56,7 +56,7 @@
 {{end}}
 
 {{define "frm_chpass"}}
-<form action="chpass" method="post">
+<form id="frm_chpass" action="chpass" method="post">
     <h3>Change Password</h3>
     Old Password : <input type="password" name="oldpwd"><br>
     New password : <input type="password" name="pwd1"><br>
@@ -66,7 +66,7 @@
 {{end}}
 
 {{define "frm_request"}}
-<form action="makerequest" method="post">
+<form id="frm_request" action="makerequest" method="post">
     <form action="pay" method="post">
         <h3>Request a Payment</h3>
         <p>The owner of the sending account will have to authorise this payment</p>

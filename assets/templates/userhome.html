@@ -22,10 +22,35 @@
 {{$x11 := .SetJob "stand" .Fmem}}
 {{template "standing" .}}
 
-{{template "frm_add_account" .}}
+    <script>
+        function setform(fid){
+            var fdiv = document.getElementById("formlist");
+            for( c in fdiv.children){
+                console.log(fdiv.children[c]);
+                if (fdiv.children[c].style) {
+                    fdiv.children[c].style.display = "none";
+                }
+            }
+            document.getElementById(fid).style.display= "";
+        }
+    </script>
+    <div id="allform">
+    <div id="actionlist">
+        <button onclick="setform('frm_add_account')">Add Account</button>
+        <button onclick="setform('frm_pay')">Pay Someone</button>
+        <button onclick="setform('frm_request')">Request Money</button>
+        <button onclick="setform('frm_standing')">Setup Regular Payment</button>
+        <button onclick="setform('frm_chpass')">Change Password</button>
+    </div>
 
+
+    <div id="formlist">
+{{template "frm_add_account" .}}
 {{template "frm_pay" .}}
+{{template "frm_request" .}}
 {{template "frm_standing" . }}
 {{template "frm_chpass" .}}
-{{template "frm_request" .}}
+    </div>
+    </div> <!--All forms-->
+    <script> setform("frm_pay"); </script>
 {{template "base"}}

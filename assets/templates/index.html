@@ -37,8 +37,8 @@ function showlogin(f,u){
         {{if .Mes}}
 	<b>{{.Mes}}</b><br>
         {{end}}
-
-	<div id="loginoptions">
+    <div id="allforms">
+	<div id="actionlist">
 		<button onclick="shownewfam()">New Family</button>
 		<button onclick="showlogin()">Login</button>
 		{{range $k,$v := .Logs}}
@@ -48,7 +48,8 @@ function showlogin(f,u){
 
         {{$tlog := loginpart0 .Logs}}
 
-
+    
+   <div id="formlist">
         <form id="login" action="login" method="post">
             <h2>Login</h2>
             Family: <input id="linfam" type="text" name="family" value="{{$tlog.Fam}}"><br>
@@ -69,4 +70,6 @@ function showlogin(f,u){
             <input type="submit" text="Create" value="Create">
 
         </form>
+   </div>
+   </div>
 {{template "base"}}        
