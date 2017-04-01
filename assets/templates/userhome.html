@@ -2,28 +2,16 @@
 {{$top := .}}
 {{$Fmem := .Fmem}}
 <h2>User Page : {{.Fmem}}</h2>
-<h3>Accounts</h3>
 {{if .Mes}}
 <h3 class="message">{{.Mes}}</h3>
 {{end}}
 
 {{template "live_request" .}}
 
-{{/*Show Accounts*/}}
-
-<ul>
-{{range $k, $v := .Fam.Period.Accounts}}
-    {{if eq $v.Username $Fmem}}
-    <li><a href="/view?uname={{$v.Username}}&ac={{$v.Name}}">{{$v.Name}}</a>&nbsp;{{money $v.End}}</li>
-    {{end}}
-{{end}}
-</ul>
-
-{{$x11 := .SetJob "stand" .Fmem}}
-{{template "standing" .}}
 
     <div id="allform">
     <div id="actionlist">
+        <button onclick="showform('view_accounts')">View Accounts</button>
         <button onclick="showform('frm_add_account')">Add Account</button>
         <button onclick="showform('frm_pay')">Pay Someone</button>
         <button onclick="showform('frm_request')">Request Money</button>
@@ -33,6 +21,18 @@
 
 
     <div id="formlist">
+        <div id="view_accounts">
+            <h2>Accounts</h2>
+            <ul>
+            {{range $k, $v := .Fam.Period.Accounts}}
+                {{if eq $v.Username $Fmem}}
+                <li><a href="/view?uname={{$v.Username}}&ac={{$v.Name}}">{{$v.Name}}</a>&nbsp;{{money $v.End}}</li>
+                {{end}}
+            {{end}}
+            </ul>
+            {{$x11 := .SetJob "stand" .Fmem}}
+            {{template "standing" .}}
+        </div>
 {{template "frm_add_account" .}}
 {{template "frm_pay" .}}
 {{template "frm_request" .}}
@@ -41,5 +41,5 @@
     </div>
     </div> <!--All forms-->
     {{js "showform.js"}}
-    <script> showform("frm_pay"); </script>
+    <script> showform("view_accounts"); </script>
 {{template "base"}}
