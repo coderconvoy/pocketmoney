@@ -21,8 +21,12 @@ button{
 	font-weight:bold;
 }
 
-button:hover{
+button:hover, input[type=submit]:hover{
 	background-color:var(--minibg);
+}
+
+input[type=number]{
+    padding:3px;
 }
 
 

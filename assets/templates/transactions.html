@@ -1,16 +1,20 @@
 {{template "head" .}}
-<h2>Transactions</h2>
-<table>
-{{range $k,$v := .Fam.Period.Transactions }}
-<tr>
-    <td>{{$v.From}}</td>
-    <td>{{$v.Dest}}</td>
-    <td>{{money $v.Amount}}</td>
-    <td>{{$v.Purpose}}</td>
-</tr>
+<div id="formlist">
+    <div>
+        <h2>Transactions</h2>
+        <table>
+        {{range $k,$v := .Fam.Period.Transactions }}
+        <tr>
+            <td>{{$v.From}}</td>
+            <td>{{$v.Dest}}</td>
+            <td>{{money $v.Amount}}</td>
+            <td>{{$v.Purpose}}</td>
+        </tr>
+        {{end}}
+        <table>
+    </div>
+</div>
 
-{{end}}
-<table>
 
 
 {{template "base"}}
