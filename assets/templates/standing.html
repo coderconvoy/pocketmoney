@@ -4,10 +4,10 @@
 {{$top := .}}
 {{$req := .Fam.GetMustRequests .Fmem}}
 {{if len $req}}
-    <h2>Pending Requests</h2>
     {{range $req}}
         {{if eq .From.Username $Fmem}}
     <div class="request">
+        <h2>Pending Request</h2>
         {{.Requester}} has requested a payment of {{money .Amount}} from you into {{.Dest}}.
         <form action="respondrequest" method="post">
             <input type="text" value="{{.ID}}" hidden readonly name="id">
@@ -23,6 +23,7 @@
     </div>
         {{else }}
     <div class="request">
+        <h2>Rejected Request</h2>
         {{.From.Username}} has rejected your request for {{money .Amount}} into {{.Dest}}.
         <form action="respondrequest" method="post">
             <input type="text" value="{{.ID}}" hidden readonly name="id">

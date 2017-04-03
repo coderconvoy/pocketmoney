@@ -7,6 +7,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/coderconvoy/gojs"
 	"github.com/coderconvoy/pocketmoney/history"
 )
 
@@ -80,6 +81,6 @@ func LoginPart0(lar []LoginPart) LoginPart {
 
 func LoadJSAsset(f string) (string, error) {
 	p := path.Join("assets/js", f)
-	b, err := Asset(p)
+	b, err := gojs.Single.Asset(p)
 	return "<script>" + string(b) + "</script>", err
 }

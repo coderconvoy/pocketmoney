@@ -17,7 +17,7 @@ button{
 	
 	border:none;
 	padding:15px;
-	font-size:200%;
+	font-size:150%;
 	font-weight:bold;
 }
 
@@ -60,7 +60,7 @@ input[type=submit]{
 }
 
 
-form , #formlist > div{
+#formlist > form , #formlist > div{
 	background-image:url("/s/svg/formback.svg");
 	background-color:transparent;
 	background-size:100% 100%;
@@ -88,17 +88,17 @@ form , #formlist > div{
 	text-align:center;
 }
 
-#actionlist{
+.main-wide #actionlist{
     float:left;
     width:25vw;
 }
 
-#actionlist button{
+.main-wide #actionlist button{
     width:100%;
 }
 
 
-#formlist{
+.main-wide #formlist{
     float:left;
     text-align:center;
     width:70vw;
@@ -106,12 +106,19 @@ form , #formlist > div{
 
 
 .request{
-    border:3px solid black;
-    margin:5px;
-    background:#ff99bb;
+	background-image:url("/s/svg/formback.svg");
+	background-color:transparent;
+	background-size:100% 100%;
+	path:#ff0000;
+    margin:5px auto;
+    max-width:700px;
+    width:85%;
+    padding:50px;
+    text-align:left;
 }
 
 .request form{
+    background:none;
     border:0px;
     margin:0px;
 }

@@ -8,6 +8,7 @@ import (
 	"text/template"
 
 	"github.com/coderconvoy/dbase"
+	"github.com/coderconvoy/gojs"
 	"github.com/coderconvoy/templater/tempower"
 )
 
@@ -81,6 +82,8 @@ func main() {
 	if *debug {
 		dbase.SetQLogger(dbase.FmtLog{})
 	}
+
+	gojs.Single.AddFuncs(Asset, AssetDir)
 
 	GT = template.New("index").Funcs(tempower.FMap()).Funcs(TemplateFuncs())
 	ad, err := AssetDir("assets/templates")
