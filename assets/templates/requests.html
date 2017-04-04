@@ -8,7 +8,8 @@
         {{if eq .From.Username $Fmem}}
     <div class="request">
         <h2>Pending Request</h2>
-        {{.Requester}} has requested a payment of {{money .Amount}} from you into {{.Dest}}.
+        {{.Requester}} has requested a payment of {{money .Amount}} from you into {{.Dest}}.<br>
+        Purpose : {{.Purpose}}
         <form action="respondrequest" method="post">
             <input type="text" value="{{.ID}}" hidden readonly name="id">
             <input type="text" value="accept" hidden readonly name="action">
