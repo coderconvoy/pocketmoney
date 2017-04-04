@@ -30,10 +30,10 @@ func (fam *Family) WriteAccess(a *history.Account, uname string) bool {
 	return a.Username == "WORLD" && fam.IsParent(uname)
 }
 
-func (fam *Family) HasWriteAccess(k history.ACKey, username string) bool{
-	for _,ac := range fam.Accounts {
+func (fam *Family) HasWriteAccess(k history.ACKey, username string) bool {
+	for _, ac := range fam.Accounts {
 		if ac.ACKey == k {
-			return fam.WriteAccess(ac,username)
+			return fam.WriteAccess(ac, username)
 		}
 	}
 	return false
@@ -79,5 +79,14 @@ func (fam *Family) GetMustRequests(uname string) []*PaymentRequest {
 		}
 	}
 	return res
+}
 
+func (fam *Family) GetWaitingRequests(uname string) []*PaymentRequest {
+	res := []*PaymentRequest{}
+	for _, pr := range fam.Requests {
+		if pr.Requester == uname && pr.Returns%2 == 0 {
+			res = append(res, pr)
+		}
+	}
+	return res
 }

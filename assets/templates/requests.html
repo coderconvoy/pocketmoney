@@ -3,7 +3,6 @@
 {{$Fmem := .Fmem}}
 {{$top := .}}
 {{$req := .Fam.GetMustRequests .Fmem}}
-{{if len $req}}
     {{range $req}}
         {{if eq .From.Username $Fmem}}
     <div class="request">
@@ -25,7 +24,8 @@
         {{else }}
     <div class="request">
         <h2>Rejected Request</h2>
-        {{.From.Username}} has rejected your request for {{money .Amount}} into {{.Dest}}.
+        {{.From.Username}} has rejected your request for {{money .Amount}} into {{.Dest}}.<br>
+        Purpose : {{.Purpose}}
         <form action="respondrequest" method="post">
             <input type="text" value="{{.ID}}" hidden readonly name="id">
             <input type="text" value="insist" hidden readonly name="action">
@@ -39,6 +39,21 @@
     </div>
         {{end}}
     {{end}}
+{{end}}
+
+{{define "waiting_requests"}}
+{{$pen := .Fam.GetWaitingRequests .Fmem}}
+{{range $pen }}
+    <div class="info">
+        <h2>Waiting Request</h2>
+        You are waiting for a payment from {{.From.Username}} for {{money .Amount}} into {{.Dest}}.<br>
+        Purpose : {{.Purpose}}
+        <form action="respondrequest" method="post">
+            <input type="text" value="{{.ID}}" hidden readonly name="id">
+            <input type="text" value="cancel" hidden readonly name="action">
+            <input type="submit" value="Cancel">
+        </form>
+    </div>
 {{end}}
 
 {{end}}
