@@ -21,6 +21,11 @@ button{
 	font-weight:bold;
 }
 
+button img{
+    width:40px;
+    height:40px;
+}
+
 button:hover, input[type=submit]:hover{
 	background-color:var(--minibg);
 }
