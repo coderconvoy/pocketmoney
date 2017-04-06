@@ -65,7 +65,7 @@ input[type=submit]{
 }
 
 .main-tall #formlist > form, .main-tall #formlist > div {
-    width:95%;
+    //width:95%;
 }
 
 #formlist > form , #formlist > div{
@@ -87,9 +87,8 @@ input[type=submit]{
     background:var(--paleblu);
 }
 .banner img{
-	float:left;
-	width:10vw;
-	margin:0px 20px;
+	width:90%;
+	margin:0px auto;
 }
 
 #loginoptions{
