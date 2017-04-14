@@ -37,6 +37,13 @@
     </div><!--formlist-->
     </div><!--allforms-->
     {{js "showform.js"}}
-    <script>showform("view_members");</script>
+    {{js "template.js"}}
+    <div id="pocket"></div> 
+    <script>
+        showform("view_members");
+        psvg = "{{jsesc (asset "s/svg/pocket-temp.svg") }}";
+        p2 = replaceAll(psvg,{"maincol":"red","linecol":"blue"});
+        document.getElementById("pocket").innerHTML = p2; 
+    </script>
     {{end}}
 {{template "base"}}

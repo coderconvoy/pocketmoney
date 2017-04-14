@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"path"
 	"reflect"
@@ -21,7 +22,9 @@ func TemplateFuncs() template.FuncMap {
 		"dateRFC":      PrintDateRFC,
 		"type":         PrintType,
 		"eq2":          Eq2,
+		"asset":        LoadAsset,
 		"js":           LoadJSAsset,
+		"jsesc":        JSEscape,
 	}
 }
 
@@ -79,8 +82,24 @@ func LoginPart0(lar []LoginPart) LoginPart {
 	return LoginPart{}
 }
 
+func LoadAsset(f string) (string, error) {
+	p := path.Join("assets", f)
+	r, err := gojs.Single.Asset(p)
+	return string(r), err
+}
+
 func LoadJSAsset(f string) (string, error) {
 	p := path.Join("assets/js", f)
 	b, err := gojs.Single.Asset(p)
 	return "<script>" + string(b) + "</script>", err
+}
+
+func JSEscape(f interface{}) (string, error) {
+	switch v := f.(type) {
+	case string:
+		return template.JSEscapeString(v), nil
+	case []byte:
+		return template.JSEscapeString(string(v)), nil
+	}
+	return "", errors.New("Expected string or []byte")
 }
