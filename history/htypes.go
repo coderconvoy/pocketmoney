@@ -72,6 +72,7 @@ type Account struct {
 	ACKey
 	Opened, Closed time.Time
 	Start, End     int
+	Col1, Col2     string
 }
 
 type Transaction struct {

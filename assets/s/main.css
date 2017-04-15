@@ -142,6 +142,20 @@ input[type=submit]{
     margin:0px;
 }
 
+.pocket {
+    flex:0 0 40px;
+}
+.pocket svg{
+    width:100%;
+    height:100%;
+}
+.pocket-d{
+    flex:1;
+}
+
+.pocket-li { 
+    display:flex;
+}
 
 input , button {
     margin:5px;

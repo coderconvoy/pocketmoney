@@ -12,10 +12,10 @@
             <ul>
             {{range .Fam.Members}}
                 <li>
-                    {{.Username}} -- {{bSelect .Parent "Parent" "Child"}}<br>
+                    {{.Username}} -- {{bSelect .Parent "Parent" ""}}<br>
                     <ul>
                         {{range ($.Fam.Period.UserAccounts .Username)}}
-                        <li>{{.Name}} {{money .End}}</li>
+                        <li class="pocket-li"><div class="pocket">{{.Col1}}:{{.Col2}}</div><div class="pocket-d">{{.Name}} {{money .End}}</div></li>
                         {{end}}
                     </ul>
                 </li>
@@ -38,12 +38,11 @@
     </div><!--allforms-->
     {{js "showform.js"}}
     {{js "template.js"}}
-    <div id="pocket"></div> 
+    {{js "divtopocket.js"}}
     <script>
         showform("view_members");
         psvg = "{{jsesc (asset "s/svg/pocket-temp.svg") }}";
-        p2 = replaceAll(psvg,{"maincol":"red","linecol":"blue"});
-        document.getElementById("pocket").innerHTML = p2; 
+        divstopocket(psvg);
     </script>
     {{end}}
 {{template "base"}}
