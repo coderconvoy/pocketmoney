@@ -3,6 +3,9 @@
     <h3>Add Account</h3>
     <input type="text" name="username" readonly value="{{.Fmem}}" hidden>
     <input type="text" name="accountname" pattern=".{4,20}" required>
+    {{template "colorpicker" "Col1"}}
+    {{template "colorpicker" "Col2"}}
+    <div class="pocket" id="color_pocket">black:black</div>
     <input type="submit" text="Add" value="Add">
     </form>
 {{end}}
@@ -17,10 +20,23 @@
         <option value="{{$v.Username}}:{{$v.Name}}">{{$v.Username}}:{{$v.Name}}</option>
         {{end}}
 {{end}}
+
 {{define "fmp_allusers"}}
     {{range $k, $v := .Fam.Members}}
     <option value="{{$v.Username}}">{{$v.Username}}</option>
     {{end}}
+{{end}}
+
+{{/*colorpicker takes a param of name for the object*/}}
+{{define "colorpicker"}}
+<select name="{{.}}" id="{{.}}" onchange="changecolor();">
+    <option value="black">black<div style="width:15px;height:15px;background:black;"></div></option>
+    <option value="blue" style="color:blue;">blue</option>
+    <option value="green" style="background:green;">green</option>
+    <option value="red" style="background:red;">red</option>
+    <option value="orange" style="background:orange;">orange</option>
+    <option value="white" style="background:white;">white</option>
+</select>
 {{end}}
 
 

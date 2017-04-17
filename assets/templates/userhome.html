@@ -41,7 +41,21 @@
     </div>
     </div> <!--All forms-->
     {{js "showform.js"}}
-    <script> showform("view_accounts"); </script>
+    {{js "template.js"}}
+    {{js "divtopocket.js"}}
+    <script>
+        psvg = "{{jsesc (asset "s/svg/pocket-temp.svg") }}";
+        divstopocket(psvg);
+
+        showform("view_accounts"); 
+        function changecolor(){
+            var c1 = document.getElementById("Col1");
+            var c2 = document.getElementById("Col2");
+            var pocket = document.getElementById("color_pocket");
+            
+            pocket.innerHTML = replaceAll(psvg,{maincol:c1.value,linecol:c2.value});
+        }
+    </script>
     <div style="clear:both"></div>
     {{template "waiting_requests" .}}
 {{template "base"}}

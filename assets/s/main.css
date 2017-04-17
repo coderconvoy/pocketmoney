@@ -143,6 +143,7 @@ input[type=submit]{
 }
 
 .pocket {
+    width:40px;
     flex:0 0 40px;
 }
 .pocket svg{

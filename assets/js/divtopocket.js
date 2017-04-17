@@ -1,7 +1,11 @@
+//pocketmoney/assets/s/js
 //requires shared js, replaceAll from template.js
-//
 
 function divtopocket(d,svg){
+    if (!d.innerHTML) {
+        console.log("No D innerhtml", d);
+        return;
+    }
     var s = d.innerHTML.split(":");
     if (s.length !== 2 ){
         s = ["black","red"];
