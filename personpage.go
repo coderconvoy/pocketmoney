@@ -10,7 +10,10 @@ func HandleAddAccount(ld *PageHand) (string, string) {
 
 	aname := r.FormValue("accountname")
 
-	fam.Period.Accounts = append(fam.Period.Accounts, history.CreateAccount(ld.Fmem, aname))
+	ac := history.CreateAccount(ld.Fmem, aname)
+	ac.Col1 = r.FormValue("Col1")
+	ac.Col2 = r.FormValue("Col2")
+	fam.Period.Accounts = append(fam.Period.Accounts, ac)
 
 	return "/personal", ""
 }
