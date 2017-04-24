@@ -6,6 +6,10 @@ import (
 	"github.com/coderconvoy/pocketmoney/history"
 )
 
+func HandleViewFamily(ld *PageHand) {
+
+}
+
 func (fam *Family) GetUser(uname string) (*User, error) {
 	for i, m := range fam.Members {
 		if m.Username == uname {
