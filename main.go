@@ -121,7 +121,7 @@ func main() {
 	//Views
 	http.HandleFunc("/transactions", LoggedInVTemp("transactions.html"))
 	http.HandleFunc("/personal", LoggedInVTemp("userhome.html"))
-	http.HandleFunc("/family", LoggedInVTemp(HandleViewFamily))
+	//http.HandleFunc("/family", LoggedInView(HandleViewFamily))
 	http.HandleFunc("/view", LoggedInView(HandleViewAccount))
 
 	if *insecure {
