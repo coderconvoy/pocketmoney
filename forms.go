@@ -1,3 +1,4 @@
+//This file is intended as forms, for creating html, replacing the former template system
 package main
 
 import (
