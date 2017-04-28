@@ -48,7 +48,6 @@ func SelectAllUsers(ld LoginData, tagname string) *htmk.Tag {
 func FormAddAccount(ld LoginData) *htmk.Tag {
 	return htmk.NewParent("form", []*htmk.Tag{
 		htmk.NewTextTag("h3", "Add Account"),
-		htmk.QInput("text", "username", "value", ld.Fmem, "--readonly", "--hidden"),
 		htmk.QInput("text", "accountname", "pattern", ".{4,20}", "--required"),
 		HTMLColorPicker("Col1", []string{}),
 		HTMLColorPicker("Col2", []string{}),
@@ -58,28 +57,49 @@ func FormAddAccount(ld LoginData) *htmk.Tag {
 }
 
 func FormPay(ld LoginData) *htmk.Tag {
-	return htmk.NewParent("form", []*htmk.Tag{
+	return htmk.QForm("pay", []*htmk.Tag{
 		htmk.NewTextTag("h3", "Pay Someone"),
-		htmk.QInput("text", "username", "value", ld.Fmem, "--readonly", "--hidden"),
 		htmk.NewText("<br>From:"), SelectMyAccounts(ld, "from"),
 		htmk.NewText("<br>To:"), SelectAllAccounts(ld, "to"),
 		htmk.NewText("<br>Amount:"), htmk.QInput("number", "amount", "step", "0.01", "min", "0"),
-		htmk.NewText("<br>Purpose:"), html.QInput("text", "purpose"),
-		html.QSubmit("Pay Now"),
-	}, "id", "frm_pay", "action", "pay", "method", "post")
+		htmk.NewText("<br>Purpose:"), htmk.QInput("text", "purpose"),
+		htmk.QSubmit("Pay Now"),
+	}, "id", "frm_pay")
 }
 
 func FormStanding(ld LoginData) *htmk.Tag {
-	return htmk.NewParent("form", []*htmk.Tag{
+	return htmk.QForm("addstanding", []*htmk.Tag{
 		htmk.NewTextTag("h3", "Make a Standing Order"),
 		htmk.NewText("<br>From:"), SelectMyAccounts(ld, "from"),
 		htmk.NewText("<br>To:"), SelectAllAccounts(ld, "to"),
-		htmk.NewText("<br>Amount: £"), htmk.NewTag("input", "type", "number", "step", "0.01", "min", "0", "name", "amount"),
-		htmk.NewText("<br>Purpose:"), htmk.NewTag("type", "text", "name", "purpose"),
-		htmk.NewText("<br>Start Date:"), htmk.NewTag("type", "date", "name", "start", "value", time.Now().Format("2006-01-02")),
-		htmk.NewText("<br>Then Every:"), htmk.NewTag("type", "number", "min", "1", "name", "delay", "value", "7"),
+		htmk.NewText("<br>Amount: £"), htmk.QInput("number", "amount", "step", "0.01", "min", "0"),
+		htmk.NewText("<br>Purpose:"), htmk.QInput("text", "purpose"),
+		htmk.NewText("<br>Start Date:"), htmk.QInput("date", "start", "value", time.Now().Format("2006-01-02")),
+		htmk.NewText("<br>Then Every:"), htmk.QInput("number", "delay", "min", "1", "value", "7"),
 		htmk.QSelect("delay_type", "days", "months"),
 		htmk.NewText("<br>"), htmk.QSubmit("Create"),
-	}, "id", "frm_standing", "action", "addstanding", "method", "post")
+	}, "id", "frm_standing")
 
+}
+
+func FormPassword() *htmk.Tag {
+	return htmk.QForm("chpass", []*htmk.Tag{
+		htmk.NewTextTag("h3", "Change Password"),
+		htmk.NewText("Old Password : "), htmk.QInput("password", "oldpwd"),
+		htmk.NewText("<br>New Password : "), htmk.QInput("password", "pwd1"),
+		htmk.NewText("<br>Confirm : "), htmk.QInput("password", "pwd2"),
+		htmk.QSubmit("Change"),
+	}, "id", "frm_chpass")
+}
+
+func FormRequest(ld LoginData) *htmk.Tag {
+	return htmk.QForm("makerequest", []*htmk.Tag{
+		htmk.NewTextTag("h3", "Request A payment"),
+		htmk.NewTextTag("p", "The owner of the sending account will have to authorise this payment"),
+		htmk.NewText("From : "), SelectAllUsers(ld, "fromuser"),
+		htmk.NewText("<br>To : "), SelectAllAccounts(ld, "to"),
+		htmk.NewText("<br>Amount : "), htmk.QInput("number", "amount", "step", "0.01", "min", "0"),
+		htmk.NewText("<br>Purpose : "), htmk.QInput("text", "purpose"),
+		htmk.QSubmit("Request Now"),
+	}, "id", "frm_request")
 }
