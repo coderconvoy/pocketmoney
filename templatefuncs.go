@@ -8,6 +8,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/coderconvoy/dbase"
 	"github.com/coderconvoy/gojs"
 	"github.com/coderconvoy/pocketmoney/history"
 )
@@ -86,6 +87,16 @@ func LoadAsset(f string) (string, error) {
 	p := path.Join("assets", f)
 	r, err := gojs.Single.Asset(p)
 	return string(r), err
+}
+
+func SafeAsset(f string) string {
+	p := path.Join("assets", f)
+	r, err := gojs.Single.Asset(p)
+	if err != nil {
+		dbase.QLog("No Asset : " + p)
+		return "//Asset not Found : " + p
+	}
+	return r
 }
 
 func LoadJSAsset(f string) (string, error) {

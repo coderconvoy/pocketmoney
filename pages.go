@@ -46,11 +46,44 @@ func PageBasic(ld LoginData, title string) (*htmq.Tag, *htmq.Tag) {
 
 func PageFamily(ld LoginData) *htmq.Tag {
 	fam := ld.Fam
+
+	//Side Buttons
+	fbuts := htmq.NewParent("div", []*htmq.Tag{
+		htmq.QBut("View Members", `showform("viewmembers"`),
+		htmq.QBut("Add Member", `showform("frm_add_member"`),
+	}, "id", "actionlist")
+	//Get Forms
+	fl := htmq.NewParent("div", []*htmq.Tag{
+		ViewMembers(ld, "viewmembers"),
+		FormAddMember(),
+	}, "id", "formlist")
+
+	//Get page
 	p, body := PageBasic(ld, "Family")
+
+	//Add forms to page
 	body.AddChildren(
 		htmq.NewTextTag("h2", "Family Page : "+fam.FamilyName),
+		htmq.NewParent("div", []*htmq.Tag{
+			fbuts,
+			fl,
+		}, "id", "allforms"),
+		htmq.QScript(
+			SafeAsset("js/showform.js"),
+			SafeAsset("js/template.js"),
+			SafeAsset("js/divtopocket.js"),
+			`
+showform("view_members");
+psvg = "{{jsesc (asset "s/svg/pocket-temp.svg") }}";
+divstopocket(psvg);`,
+		),
 	)
-
 	return p
+}
 
+func PagePersonal(ld LoginData) *htmq.Tag {
+
+	p, body := PageBasic(ld, "Personal")
+
+	body.AddChildren()
 }
