@@ -16,26 +16,33 @@ func ViewTransactions(ld LoginData, fid string) *htmq.Tag {
 }
 
 func ViewMembers(ld LoginData, fid string) *htmq.Tag {
-	//membertag returns a ul containing all accounts for that user
-	membertag := func(uname string) *htmq.Tag {
-		res := []*htmq.Tag{}
-		for _, v := range ld.Fam.Period.UserAccounts(uname) {
-			res = append(res, htmq.NewParent("li", []*htmq.Tag{
-				htmq.NewTextTag("div", v.Col1+":"+v.Col2, "class", "pocket"),
-				htmq.NewTextTag("div", v.Name+" "+PrintMoney(v.End), "class", "pocket-d"),
-			}, "class", "pocket-li"))
-		}
-		return htmq.NewParent("ul", res)
-	}
 
 	//List of li one for each family member
 	rows := []*htmq.Tag{}
 	for _, v := range ld.Fam.Members {
 		rows = append(rows, htmq.NewParent("li", []*htmq.Tag{
 			htmq.NewTextTag("p", v.Username+"  "+(Plex(v.Parent, "Parent", "Child")).(string)),
-			membertag(v.Username),
+			ViewMemberAccount(ld, v.Username),
 		}))
 	}
 
 	return htmq.NewParent("ul", rows).Wrap("div", "id", fid)
+}
+
+func ViewAccounts(ld LoginData, fid string) *htmq.Tag {
+	return htmq.NewParent("div", *htmq.Tag{
+		ViewMemberAccount(ld, v.UserName),
+	}, "id", fid)
+}
+
+//ViewMemberAccount returns a ul containing all accounts for that user
+func ViewMemberAccount(ld LoginData, uname string) *htmq.Tag {
+	res := []*htmq.Tag{}
+	for _, v := range ld.Fam.Period.UserAccounts(uname) {
+		res = append(res, htmq.NewParent("li", []*htmq.Tag{
+			htmq.NewTextTag("div", v.Col1+":"+v.Col2, "class", "pocket"),
+			htmq.NewTextTag("div", v.Name+" "+PrintMoney(v.End), "class", "pocket-d"),
+		}, "class", "pocket-li"))
+	}
+	return htmq.NewParent("ul", res)
 }
