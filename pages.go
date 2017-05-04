@@ -90,26 +90,25 @@ func PagePersonal(ld LoginData) *htmq.Tag {
 
 	//Side Buttons
 	fbuts := htmq.NewParent("div", []*htmq.Tag{
-		htmq.QBut("View Accounts",`showform('view_accounts')`),
-		htmq.QBut("Add Account"),`showform('frm_add_account')`),
-		htmq.NewParent("button",[]*htmq.Tag{
-		}
-        <button onclick="showform('frm_pay')"><image src="/s/svg/payments.svg">Pay Someone</button>
-        <button onclick="showform('frm_request')"><image src="/s/svg/requests.svg">Request Money</button>
-        <button onclick="showform('frm_standing')">Setup Regular Payment</button>
-        <button onclick="showform('frm_chpass')">Change Password</button>
-    </div>
-		htmq.QBut("View Members", `showform("viewmembers"`),
-		htmq.QBut("Add Member", `showform("frm_add_member"`),
+		htmq.QBut("View Accounts", `showform('view_accounts')`),
+		htmq.QBut("Add Account", `showform('frm_add_account')`),
+		htmq.QBut("", `showform('frm_pay')`, "!/s/svg/payments.svg", "^Pay Someone"),
+		htmq.QBut("", `showform('frm_request')`, "!/s/svg/requests.svg", "^Request Money"),
+		htmq.QBut("Setup Regular Payment", `showform('frm_standing')`),
+		htmq.QBut("Change Password", `showform('frm_standing')`),
 	}, "id", "actionlist")
 	//Get Forms
 	fl := htmq.NewParent("div", []*htmq.Tag{
-		ViewMembers(ld, "viewmembers"),
-		FormAddMember(),
+		ViewAccounts(ld, "view_acounts"),
+		FormAddAccount(ld),
+		FormPay(ld),
+		FormRequest(ld),
+		FormStanding(ld),
+		FormPassword(),
 	}, "id", "formlist")
 
 	//Get page
-	p, body := PageBasic(ld, "Persoanl")
+	p, body := PageBasic(ld, "Personal")
 
 	//Add forms to page
 	body.AddChildren(

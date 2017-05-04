@@ -22,7 +22,7 @@ func ViewMembers(ld LoginData, fid string) *htmq.Tag {
 	for _, v := range ld.Fam.Members {
 		rows = append(rows, htmq.NewParent("li", []*htmq.Tag{
 			htmq.NewTextTag("p", v.Username+"  "+(Plex(v.Parent, "Parent", "Child")).(string)),
-			ViewMemberAccount(ld, v.Username),
+			viewMemberAccount(ld, v.Username),
 		}))
 	}
 
@@ -31,12 +31,12 @@ func ViewMembers(ld LoginData, fid string) *htmq.Tag {
 
 func ViewAccounts(ld LoginData, fid string) *htmq.Tag {
 	return htmq.NewParent("div", *htmq.Tag{
-		ViewMemberAccount(ld, v.UserName),
+		viewMemberAccount(ld, v.UserName),
 	}, "id", fid)
 }
 
 //ViewMemberAccount returns a ul containing all accounts for that user
-func ViewMemberAccount(ld LoginData, uname string) *htmq.Tag {
+func viewMemberAccount(ld LoginData, uname string) *htmq.Tag {
 	res := []*htmq.Tag{}
 	for _, v := range ld.Fam.Period.UserAccounts(uname) {
 		res = append(res, htmq.NewParent("li", []*htmq.Tag{
