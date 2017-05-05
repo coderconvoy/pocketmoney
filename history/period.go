@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/coderconvoy/dbase"
+	"github.com/coderconvoy/money"
 )
 
 func (p Period) StartNext() Period {
@@ -113,7 +114,7 @@ func (p Period) Merge(p2 Period) (Period, error) {
 }
 
 func (p Period) Accumulate(ak ACKey) []Accumulation {
-	running := 0
+	running := money.M(0)
 	for _, ac := range p.Accounts {
 		if ak == ac.ACKey {
 			running = ac.Start

@@ -5,14 +5,11 @@ import (
 	"fmt"
 	"net/http"
 	"path"
-	"text/template"
 
 	"github.com/coderconvoy/dbase"
 	"github.com/coderconvoy/gojs"
-	"github.com/coderconvoy/templater/tempower"
 )
 
-var GT *template.Template
 var FamDB = dbase.DBase{"data/families"}
 
 type IndexData struct {
@@ -22,29 +19,6 @@ type IndexData struct {
 
 func (id IndexData) FamOptions() []Link {
 	return []Link{}
-}
-
-func GoIndex(w http.ResponseWriter, r *http.Request, m string) {
-	c, err := r.Cookie("LastLog")
-	if err != nil {
-		ExTemplate(GT, w, "index.html", IndexData{m, []LoginStore{}})
-		return
-	}
-	var ll []LoginStore
-	err = CookieUnmarshal(c.Value, &ll)
-	if err != nil {
-		ll = []LoginStore{}
-	}
-
-	ExTemplate(GT, w, "index.html", IndexData{m, ll})
-
-}
-
-func ExTemplate(t *template.Template, w http.ResponseWriter, name string, data interface{}) {
-	err := t.ExecuteTemplate(w, name, data)
-	if err != nil {
-		fmt.Println(err)
-	}
 }
 
 func Handle(w http.ResponseWriter, r *http.Request) {
@@ -84,23 +58,6 @@ func main() {
 	}
 
 	gojs.Single.AddFuncs(Asset, AssetDir)
-
-	GT = template.New("index").Funcs(tempower.FMap()).Funcs(TemplateFuncs())
-	ad, err := AssetDir("assets/templates")
-	for _, n := range ad {
-		if path.Ext(n) == ".swp" {
-			continue
-		}
-		t, err := Asset("assets/templates/" + n)
-		dbase.QLog("Parsing :" + n)
-		GT = GT.New(n)
-		_, err = GT.Parse(string(t))
-		if err != nil {
-			dbase.QLog(err.Error())
-			fmt.Println(err)
-			return
-		}
-	}
 
 	http.HandleFunc("/", Handle)
 	http.HandleFunc("/s/", HandleStatic)

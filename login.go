@@ -24,7 +24,7 @@ func NewLoginControl(md time.Duration) *LoginControl {
 }
 
 func (lc *LoginControl) Login(w http.ResponseWriter, familyname, username string) LoginStore {
-	ls := LoginStore{familyname, username, []JPar{}, ""}
+	ls := LoginStore{familyname, username, ""}
 	lc.SessionControl.Login(w, ls)
 	return ls
 }
@@ -70,7 +70,6 @@ func LoggedInView(f ViewFunc) MuxFunc {
 			dbase.QLog("Could not write output to request")
 		}
 
-		pdata.Jobs = []JPar{}
 		pdata.Mes = ""
 		err = loginControl.EditLogin(r, pdata.LoginStore)
 		if err != nil {
@@ -119,7 +118,8 @@ func loggedInFamily(w http.ResponseWriter, r *http.Request) (*PageData, uint64, 
 	if iok != dbase.OK {
 		return nil, 0, errors.New("No login")
 	}
-	id := logLock.Lock(ld.Familyname)
-	fam, err := LoadFamily(ld.Familyname)
+	id := logLock.Lock(ld.FamName)
+	fam, err := LoadFamily(ld.FamName)
+	return &PageData{fam, ld}, id, err
 
 }

@@ -23,7 +23,7 @@ func SelectMyAccounts(ld LoginData, tagname string) *htmq.Tag {
 	ops := []*htmq.Tag{}
 	for _, v := range ld.Fam.ListWriteAccess(ld.Fmem) {
 		s := v.Username + ":" + v.Name
-		ops = append(ops, htmq.NewTextTag("option", s+": "+PrintMoney(v.End), "value", s))
+		ops = append(ops, htmq.NewTextTag("option", s+": "+v.End.String(), "value", s))
 	}
 	return htmq.NewParent("select", ops, "name", tagname)
 }

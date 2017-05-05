@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -13,15 +12,6 @@ const (
 	D_NDAYS = iota
 	D_OFMONTH
 )
-
-type Money int
-
-func (m Money) String() {
-	if m < 0 {
-		return "-£" + fmt.Sprintf("%.2f", float32(-m)/100)
-	}
-	return "£" + fmt.Sprintf("%.2f", float32(m)/100)
-}
 
 type Link struct {
 	Name, Dest string
