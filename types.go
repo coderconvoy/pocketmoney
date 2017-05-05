@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -13,20 +14,23 @@ const (
 	D_OFMONTH
 )
 
+type Money int
+
+func (m Money) String() {
+	if m < 0 {
+		return "-£" + fmt.Sprintf("%.2f", float32(-m)/100)
+	}
+	return "£" + fmt.Sprintf("%.2f", float32(m)/100)
+}
+
 type Link struct {
 	Name, Dest string
 }
 
-type LoginPart struct {
-	Fam  string
-	User string
-}
-
 type LoginStore struct {
-	Familyname string
-	Fmem       string
-	Jobs       []JPar
-	Mes        interface{}
+	FamName string
+	Fmem    string
+	Mes     interface{}
 }
 
 type PageData struct {

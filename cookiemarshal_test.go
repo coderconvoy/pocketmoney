@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func Test_cMarshal(t *testing.T) {
-	logs := []LoginPart{
+	logs := []LoginStore{
 		{"f1", "fm1"},
 		{"f2", "fm1"},
 		{"f3", "fm2"},
@@ -14,7 +14,7 @@ func Test_cMarshal(t *testing.T) {
 		t.Log(err)
 	}
 
-	var res []LoginPart
+	var res []LoginStore
 
 	err = CookieUnmarshal(s, &res)
 	if err != nil {

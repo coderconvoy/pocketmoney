@@ -72,13 +72,13 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		GoIndex(w, r, "No Family Member of that name")
 	}
 
-	lpart := LoginPart{famname, uname}
+	lpart := LoginStore{famname, uname, nil}
 	//Grab LastLogs from cookie
-	LastLogs := []LoginPart{}
+	LastLogs := []LoginStore{}
 	c, err := r.Cookie("LastLog")
 
 	if err == nil {
-		var p []LoginPart
+		var p []LoginStore
 		err := CookieUnmarshal(c.Value, &p)
 		if err == nil {
 			LastLogs = p
@@ -96,7 +96,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if !logfound {
-		LastLogs = append([]LoginPart{lpart}, LastLogs...)
+		LastLogs = append([]LoginStore{lpart}, LastLogs...)
 	}
 
 	mlogs, err := CookieMarshal(LastLogs)

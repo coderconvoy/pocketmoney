@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"path"
 	"reflect"
 	"text/template"
@@ -13,35 +12,11 @@ import (
 	"github.com/coderconvoy/pocketmoney/history"
 )
 
-func TemplateFuncs() template.FuncMap {
-	return template.FuncMap{
-		"plex":         Plex,
-		"loginpart0":   LoginPart0,
-		"standingbyac": FilterStandingByAC,
-		"money":        PrintMoney,
-		"date":         PrintDate,
-		"dateRFC":      PrintDateRFC,
-		"type":         PrintType,
-		"eq2":          Eq2,
-		"asset":        LoadAsset,
-		"js":           LoadJSAsset,
-		"jsesc":        JSEscape,
-	}
-}
-
 func Plex(p, a, b interface{}) interface{} {
 	if p == nil || p == 0 || p == "" {
 		return b
 	}
 	return a
-
-}
-
-func PrintMoney(n int) string {
-	if n < 0 {
-		return "-£" + fmt.Sprintf("%.2f", float32(-n)/100)
-	}
-	return "£" + fmt.Sprintf("%.2f", float32(n)/100)
 }
 
 func PrintDate(t ...time.Time) string {
@@ -76,13 +51,6 @@ func Eq2(a, b interface{}) bool {
 	return a == b
 }
 
-func LoginPart0(lar []LoginPart) LoginPart {
-	if len(lar) > 0 {
-		return lar[0]
-	}
-	return LoginPart{}
-}
-
 func LoadAsset(f string) (string, error) {
 	p := path.Join("assets", f)
 	r, err := gojs.Single.Asset(p)
@@ -96,7 +64,7 @@ func SafeAsset(f string) string {
 		dbase.QLog("No Asset : " + p)
 		return "//Asset not Found : " + p
 	}
-	return r
+	return string(r)
 }
 
 func LoadJSAsset(f string) (string, error) {

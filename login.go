@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/coderconvoy/dbase"
+	"github.com/coderconvoy/htmq"
 )
 
 var loginControl = NewLoginControl(time.Minute * 20)
@@ -45,15 +46,9 @@ func (lc *LoginControl) EditLogin(r *http.Request, ls LoginStore) error {
 type PostFunc func(*PageHand) (string, string)
 
 // ViewFunc Shows what the world looks like returning, the expected template name.
-type ViewFunc func(*PageHand) string
+type ViewFunc func(*PageData) *htmq.Tag
 
 type MuxFunc func(w http.ResponseWriter, r *http.Request)
-
-func LoggedInVTemp(tname string) MuxFunc {
-	return LoggedInView(func(ph *PageHand) string {
-		return tname
-	})
-}
 
 func LoggedInView(f ViewFunc) MuxFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -68,9 +63,13 @@ func LoggedInView(f ViewFunc) MuxFunc {
 			pdata.Fam.Save()
 		}
 		//Consider adding a calculate and save if changed here
-		page := f(phand)
+		page := f(pdata)
 
-		ExTemplate(GT, w, page, pdata)
+		_, err = w.Write([]byte(page.String()))
+		if err != nil {
+			dbase.QLog("Could not write output to request")
+		}
+
 		pdata.Jobs = []JPar{}
 		pdata.Mes = ""
 		err = loginControl.EditLogin(r, pdata.LoginStore)
@@ -122,9 +121,5 @@ func loggedInFamily(w http.ResponseWriter, r *http.Request) (*PageData, uint64, 
 	}
 	id := logLock.Lock(ld.Familyname)
 	fam, err := LoadFamily(ld.Familyname)
-	if err != nil {
-		logLock.Unlock(id)
-	}
 
-	return &PageData{Fam: fam, LoginStore: ld}, id, err
 }

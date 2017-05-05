@@ -30,8 +30,8 @@ func ViewMembers(ld LoginData, fid string) *htmq.Tag {
 }
 
 func ViewAccounts(ld LoginData, fid string) *htmq.Tag {
-	return htmq.NewParent("div", *htmq.Tag{
-		viewMemberAccount(ld, v.UserName),
+	return htmq.NewParent("div", []*htmq.Tag{
+		viewMemberAccount(ld, ld.Fmem),
 	}, "id", fid)
 }
 

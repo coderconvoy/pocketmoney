@@ -17,7 +17,7 @@ var FamDB = dbase.DBase{"data/families"}
 
 type IndexData struct {
 	Mes  string
-	Logs []LoginPart
+	Logs []LoginStore
 }
 
 func (id IndexData) FamOptions() []Link {
@@ -27,13 +27,13 @@ func (id IndexData) FamOptions() []Link {
 func GoIndex(w http.ResponseWriter, r *http.Request, m string) {
 	c, err := r.Cookie("LastLog")
 	if err != nil {
-		ExTemplate(GT, w, "index.html", IndexData{m, []LoginPart{}})
+		ExTemplate(GT, w, "index.html", IndexData{m, []LoginStore{}})
 		return
 	}
-	var ll []LoginPart
+	var ll []LoginStore
 	err = CookieUnmarshal(c.Value, &ll)
 	if err != nil {
-		ll = []LoginPart{}
+		ll = []LoginStore{}
 	}
 
 	ExTemplate(GT, w, "index.html", IndexData{m, ll})
@@ -119,10 +119,10 @@ func main() {
 	http.HandleFunc("/chpass", LoggedInPost(HandlePasswordChange))
 
 	//Views
-	http.HandleFunc("/transactions", LoggedInVTemp("transactions.html"))
-	http.HandleFunc("/personal", LoggedInVTemp("userhome.html"))
-	//http.HandleFunc("/family", LoggedInView(HandleViewFamily))
-	http.HandleFunc("/view", LoggedInView(HandleViewAccount))
+	http.HandleFunc("/transactions", LoggedInVTemp(PageTransactions))
+	http.HandleFunc("/personal", LoggedInVTemp(PagePerson))
+	http.HandleFunc("/family", LoggedInView(PageFamily))
+	//http.HandleFunc("/view", LoggedInView(Pag))
 
 	if *insecure {
 		err = http.ListenAndServe(":8080", nil)

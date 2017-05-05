@@ -86,7 +86,6 @@ func PageFamily(ld LoginData) *htmq.Tag {
 }
 
 func PagePersonal(ld LoginData) *htmq.Tag {
-	fam := ld.Fam
 
 	//Side Buttons
 	fbuts := htmq.NewParent("div", []*htmq.Tag{
