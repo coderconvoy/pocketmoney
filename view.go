@@ -2,11 +2,11 @@ package main
 
 import "github.com/coderconvoy/htmq"
 
-func ViewTransactions(ld LoginData, fid string) *htmq.Tag {
+func ViewTransactions(ld PageData, fid string) *htmq.Tag {
 
 	rows := []*htmq.Tag{htmq.QMulti("tr", "th", "From", "To", "Amount", "Date", "Purpose")}
 	for _, v := range ld.Fam.Period.Transactions {
-		rows = append(rows, htmq.QMulti("tr", "td", v.From.String(), v.Dest.String(), PrintMoney(v.Amount), v.Date.Format("2006-01-02"), v.Purpose))
+		rows = append(rows, htmq.QMulti("tr", "td", v.From.String(), v.Dest.String(), v.Amount.String(), v.Date.Format("2006-01-02"), v.Purpose))
 	}
 	return htmq.NewParent("div", []*htmq.Tag{
 		htmq.NewTextTag("h3", "Transactions"),
@@ -15,7 +15,7 @@ func ViewTransactions(ld LoginData, fid string) *htmq.Tag {
 
 }
 
-func ViewMembers(ld LoginData, fid string) *htmq.Tag {
+func ViewMembers(ld PageData, fid string) *htmq.Tag {
 
 	//List of li one for each family member
 	rows := []*htmq.Tag{}
@@ -29,19 +29,19 @@ func ViewMembers(ld LoginData, fid string) *htmq.Tag {
 	return htmq.NewParent("ul", rows).Wrap("div", "id", fid)
 }
 
-func ViewAccounts(ld LoginData, fid string) *htmq.Tag {
+func ViewAccounts(ld PageData, fid string) *htmq.Tag {
 	return htmq.NewParent("div", []*htmq.Tag{
 		viewMemberAccount(ld, ld.Fmem),
 	}, "id", fid)
 }
 
 //ViewMemberAccount returns a ul containing all accounts for that user
-func viewMemberAccount(ld LoginData, uname string) *htmq.Tag {
+func viewMemberAccount(ld PageData, uname string) *htmq.Tag {
 	res := []*htmq.Tag{}
 	for _, v := range ld.Fam.Period.UserAccounts(uname) {
 		res = append(res, htmq.NewParent("li", []*htmq.Tag{
 			htmq.NewTextTag("div", v.Col1+":"+v.Col2, "class", "pocket"),
-			htmq.NewTextTag("div", v.Name+" "+PrintMoney(v.End), "class", "pocket-d"),
+			htmq.NewTextTag("div", v.Name+" "+v.End.String(), "class", "pocket-d"),
 		}, "class", "pocket-li"))
 	}
 	return htmq.NewParent("ul", res)

@@ -45,27 +45,6 @@ type PageHand struct {
 	R *http.Request
 }
 
-// SetJob is intended to allow this to be passed around in
-func (pd *PageData) SetJob(k string, v interface{}) *PageData {
-	for i, j := range pd.Jobs {
-		if j.s == k {
-			pd.Jobs[i] = JPar{k, v}
-			return pd
-		}
-	}
-	pd.Jobs = append(pd.Jobs, JPar{k, v})
-	return pd
-}
-
-func (pd PageData) Job(k string) interface{} {
-	for _, v := range pd.Jobs {
-		if v.s == k {
-			return v.i
-		}
-	}
-	return nil
-}
-
 type LoginData struct {
 	W      http.ResponseWriter
 	R      *http.Request

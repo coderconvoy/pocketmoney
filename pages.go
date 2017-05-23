@@ -5,7 +5,7 @@ import (
 	"github.com/coderconvoy/htmq"
 )
 
-func PageBasic(ld LoginData, title string) (*htmq.Tag, *htmq.Tag) {
+func PageBasic(ld PageData, title string) (*htmq.Tag, *htmq.Tag) {
 	fam, fmem := ld.Fam, ld.Fmem
 
 	p, body := htmq.NewPage(title, "/s/main.css")
@@ -56,7 +56,7 @@ divstopocket(psvg);`,
 	)
 }
 
-func PageFamily(ld LoginData) *htmq.Tag {
+func PageFamily(ld PageData) *htmq.Tag {
 	fam := ld.Fam
 
 	//Side Buttons
@@ -85,7 +85,7 @@ func PageFamily(ld LoginData) *htmq.Tag {
 	return p
 }
 
-func PagePersonal(ld LoginData) *htmq.Tag {
+func PagePersonal(ld PageData) *htmq.Tag {
 
 	//Side Buttons
 	fbuts := htmq.NewParent("div", []*htmq.Tag{

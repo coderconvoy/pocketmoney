@@ -46,7 +46,7 @@ func (lc *LoginControl) EditLogin(r *http.Request, ls LoginStore) error {
 type PostFunc func(*PageHand) (string, string)
 
 // ViewFunc Shows what the world looks like returning, the expected template name.
-type ViewFunc func(*PageData) *htmq.Tag
+type ViewFunc func(PageData) *htmq.Tag
 
 type MuxFunc func(w http.ResponseWriter, r *http.Request)
 
@@ -58,14 +58,14 @@ func LoggedInView(f ViewFunc) MuxFunc {
 			return
 		}
 		dbase.QLog(fmt.Sprintln("PData : ", pdata))
-		phand := &PageHand{PageData: pdata, W: w, R: r}
+		//phand := &PageHand{PageData: pdata, W: w, R: r}
 		if pdata.Fam.Calculate() {
 			pdata.Fam.Save()
 		}
 		//Consider adding a calculate and save if changed here
-		page := f(pdata)
+		page := f(*pdata)
 
-		_, err = w.Write([]byte(page.String()))
+		_, err = w.Write(page.Bytes())
 		if err != nil {
 			dbase.QLog("Could not write output to request")
 		}

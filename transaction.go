@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 
+	"github.com/coderconvoy/money"
 	"github.com/coderconvoy/pocketmoney/history"
 	"github.com/pkg/errors"
 )
@@ -48,7 +49,7 @@ func readPostTransaction(ld *PageHand) (history.Transaction, error) {
 		return res, errors.New("Accounts must be real, no hacky hacky")
 	}
 
-	res.Amount, err = history.ParseAmount(r.FormValue("amount"))
+	res.Amount, err = money.Parse(r.FormValue("amount"))
 	if err != nil {
 		return res, errors.Wrap(err, "Cannot parse amount")
 
@@ -80,6 +81,7 @@ func HandlePay(ld *PageHand) (string, string) {
 	return "/personal", ""
 }
 
+/*
 func HandleViewAccount(ld *PageHand) string {
 	r, fam, fmem := ld.R, ld.Fam, ld.Fmem
 	rname := r.FormValue("uname")
@@ -90,6 +92,6 @@ func HandleViewAccount(ld *PageHand) string {
 		return "userhome.html"
 	}
 
-	ld.SetJob("ac", history.ACKey{rname, rac})
 	return "viewac.html"
 }
+*/

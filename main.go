@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"log"
 	"net/http"
 	"path"
 
@@ -76,18 +76,18 @@ func main() {
 	http.HandleFunc("/chpass", LoggedInPost(HandlePasswordChange))
 
 	//Views
-	http.HandleFunc("/transactions", LoggedInVTemp(PageTransactions))
-	http.HandleFunc("/personal", LoggedInVTemp(PagePerson))
+	//http.HandleFunc("/transactions", LoggedInVTemp(PageTransactions))
+	http.HandleFunc("/personal", LoggedInView(PagePersonal))
 	http.HandleFunc("/family", LoggedInView(PageFamily))
 	//http.HandleFunc("/view", LoggedInView(Pag))
 
+	dbase.QLog("Starting Server")
+
 	if *insecure {
-		err = http.ListenAndServe(":8080", nil)
+		log.Fatal(http.ListenAndServe(":8080", nil))
+
 		return
 
 	}
-	err = http.ListenAndServeTLS(":8081", "data/server.pub", "data/server.key", nil)
-	if err != nil {
-		fmt.Println(err)
-	}
+	log.Fatal(http.ListenAndServeTLS(":8081", "data/server.pub", "data/server.key", nil))
 }

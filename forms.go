@@ -19,7 +19,7 @@ func HTMLColorPicker(id string, colors []string) *htmq.Tag {
 	return htmq.NewParent("select", ops, "name", id, "id", id)
 }
 
-func SelectMyAccounts(ld LoginData, tagname string) *htmq.Tag {
+func SelectMyAccounts(ld PageData, tagname string) *htmq.Tag {
 	ops := []*htmq.Tag{}
 	for _, v := range ld.Fam.ListWriteAccess(ld.Fmem) {
 		s := v.Username + ":" + v.Name
@@ -28,7 +28,7 @@ func SelectMyAccounts(ld LoginData, tagname string) *htmq.Tag {
 	return htmq.NewParent("select", ops, "name", tagname)
 }
 
-func SelectAllAccounts(ld LoginData, tagname string) *htmq.Tag {
+func SelectAllAccounts(ld PageData, tagname string) *htmq.Tag {
 	ops := []*htmq.Tag{}
 	for _, v := range ld.Fam.Period.Accounts {
 		s := v.Username + ":" + v.Name
@@ -37,7 +37,7 @@ func SelectAllAccounts(ld LoginData, tagname string) *htmq.Tag {
 	return htmq.NewParent("select", ops, "name", tagname)
 }
 
-func SelectAllUsers(ld LoginData, tagname string) *htmq.Tag {
+func SelectAllUsers(ld PageData, tagname string) *htmq.Tag {
 	ops := []*htmq.Tag{}
 	for _, v := range ld.Fam.Members {
 		ops = append(ops, htmq.NewTextTag("option", v.Username, "value", v.Username))
@@ -45,7 +45,7 @@ func SelectAllUsers(ld LoginData, tagname string) *htmq.Tag {
 	return htmq.NewParent("select", ops, "name", tagname)
 }
 
-func FormAddAccount(ld LoginData) *htmq.Tag {
+func FormAddAccount(ld PageData) *htmq.Tag {
 	return htmq.NewParent("form", []*htmq.Tag{
 		htmq.NewTextTag("h3", "Add Account"),
 		htmq.QInput("text", "accountname", "pattern", ".{4,20}", "--required"),
@@ -56,7 +56,7 @@ func FormAddAccount(ld LoginData) *htmq.Tag {
 	}, "id", "frm_add_account", "action", "addaccount", "method", "post")
 }
 
-func FormPay(ld LoginData) *htmq.Tag {
+func FormPay(ld PageData) *htmq.Tag {
 	return htmq.QForm("pay", []*htmq.Tag{
 		htmq.NewTextTag("h3", "Pay Someone"),
 		htmq.NewText("<br>From:"), SelectMyAccounts(ld, "from"),
@@ -67,7 +67,7 @@ func FormPay(ld LoginData) *htmq.Tag {
 	}, "id", "frm_pay")
 }
 
-func FormStanding(ld LoginData) *htmq.Tag {
+func FormStanding(ld PageData) *htmq.Tag {
 	return htmq.QForm("addstanding", []*htmq.Tag{
 		htmq.NewTextTag("h3", "Make a Standing Order"),
 		htmq.NewText("<br>From:"), SelectMyAccounts(ld, "from"),
@@ -92,7 +92,7 @@ func FormPassword() *htmq.Tag {
 	}, "id", "frm_chpass")
 }
 
-func FormRequest(ld LoginData) *htmq.Tag {
+func FormRequest(ld PageData) *htmq.Tag {
 	return htmq.QForm("makerequest", []*htmq.Tag{
 		htmq.NewTextTag("h3", "Request A payment"),
 		htmq.NewTextTag("p", "The owner of the sending account will have to authorise this payment"),

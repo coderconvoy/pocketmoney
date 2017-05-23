@@ -121,13 +121,17 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if sel == -1 {
-		ExTemplate(GT, w, "index.html", IndexData{"No Username-Password match", LastLogs})
+		GoIndex(w, r, "No Username-Password match")
 		return
 	}
 
 	lstore := loginControl.Login(w, fam.FamilyName, uname)
 	fam.Calculate()
-	ExTemplate(GT, w, "familypage.html", PageData{LoginStore: lstore, Fam: fam})
+	pd := PageData{fam, lstore}
+	if fam.IsParent(uname) {
+		w.Write(PageFamily(pd).Bytes())
+	}
+	w.Write(PagePersonal(pd).Bytes())
 
 }
 func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
@@ -182,6 +186,7 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 		//TODO
 	}
 	lstore := loginControl.Login(w, f.FamilyName, uname)
-	ExTemplate(GT, w, "familypage.html", PageData{LoginStore: lstore, Fam: f})
+	pd := PageData{f, lstore}
+	w.Write(PageFamily(pd).Bytes())
 
 }

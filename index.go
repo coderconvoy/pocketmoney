@@ -9,22 +9,23 @@ import (
 
 func GoIndex(w http.ResponseWriter, r *http.Request, m string) {
 	c, err := r.Cookie("LastLog")
+	var ll []LoginStore
+
 	if err != nil {
-		ExTemplate(GT, w, "index.html", IndexData{m, []LoginStore{}})
+		w.Write(PageIndex(m, ll).Bytes())
 		return
 	}
-	var ll []LoginStore
 	err = CookieUnmarshal(c.Value, &ll)
 	if err != nil {
 		ll = []LoginStore{}
 	}
 
-	ExTemplate(GT, w, "index.html", IndexData{m, ll})
+	w.Write(PageIndex(m, ll).Bytes())
 
 }
 
-func PageIndex(mes string, ll []LoginStore) {
-	p, body := htmq.NewPage(title, "/s/main.css")
+func PageIndex(mes string, ll []LoginStore) *htmq.Tag {
+	page, body := htmq.NewPage("Pocket Money", "/s/main.css")
 	body.SetAttr("id", "main-area")
 	if mes != "" {
 		body.AddChildren(htmq.NewTextTag("b", mes))
@@ -37,7 +38,7 @@ func PageIndex(mes string, ll []LoginStore) {
 	}, "id", "actionlist")
 	for _, v := range ll {
 		aList.AddChildren(htmq.QBut(
-			v.FamName+"<br>"+v.FMem,
+			v.FamName+"<br>"+v.Fmem,
 			fmt.Sprintf("showlogin('%s','%s')", v.FamName, v.Fmem),
 		))
 	}
@@ -47,7 +48,7 @@ func PageIndex(mes string, ll []LoginStore) {
 	}
 
 	//Login Form
-	lForm := htmq.QForm("login", []htmq.Tag{
+	lForm := htmq.QForm("login", []*htmq.Tag{
 		htmq.NewTextTag("h2", "Login"),
 		htmq.NewText("Family Name : "), htmq.QInput("text", "family", "id", "linfam", "value", l0.FamName),
 		htmq.NewText("<br>User Name : "), htmq.QInput("text", "username", "id", "linusr", "value", l0.Fmem),
@@ -55,6 +56,17 @@ func PageIndex(mes string, ll []LoginStore) {
 		htmq.QSubmit("Login"),
 	}, "id", "login")
 
-	//Family Form
+	//New Family Form
+	nForm := htmq.QForm("newfamily", []*htmq.Tag{
+		htmq.NewTextTag("h2", "Create New Family"),
+		htmq.QText("Family Name : "), htmq.QInput("text", "familyname"),
+		htmq.QText("<br>User Name : "), htmq.QInput("text", "username"),
+		htmq.QText("<br>Email : "), htmq.QInput("email", "email"),
+		htmq.NewText("<br>Password : "), htmq.QInput("password", "pwd1", "id", "linpass"),
+		htmq.NewText("<br>Confirm : "), htmq.QInput("password", "pwd2", "id", "linpass"),
+		htmq.QSubmit("Create Family"),
+	}, "id", "newfamily")
 
+	body.AddChildren(aList, lForm, nForm)
+	return page
 }
