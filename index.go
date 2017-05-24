@@ -25,7 +25,7 @@ func GoIndex(w http.ResponseWriter, r *http.Request, m string) {
 }
 
 func PageIndex(mes string, ll []LoginStore) *htmq.Tag {
-	page, body := htmq.NewPage("Pocket Money", "/s/main.css")
+	page, body := PageBasic(PageData{}, "Pocket Money")
 	body.SetAttr("id", "main-area")
 	if mes != "" {
 		body.AddChildren(htmq.NewTextTag("b", mes))
@@ -67,6 +67,8 @@ func PageIndex(mes string, ll []LoginStore) *htmq.Tag {
 		htmq.QSubmit("Create Family"),
 	}, "id", "newfamily")
 
-	body.AddChildren(aList, lForm, nForm)
+	flist := htmq.NewTag("div", "id", "formlist")
+	flist.AddChildren(lForm, nForm)
+	body.AddChildren(aList, flist)
 	return page
 }

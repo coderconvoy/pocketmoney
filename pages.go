@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/coderconvoy/dbase"
+	"github.com/coderconvoy/gojs"
 	"github.com/coderconvoy/htmq"
 )
 
@@ -30,30 +31,33 @@ func PageBasic(ld PageData, title string) (*htmq.Tag, *htmq.Tag) {
 		tmenu,
 	)
 
-	twide, err := LoadAsset("tallwide.js")
-	if err != nil {
-		dbase.QLog("No Asset tallwide.js")
-	}
 	body.AddChildren(
 		banner,
 		htmq.NewTag("div", "style", "clear:both;"),
-
-		htmq.NewTextTag("script", twide),
+		CommonJS(),
 	)
 
 	return p, body
 }
 
 func CommonJS() *htmq.Tag {
-	return htmq.QScript(
-		SafeAsset("js/showform.js"),
-		SafeAsset("js/template.js"),
-		SafeAsset("js/divtopocket.js"),
-		`
-showform("view_members");
-psvg = "`+SafeAsset("s/svg/pocket-temp.svg")+`;
-divstopocket(psvg);`,
+	res, err := htmq.AScript(
+		gojs.Single,
+		"assets/js/showform.js",
+		"assets/js/template.js",
+		"assets/js/divtopocket.js",
+		"assets/js/tallwide.js",
 	)
+	if err != nil {
+		dbase.QLog(err.Error())
+	}
+	return res
+
+	/*		`
+	showform("view_members");
+	psvg = "`+SafeAsset("s/svg/pocket-temp.svg")+`;
+	divstopocket(psvg);`,
+		)*/
 }
 
 func PageFamily(ld PageData) *htmq.Tag {
