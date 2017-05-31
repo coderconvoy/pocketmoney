@@ -69,6 +69,6 @@ func PageIndex(mes string, ll []LoginStore) *htmq.Tag {
 
 	flist := htmq.NewTag("div", "id", "formlist")
 	flist.AddChildren(lForm, nForm)
-	body.AddChildren(aList, flist)
+	body.AddChildren(aList, flist, CommonJS())
 	return page
 }

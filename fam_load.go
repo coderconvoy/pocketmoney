@@ -130,10 +130,12 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	pd := PageData{fam, lstore}
 	if fam.IsParent(uname) {
 		w.Write(PageFamily(pd).Bytes())
+		return
 	}
 	w.Write(PagePersonal(pd).Bytes())
 
 }
+
 func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 	f := &Family{}
 	f.FamilyName = r.FormValue("familyname")

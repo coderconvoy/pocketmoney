@@ -34,10 +34,13 @@ func PageBasic(ld PageData, title string) (*htmq.Tag, *htmq.Tag) {
 	body.AddChildren(
 		banner,
 		htmq.NewTag("div", "style", "clear:both;"),
-		CommonJS(),
 	)
 
+	//hml := p.GetFirst(htmq.ByType("html"), 10)
+	//if hml != nil {
+	//}
 	return p, body
+
 }
 
 func CommonJS() *htmq.Tag {
@@ -47,6 +50,12 @@ func CommonJS() *htmq.Tag {
 		"assets/js/template.js",
 		"assets/js/divtopocket.js",
 		"assets/js/tallwide.js",
+		"assets/js/login.js",
+		`--
+	showform();
+	psvg = `+"`"+SafeAsset("s/svg/pocket-temp.svg")+"`"+`;
+	divstopocket(psvg);
+		`,
 	)
 	if err != nil {
 		dbase.QLog(err.Error())
