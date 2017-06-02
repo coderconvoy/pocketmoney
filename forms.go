@@ -89,7 +89,7 @@ func FormPassword() *htmq.Tag {
 		htmq.NewText("<br>New Password : "), htmq.QInput("password", "pwd1"),
 		htmq.NewText("<br>Confirm : "), htmq.QInput("password", "pwd2"),
 		htmq.QSubmit("Change"),
-	}, "id", "frm_chpass")
+	}, "id", "frm_pass")
 }
 
 func FormRequest(ld PageData) *htmq.Tag {

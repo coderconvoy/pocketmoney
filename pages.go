@@ -9,7 +9,7 @@ import (
 func PageBasic(ld PageData, title string) (*htmq.Tag, *htmq.Tag) {
 	fam, fmem := ld.Fam, ld.Fmem
 
-	p, body := htmq.NewPage(title, "/s/main.css")
+	p, body := htmq.NewPage(title, "/s/main.css", "/common.js")
 	body.SetAttr("id", "main-area")
 
 	banner := htmq.NewTag("div", "class", "banner")
@@ -43,6 +43,15 @@ func PageBasic(ld PageData, title string) (*htmq.Tag, *htmq.Tag) {
 
 }
 
+func JSCalls() *htmq.Tag {
+	return htmq.QScript(
+		`
+	showform();
+	divstopocket(psvg);
+	TallFrac();
+		`)
+}
+
 func CommonJS() *htmq.Tag {
 	res, err := htmq.AScript(
 		gojs.Single,
@@ -51,11 +60,7 @@ func CommonJS() *htmq.Tag {
 		"assets/js/divtopocket.js",
 		"assets/js/tallwide.js",
 		"assets/js/login.js",
-		`--
-	showform();
-	psvg = `+"`"+SafeAsset("s/svg/pocket-temp.svg")+"`"+`;
-	divstopocket(psvg);
-		`,
+		`--psvg = `+"`"+SafeAsset("s/svg/pocket-temp.svg")+"`;",
 	)
 	if err != nil {
 		dbase.QLog(err.Error())
@@ -92,7 +97,7 @@ func PageFamily(ld PageData) *htmq.Tag {
 		htmq.NewParent("div", []*htmq.Tag{
 			fbuts,
 			fl,
-			CommonJS(),
+			JSCalls(),
 		}, "id", "allforms"),
 	)
 	return p
@@ -107,11 +112,11 @@ func PagePersonal(ld PageData) *htmq.Tag {
 		htmq.QBut("", `showform('frm_pay')`, "!/s/svg/payments.svg", "^Pay Someone"),
 		htmq.QBut("", `showform('frm_request')`, "!/s/svg/requests.svg", "^Request Money"),
 		htmq.QBut("Setup Regular Payment", `showform('frm_standing')`),
-		htmq.QBut("Change Password", `showform('frm_standing')`),
+		htmq.QBut("Change Password", `showform('frm_pass')`),
 	}, "id", "actionlist")
 	//Get Forms
 	fl := htmq.NewParent("div", []*htmq.Tag{
-		ViewAccounts(ld, "view_acounts"),
+		ViewAccounts(ld, "view_accounts"),
 		FormAddAccount(ld),
 		FormPay(ld),
 		FormRequest(ld),
@@ -128,7 +133,7 @@ func PagePersonal(ld PageData) *htmq.Tag {
 		htmq.NewParent("div", []*htmq.Tag{
 			fbuts,
 			fl,
-			CommonJS(),
+			JSCalls(),
 		}, "id", "allforms"),
 	)
 	return p

@@ -49,6 +49,14 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 	w.Write(ass)
 }
 
+func CommonHandler() MuxFunc {
+	cjs := []byte(CommonJS().Inner)
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/javascript")
+		w.Write(cjs)
+	}
+}
+
 func main() {
 	insecure := flag.Bool("i", false, "Run without https")
 	debug := flag.Bool("d", false, "Debug, log to fmt.Println")
@@ -61,6 +69,7 @@ func main() {
 
 	http.HandleFunc("/", Handle)
 	http.HandleFunc("/s/", HandleStatic)
+	http.HandleFunc("/common.js", CommonHandler())
 	http.HandleFunc("/newfamily", HandleNewFamily)
 	http.HandleFunc("/login", HandleLogin)
 	http.HandleFunc("/logout", HandleLogout)
