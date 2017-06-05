@@ -28,3 +28,10 @@ function divstopocket(svg){
         divtopocket(ar[s],svg);
     }
 }
+function changecolor(){
+        var c1 = document.getElementById("Col1");
+        var c2 = document.getElementById("Col2");
+        var pocket = document.getElementById("color_pocket");
+        
+        pocket.innerHTML = replaceAll(psvg,{maincol:c1.value,linecol:c2.value});
+    }

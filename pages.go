@@ -9,7 +9,7 @@ import (
 func PageBasic(ld PageData, title string) (*htmq.Tag, *htmq.Tag) {
 	fam, fmem := ld.Fam, ld.Fmem
 
-	p, body := htmq.NewPage(title, "/s/main.css", "/common.js")
+	p, body := htmq.NewPage(title, "/s/main.css", "/common.js,https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js,")
 	body.SetAttr("id", "main-area")
 
 	banner := htmq.NewTag("div", "class", "banner")
@@ -17,14 +17,14 @@ func PageBasic(ld PageData, title string) (*htmq.Tag, *htmq.Tag) {
 
 	//Add content to menu bar based on login status
 	if fam != nil {
-		tmenu.AddChildren(htmq.QLink("/personal", "Personal"))
+		tmenu.AddChildren(htmq.QLinkRep("/personal", "Personal"))
 		if fam.IsParent(fmem) {
 			tmenu.AddChildren(
-				htmq.QLink("/family", "Family"),
-				htmq.QLink("/transactions", "Transaction History"),
+				htmq.QLinkRep("/family", "Family"),
+				htmq.QLinkRep("/transactions", "Transaction History"),
 			)
 		}
-		tmenu.AddChildren(htmq.QLink("/logout", "Logout"))
+		tmenu.AddChildren(htmq.QLinkRep("/logout", "Logout"))
 	}
 	banner.AddChildren(
 		htmq.QImg("/s/svg/banner.svg"),
@@ -49,6 +49,19 @@ func JSCalls() *htmq.Tag {
 	showform();
 	divstopocket(psvg);
 	TallFrac();
+	$( "form" ).on( "submit", function( event ) {
+	  	event.preventDefault();
+		$.ajax({
+			url:$(this).attr("action"),
+			type:"post",
+			data:$(this).serialize(),
+			success:function(data){
+				console.log("Success:" ,data);
+			},
+		});
+		
+	    console.log( $( this ).serialize() );
+	});
 		`)
 }
 

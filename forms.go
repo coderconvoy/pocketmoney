@@ -7,7 +7,7 @@ import (
 	"github.com/coderconvoy/htmq"
 )
 
-func HTMLColorPicker(id string, colors []string) *htmq.Tag {
+func HTMLColorPicker(id string, colors []string, params ...string) *htmq.Tag {
 	if len(colors) == 0 {
 		colors = []string{"black", "blue", "red", "green", "orange", "white", "yellow"}
 	}
@@ -16,7 +16,7 @@ func HTMLColorPicker(id string, colors []string) *htmq.Tag {
 		ops = append(ops, htmq.NewTextTag("option", v, "value", v))
 	}
 
-	return htmq.NewParent("select", ops, "name", id, "id", id)
+	return htmq.NewParent("select", ops, append(params, "name", id, "id", id)...)
 }
 
 func SelectMyAccounts(ld PageData, tagname string) *htmq.Tag {
@@ -49,8 +49,8 @@ func FormAddAccount(ld PageData) *htmq.Tag {
 	return htmq.NewParent("form", []*htmq.Tag{
 		htmq.NewTextTag("h3", "Add Account"),
 		htmq.QInput("text", "accountname", "pattern", ".{4,20}", "--required"),
-		HTMLColorPicker("Col1", []string{}),
-		HTMLColorPicker("Col2", []string{}),
+		HTMLColorPicker("Col1", []string{}, "onchange", "changecolor();"),
+		HTMLColorPicker("Col2", []string{}, "onchange", "changecolor();"),
 		htmq.NewTextTag("div", "black:black", "class", "pocket", "id", "color_pocket"),
 		htmq.QSubmit("Add"),
 	}, "id", "frm_add_account", "action", "addaccount", "method", "post")
