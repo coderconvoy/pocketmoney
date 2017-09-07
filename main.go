@@ -2,12 +2,14 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"path"
 
 	"github.com/coderconvoy/dbase"
 	"github.com/coderconvoy/gojs"
+	"github.com/coderconvoy/lazyf"
 )
 
 var FamDB = dbase.DBase{"data/families"}
@@ -60,13 +62,27 @@ func CommonHandler() MuxFunc {
 func main() {
 	insecure := flag.Bool("i", false, "Run without https")
 	debug := flag.Bool("d", false, "Debug, log to fmt.Println")
+	confloc := flag.String("c", "", "Configuration File Location")
+	noconf := flag.Bool("noconf", false, "Run with no config file")
 	flag.Parse()
 	if *debug {
 		dbase.SetQLogger(dbase.FmtLog{})
 	}
 
+	conf := lazyf.LZ{}
+	if !*noconf {
+		var err error
+		conf, err = getConfig(*confloc)
+		if err != nil {
+			fmt.Println("Could not load config", err)
+			return
+		}
+	}
+
+	//Enable web access to embedded assets in this package
 	gojs.Single.AddFuncs(Asset, AssetDir)
 
+	//views
 	http.HandleFunc("/", Handle)
 	http.HandleFunc("/s/", HandleStatic)
 	http.HandleFunc("/common.js", CommonHandler())
@@ -94,9 +110,11 @@ func main() {
 
 	if *insecure {
 		log.Fatal(http.ListenAndServe(":8080", nil))
-
 		return
-
 	}
-	log.Fatal(http.ListenAndServeTLS(":8081", "data/server.pub", "data/server.key", nil))
+
+	pubkey := conf.PStringD("data/server.pub")
+	privkey := conf.PStringD("data/server.key")
+
+	log.Fatal(http.ListenAndServeTLS(":8081", pubkey, privkey, nil))
 }
