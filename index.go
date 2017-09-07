@@ -59,7 +59,7 @@ func PageIndex(mes string, ll []LoginStore) *htmq.Tag {
 	//New Family Form
 	nForm := htmq.QForm("newfamily", []*htmq.Tag{
 		htmq.NewTextTag("h2", "Create New Family"),
-		htmq.QText("Family Name : "), htmq.QInput("text", "familyname"),
+		htmq.QText("Family Name : "), htmq.QInput("text", "familyname", "id", "famtop"),
 		htmq.QText("<br>User Name : "), htmq.QInput("text", "username"),
 		htmq.QText("<br>Email : "), htmq.QInput("email", "email"),
 		htmq.NewText("<br>Password : "), htmq.QInput("password", "pwd1", "id", "linpass"),

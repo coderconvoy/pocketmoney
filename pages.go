@@ -49,7 +49,8 @@ func JSCalls() *htmq.Tag {
 	showform();
 	divstopocket(psvg);
 	TallFrac();
-	$( "form" ).on( "submit", function( event ) {
+		`)
+	/**	$( "form" ).on( "submit", function( event ) {
 	  	event.preventDefault();
 		$.ajax({
 			url:$(this).attr("action"),
@@ -59,10 +60,9 @@ func JSCalls() *htmq.Tag {
 				console.log("Success:" ,data);
 			},
 		});
-		
+
 	    console.log( $( this ).serialize() );
-	});
-		`)
+	});*/
 }
 
 func CommonJS() *htmq.Tag {
