@@ -13,6 +13,7 @@ func confLocs() []string {
 	return []string{
 		"test_data/.pmconf",
 		".pmconf",
+		path.Join(home, ".pmconf"),
 		path.Join(home, ".config/pocketmoney/init"),
 	}
 }

@@ -113,8 +113,8 @@ func main() {
 		return
 	}
 
-	pubkey := conf.PStringD("data/server.pub")
-	privkey := conf.PStringD("data/server.key")
+	pubkey := conf.PStringD("data/server.pub", "pubkey")
+	privkey := conf.PStringD("data/server.key", "privkey")
 
 	log.Fatal(http.ListenAndServeTLS(":8081", pubkey, privkey, nil))
 }

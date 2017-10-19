@@ -45,9 +45,3 @@ type Transortable []Transaction
 func (t Transortable) Len() int           { return len(t) }
 func (t Transortable) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
 func (t Transortable) Less(i, j int) bool { return t[j].Date.After(t[i].Date) }
-
-type Period struct {
-	Start, End   time.Time
-	Accounts     []*Account
-	Transactions []Transaction
-}

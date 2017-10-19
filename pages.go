@@ -50,8 +50,14 @@ func JSCalls() *htmq.Tag {
 	divstopocket(psvg);
 	TallFrac();
 		`)
-	/**	$( "form" ).on( "submit", function( event ) {
+	/*$("form").on("submit",function(event){
+		event.preventDefault();
+		this.submit();
+		console.log(this);
+	});*/
+	/* $( "form" ).on( "submit", function( event ) {
 	  	event.preventDefault();
+
 		$.ajax({
 			url:$(this).attr("action"),
 			type:"post",
@@ -62,7 +68,7 @@ func JSCalls() *htmq.Tag {
 		});
 
 	    console.log( $( this ).serialize() );
-	});*/
+	*/
 }
 
 func CommonJS() *htmq.Tag {
@@ -126,10 +132,12 @@ func PagePersonal(ld PageData) *htmq.Tag {
 		htmq.QBut("", `showform('frm_request')`, "!/s/svg/requests.svg", "^Request Money"),
 		htmq.QBut("Setup Regular Payment", `showform('frm_standing')`),
 		htmq.QBut("Change Password", `showform('frm_pass')`),
+		htmq.QBut("View Transactions", `showform('view_trans')`),
 	}, "id", "actionlist")
 	//Get Forms
 	fl := htmq.NewParent("div", []*htmq.Tag{
 		ViewAccounts(ld, "view_accounts"),
+		ViewTransactions(ld, "view_trans"),
 		FormAddAccount(ld),
 		FormPay(ld),
 		FormRequest(ld),
