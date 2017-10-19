@@ -129,10 +129,12 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	fam.Calculate()
 	pd := PageData{fam, lstore}
 	if fam.IsParent(uname) {
-		w.Write(PageFamily(pd).Bytes())
+		fp, _ := PageFamily(pd)
+		w.Write(fp)
 		return
 	}
-	w.Write(PagePersonal(pd).Bytes())
+	pp, _ := PagePersonal(pd)
+	w.Write(pp)
 
 }
 
@@ -189,6 +191,7 @@ func HandleNewFamily(w http.ResponseWriter, r *http.Request) {
 	}
 	lstore := loginControl.Login(w, f.FamilyName, uname)
 	pd := PageData{f, lstore}
-	w.Write(PageFamily(pd).Bytes())
+	pf, _ := PageFamily(pd)
+	w.Write(pf)
 
 }

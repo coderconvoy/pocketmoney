@@ -93,7 +93,7 @@ func CommonJS() *htmq.Tag {
 		)*/
 }
 
-func PageFamily(ld PageData) *htmq.Tag {
+func PageFamily(ld PageData) ([]byte, error) {
 	fam := ld.Fam
 
 	//Side Buttons
@@ -119,10 +119,10 @@ func PageFamily(ld PageData) *htmq.Tag {
 			JSCalls(),
 		}, "id", "allforms"),
 	)
-	return p
+	return p.Bytes(), nil
 }
 
-func PagePersonal(ld PageData) *htmq.Tag {
+func PagePersonal(ld PageData) ([]byte, error) {
 
 	//Side Buttons
 	fbuts := htmq.NewParent("div", []*htmq.Tag{
@@ -157,5 +157,5 @@ func PagePersonal(ld PageData) *htmq.Tag {
 			JSCalls(),
 		}, "id", "allforms"),
 	)
-	return p
+	return p.Bytes(), nil
 }

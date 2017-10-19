@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/coderconvoy/dbase"
-	"github.com/coderconvoy/htmq"
 )
 
 var loginControl = NewLoginControl(time.Minute * 20)
@@ -46,9 +45,45 @@ func (lc *LoginControl) EditLogin(r *http.Request, ls LoginStore) error {
 type PostFunc func(*PageHand) (string, string)
 
 // ViewFunc Shows what the world looks like returning, the expected template name.
-type ViewFunc func(PageData) *htmq.Tag
+type DataFunc func(PageData, *http.Request) ([]byte, error)
+
+type ViewFunc func(PageData) ([]byte, error)
 
 type MuxFunc func(w http.ResponseWriter, r *http.Request)
+
+func LoggedInData(f DataFunc) MuxFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		pdata, lockId, err := loggedInFamily(w, r)
+		if err != nil {
+			GoIndex(w, r, err.Error())
+			return
+		}
+		dbase.QLog(fmt.Sprintln("PData : ", pdata))
+		//phand := &PageHand{PageData: pdata, W: w, R: r}
+		if pdata.Fam.Calculate() {
+			pdata.Fam.Save()
+		}
+		//Consider adding a calculate and save if changed here
+		page, err := f(*pdata, r)
+		if err != nil {
+			http.Error(w, err.Error(), 400)
+			dbase.QLog("Could not get data:" + err.Error())
+		}
+
+		_, err = w.Write(page)
+		if err != nil {
+			dbase.QLog("Could not write output to request")
+		}
+
+		pdata.Mes = ""
+		err = loginControl.EditLogin(r, pdata.LoginStore)
+		if err != nil {
+			dbase.QLog("Could not edit login ")
+		}
+		logLock.Unlock(lockId)
+	}
+
+}
 
 func LoggedInView(f ViewFunc) MuxFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -63,9 +98,13 @@ func LoggedInView(f ViewFunc) MuxFunc {
 			pdata.Fam.Save()
 		}
 		//Consider adding a calculate and save if changed here
-		page := f(*pdata)
+		page, err := f(*pdata)
+		if err != nil {
+			http.Error(w, err.Error(), 400)
+			dbase.QLog("Could not get data:" + err.Error())
+		}
 
-		_, err = w.Write(page.Bytes())
+		_, err = w.Write(page)
 		if err != nil {
 			dbase.QLog("Could not write output to request")
 		}
@@ -121,5 +160,4 @@ func loggedInFamily(w http.ResponseWriter, r *http.Request) (*PageData, uint64, 
 	id := logLock.Lock(ld.FamName)
 	fam, err := LoadFamily(ld.FamName)
 	return &PageData{fam, ld}, id, err
-
 }

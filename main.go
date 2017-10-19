@@ -82,7 +82,7 @@ func main() {
 	//Enable web access to embedded assets in this package
 	gojs.Single.AddFuncs(Asset, AssetDir)
 
-	//views
+	//basic views
 	http.HandleFunc("/", Handle)
 	http.HandleFunc("/s/", HandleStatic)
 	http.HandleFunc("/common.js", CommonHandler())
@@ -100,10 +100,11 @@ func main() {
 	http.HandleFunc("/addstanding", LoggedInPost(HandleAddStanding))
 	http.HandleFunc("/chpass", LoggedInPost(HandlePasswordChange))
 
-	//Views
+	//Data Views
 	//http.HandleFunc("/transactions", LoggedInVTemp(PageTransactions))
 	http.HandleFunc("/personal", LoggedInView(PagePersonal))
 	http.HandleFunc("/family", LoggedInView(PageFamily))
+	http.HandleFunc("/json/history", LoggedInData(JsonHistory))
 	//http.HandleFunc("/view", LoggedInView(Pag))
 
 	dbase.QLog("Starting Server")
