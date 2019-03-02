@@ -1,6 +1,10 @@
 package main
 
-import "github.com/coderconvoy/htmq"
+import (
+	"github.com/coderconvoy/htmq"
+	"github.com/coderconvoy/money"
+	"github.com/coderconvoy/pocketmoney/history"
+)
 
 func ViewTransactions(ld PageData, fid string) *htmq.Tag {
 
@@ -13,6 +17,34 @@ func ViewTransactions(ld PageData, fid string) *htmq.Tag {
 		htmq.NewParent("table", rows),
 	}, "id", fid)
 
+}
+
+func ViewMyTransactions(ld PageData, fid string) *htmq.Tag {
+	totals := make(map[history.ACKey]money.M)
+
+	uname := ld.Fmem
+	rows := []*htmq.Tag{htmq.QMulti("tr", "th", "From", "To", "Amount", "Total", "Date", "Purpose")}
+	for _, v := range ld.Fam.Period.Transactions {
+
+		if v.From.Username == uname {
+			t, _ := totals[v.From]
+			totals[v.From] = t - v.Amount
+			rows = append(rows, htmq.QMulti("tr", "td", v.From.String(), v.Dest.String(), v.Amount.String(), totals[v.From].String(), v.Date.Format("2006-01-02"), v.Purpose))
+		}
+
+		if v.Dest.Username == uname {
+			t, _ := totals[v.Dest]
+			totals[v.Dest] = t + v.Amount
+			rows = append(rows, htmq.QMulti("tr", "td", v.From.String(), v.Dest.String(), v.Amount.String(), totals[v.Dest].String(), v.Date.Format("2006-01-02"), v.Purpose))
+		} else {
+			continue
+		}
+
+	}
+	return htmq.NewParent("div", []*htmq.Tag{
+		htmq.NewTextTag("h3", "Transactions"),
+		htmq.NewParent("table", rows),
+	}, "id", fid)
 }
 
 func ViewMembers(ld PageData, fid string) *htmq.Tag {

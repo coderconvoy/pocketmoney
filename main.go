@@ -1,8 +1,6 @@
 package main
 
 import (
-	"flag"
-	"fmt"
 	"log"
 	"net/http"
 	"path"
@@ -60,23 +58,19 @@ func CommonHandler() MuxFunc {
 }
 
 func main() {
-	insecure := flag.Bool("i", false, "Run without https")
-	debug := flag.Bool("d", false, "Debug, log to fmt.Println")
-	confloc := flag.String("c", "", "Configuration File Location")
-	noconf := flag.Bool("noconf", false, "Run with no config file")
-	flag.Parse()
-	if *debug {
-		dbase.SetQLogger(dbase.FmtLog{})
-	}
+	_insec := lazyf.FlagBool("i", "insec", "Run local without https")
+	_debug := lazyf.FlagBool("d", "debug", "Debug, log to fmt.Println")
+	_dataloc := lazyf.FlagString("df", "{HOME}/data/pocketmoney", "datafolder", "Location of data folder")
+	_pubkey := lazyf.FlagString("pbk", "data/server.pub", "pubkey", "Location of public Key")
+	_privkey := lazyf.FlagString("prk", "data/server.key", "privkey", "Location of Private Key")
+	_port := lazyf.FlagString("p", "8080", "port", "Port to serv")
 
-	conf := lazyf.LZ{}
-	if !*noconf {
-		var err error
-		conf, err = getConfig(*confloc)
-		if err != nil {
-			fmt.Println("Could not load config", err)
-			return
-		}
+	lazyf.FlagLoad("c", "{HOME}/.config/pocketmoney/init.lz")
+
+	FamDB.Root = path.Join(lazyf.EnvReplace(*_dataloc), "families")
+
+	if *_debug {
+		dbase.SetQLogger(dbase.FmtLog{})
 	}
 
 	//Enable web access to embedded assets in this package
@@ -109,13 +103,10 @@ func main() {
 
 	dbase.QLog("Starting Server")
 
-	if *insecure {
-		log.Fatal(http.ListenAndServe(":8080", nil))
+	if *_insec {
+		log.Fatal(http.ListenAndServe("localhost:"+*_port, nil))
 		return
 	}
 
-	pubkey := conf.PStringD("data/server.pub", "pubkey")
-	privkey := conf.PStringD("data/server.key", "privkey")
-
-	log.Fatal(http.ListenAndServeTLS(":8081", pubkey, privkey, nil))
+	log.Fatal(http.ListenAndServeTLS(":"+*_port, *_pubkey, *_privkey, nil))
 }

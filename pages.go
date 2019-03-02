@@ -137,7 +137,7 @@ func PagePersonal(ld PageData) ([]byte, error) {
 	//Get Forms
 	fl := htmq.NewParent("div", []*htmq.Tag{
 		ViewAccounts(ld, "view_accounts"),
-		ViewTransactions(ld, "view_trans"),
+		ViewMyTransactions(ld, "view_trans"),
 		FormAddAccount(ld),
 		FormPay(ld),
 		FormRequest(ld),
