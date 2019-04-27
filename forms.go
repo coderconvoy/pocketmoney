@@ -68,7 +68,8 @@ func FormPay(ld PageData) *htmq.Tag {
 }
 
 func FormStanding(ld PageData) *htmq.Tag {
-	return htmq.QForm("addstanding", []*htmq.Tag{
+
+	adder := htmq.QForm("addstanding", []*htmq.Tag{
 		htmq.NewTextTag("h3", "Make a Standing Order"),
 		htmq.NewText("<br>From:"), SelectMyAccounts(ld, "from"),
 		htmq.NewText("<br>To:"), SelectAllAccounts(ld, "to"),
@@ -78,6 +79,20 @@ func FormStanding(ld PageData) *htmq.Tag {
 		htmq.NewText("<br>Then Every:"), htmq.QInput("number", "delay", "min", "1", "value", "7"),
 		htmq.QSelect("delay_type", "days", "months"),
 		htmq.NewText("<br>"), htmq.QSubmit("Create"),
+	})
+
+	st := []string{}
+	for _, v := range ld.Fam.Standing {
+		st = append(st, v.Purpose)
+	}
+
+	canceler := htmq.QForm("canc", []*htmq.Tag{
+		htmq.NewTextTag("h3", "Cancel Standing Order"),
+		htmq.QSelect("Standing Orders", st...),
+	})
+
+	return htmq.NewParent("div", []*htmq.Tag{
+		adder, canceler,
 	}, "id", "frm_standing")
 
 }

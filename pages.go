@@ -130,7 +130,7 @@ func PagePersonal(ld PageData) ([]byte, error) {
 		htmq.QBut("Add Account", `showform('frm_add_account')`),
 		htmq.QBut("", `showform('frm_pay')`, "!/s/svg/payments.svg", "^Pay Someone"),
 		htmq.QBut("", `showform('frm_request')`, "!/s/svg/requests.svg", "^Request Money"),
-		htmq.QBut("Setup Regular Payment", `showform('frm_standing')`),
+		htmq.QBut("Regular Payments", `showform('frm_standing')`),
 		htmq.QBut("Change Password", `showform('frm_pass')`),
 		htmq.QBut("View Transactions", `showform('view_trans')`),
 	}, "id", "actionlist")
